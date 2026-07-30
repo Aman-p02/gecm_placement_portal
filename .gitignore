@@ -1,0 +1,4 @@
+student-module/uploads/profile_pics/*
+!student-module/uploads/profile_pics/.gitkeep
+student-module/uploads/resumes/*
+!student-module/uploads/resumes/.gitkeep

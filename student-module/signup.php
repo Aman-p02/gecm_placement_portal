@@ -1,0 +1,138 @@
+<?php
+/**
+ * Student Signup Page
+ */
+require_once __DIR__ . '/includes/db_connect.php';
+require_once __DIR__ . '/includes/auth_check.php';
+
+// Redirect if already logged in
+if (isset($_SESSION['student_id'])) {
+    header('Location: dashboard.php');
+    exit;
+}
+
+$error = '';
+$success = '';
+
+if ($_SERVER['REQUEST_METHOD'] === 'POST') {
+    validate_csrf_token($_POST['csrf_token'] ?? '');
+
+    $enrollmentNo = sanitize_input($_POST['enrollment_no'] ?? '');
+    $fullName = sanitize_input($_POST['full_name'] ?? '');
+    $branch = sanitize_input($_POST['branch'] ?? '');
+    $password = $_POST['password'] ?? '';
+    $confirmPassword = $_POST['confirm_password'] ?? '';
+
+    // Basic Server-side Validation
+    if (empty($enrollmentNo) || empty($fullName) || empty($branch) || empty($password)) {
+        $error = "All fields are required.";
+    } elseif (!preg_match('/^[0-9]{12}$/', $enrollmentNo)) {
+        $error = "Invalid Enrollment Number. It must be exactly 12 digits.";
+    } elseif ($password !== $confirmPassword) {
+        $error = "Passwords do not match.";
+    } elseif (strlen($password) < 8 || !preg_match('/[A-Z]/', $password) || !preg_match('/[a-z]/', $password) || !preg_match('/[0-9]/', $password) || !preg_match('/[\W_]/', $password)) {
+        $error = "Password must have at least 8 chars, including uppercase, lowercase, number, and special character.";
+    } else {
+        // Check for duplicate enrollment
+        $stmt = $pdo->prepare("SELECT student_id FROM tbl_students WHERE enrollment_no = ?");
+        $stmt->execute([$enrollmentNo]);
+        if ($stmt->fetch()) {
+            $error = "An account with this Enrollment Number already exists.";
+        } else {
+            // Insert new student
+            $hashedPassword = password_hash($password, PASSWORD_BCRYPT);
+            $stmt = $pdo->prepare("INSERT INTO tbl_students (enrollment_no, full_name, branch, password) VALUES (?, ?, ?, ?)");
+            if ($stmt->execute([$enrollmentNo, $fullName, $branch, $hashedPassword])) {
+                $_SESSION['signup_success'] = "Registration successful! You can now login.";
+                header("Location: login.php");
+                exit;
+            } else {
+                $error = "A database error occurred during registration.";
+            }
+        }
+    }
+}
+$csrfToken = generate_csrf_token();
+?>
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Signup - GEC Modasa Placement Portal</title>
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css" rel="stylesheet">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <link rel="stylesheet" href="css/dashboard.css">
+</head>
+
+<body>
+    <div class="container auth-container">
+        <div class="custom-card">
+            <h4 class="text-center mb-2 brand-text">GEC Modasa <span>Placement</span></h4>
+            <h6 class="text-center mb-3 text-muted">Create Student Account</h6>
+
+            <?php if ($error): ?>
+                <div class="alert alert-danger py-1 mb-2 small"><?= htmlspecialchars($error) ?></div>
+            <?php endif; ?>
+
+            <form id="signupForm" action="signup.php" method="POST" novalidate>
+                <input type="hidden" name="csrf_token" value="<?= $csrfToken ?>">
+
+                <div class="row g-2 mb-2">
+                    <div class="col-sm-6">
+                        <label for="enrollment_no" class="form-label mb-1 small">Enrollment Number</label>
+                        <input type="text" class="form-control form-control-sm" id="enrollment_no" name="enrollment_no"
+                            value="<?= htmlspecialchars($enrollmentNo ?? '') ?>" required>
+                    </div>
+                    <div class="col-sm-6">
+                        <label for="full_name" class="form-label mb-1 small">Full Name</label>
+                        <input type="text" class="form-control form-control-sm" id="full_name" name="full_name"
+                            value="<?= htmlspecialchars($fullName ?? '') ?>" required>
+                    </div>
+                </div>
+
+                <div class="mb-2">
+                    <label for="branch" class="form-label mb-1 small">Branch</label>
+                    <select class="form-select form-select-sm" id="branch" name="branch" required>
+                        <option value="">Select Branch</option>
+                        <option value="Computer Engineering" <?= (isset($branch) && $branch == 'Computer Engineering') ? 'selected' : '' ?>>Computer Engineering</option>
+                        <option value="Information Technology" <?= (isset($branch) && $branch == 'Information Technology') ? 'selected' : '' ?>>Information Technology</option>
+                        <option value="Mechanical Engineering" <?= (isset($branch) && $branch == 'Mechanical Engineering') ? 'selected' : '' ?>>Mechanical Engineering</option>
+                        <option value="Civil Engineering" <?= (isset($branch) && $branch == 'Civil Engineering') ? 'selected' : '' ?>>Civil Engineering</option>
+                        <option value="Electrical Engineering" <?= (isset($branch) && $branch == 'Electrical Engineering') ? 'selected' : '' ?>>Electrical Engineering</option>
+                    </select>
+                </div>
+
+                <div class="row g-2 mb-3">
+                    <div class="col-sm-6">
+                        <label for="password" class="form-label mb-1 small">Password</label>
+                        <div class="input-group input-group-sm">
+                            <input type="password" class="form-control" id="password" name="password" required>
+                            <button class="btn btn-outline-secondary toggle-password" type="button"><i class="fa-solid fa-eye"></i></button>
+                        </div>
+                        <div id="passwordFeedback" class="invalid-feedback">Must have 8+ chars, upper, lower, number & special char.</div>
+                    </div>
+                    <div class="col-sm-6">
+                        <label for="confirm_password" class="form-label mb-1 small">Confirm Password</label>
+                        <div class="input-group input-group-sm">
+                            <input type="password" class="form-control" id="confirm_password" name="confirm_password" required>
+                            <button class="btn btn-outline-secondary toggle-password" type="button"><i class="fa-solid fa-eye"></i></button>
+                        </div>
+                    </div>
+                </div>
+
+                <button type="submit" class="btn btn-accent btn-sm w-100">Sign Up</button>
+
+                <div class="mt-2 text-center">
+                    <span class="text-muted small">Already have an account?</span> <a href="login.php"
+                        class="small fw-semibold" style="color: var(--accent-coral);">Login</a>
+                </div>
+            </form>
+        </div>
+    </div>
+
+    <script src="js/validation.js"></script>
+</body>
+
+</html>
