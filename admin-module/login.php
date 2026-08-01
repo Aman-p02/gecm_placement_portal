@@ -102,6 +102,9 @@ $csrfToken = generate_csrf_token();
                         <input type="password" class="form-control border-start-0 pe-5" name="password" id="admin_password" required>
                         <i class="fa-solid fa-eye position-absolute top-50 end-0 translate-middle-y me-3 text-muted" style="cursor: pointer; z-index: 10;" onclick="togglePassword('admin_password', this)"></i>
                     </div>
+                    <div class="text-end mt-1">
+                        <a href="forgot_password.php" class="small text-decoration-none" style="color: var(--accent-coral);">Forgot Password?</a>
+                    </div>
                 </div>
 
                 <button type="submit" class="btn btn-accent w-100 py-2">Login</button>
