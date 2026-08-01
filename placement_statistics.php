@@ -106,11 +106,15 @@ $displayBranch = $filterBranch ? $filterBranch : 'Computer Engineering';
             font-weight: bold;
             margin-bottom: 20px;
         }
-        .header-title h2, .header-title h3, .header-title h4 {
+        .header-title h1, .header-title h2, .header-title h3, .header-title h4 {
             font-weight: bold;
             margin: 8px 0;
             color: black;
         }
+        .header-title h1 { font-size: 1.8rem; }
+        .header-title h2 { font-size: 1.5rem; }
+        .header-title h3 { font-size: 1.3rem; }
+        .header-title h4 { font-size: 1.1rem; }
         .filter-section {
             display: flex;
             justify-content: center;
@@ -165,17 +169,17 @@ $displayBranch = $filterBranch ? $filterBranch : 'Computer Engineering';
     <!-- Navbar (Without Login Buttons) -->
     <nav class="navbar top-navbar no-print">
         <div class="container d-flex justify-content-center align-items-center">
-            <a class="brand-text" href="index.php">GEC Modasa <span>Placement</span></a>
+            <span class="brand-text">GEC Modasa <span>Placement Statistics</span></span>
         </div>
     </nav>
 
     <div class="container">
         <div class="record-container">
             <div class="header-title">
-                <h2>Government Engineering College, Modasa</h2>
-                <h3>Department of <?= htmlspecialchars($displayBranch) ?></h3>
+                <h1>Government Engineering College, Modasa</h1>
+                <h2>Department of <?= htmlspecialchars($displayBranch) ?></h2>
                 <br>
-                <h4>Placement Record</h4>
+                <h3>Placement Record</h3>
                 <h4>Academic Year: <?= htmlspecialchars($displayYear) ?></h4>
             </div>
 
