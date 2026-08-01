@@ -4,66 +4,61 @@
  */
 require_once __DIR__ . '/admin-module/includes/db_connect.php';
 
-// Get distinct batch years
-$stmt = $pdo->query("
-    SELECT DISTINCT c.batch_year 
-    FROM tbl_applications a
-    JOIN tbl_companies c ON a.company_id = c.company_id
-    WHERE a.status = 'Selected'
-    ORDER BY c.batch_year DESC
-");
-$distinctBatches = $stmt->fetchAll(PDO::FETCH_COLUMN);
-
-// Handle Filtering
-$filterBatch = filter_input(INPUT_GET, 'batch_year', FILTER_VALIDATE_INT) ?: '';
+// Handle URL Parameters
 $filterBranch = filter_input(INPUT_GET, 'branch', FILTER_SANITIZE_STRING) ?: '';
+$filterBatch = filter_input(INPUT_GET, 'batch_year', FILTER_VALIDATE_INT) ?: '';
 
 // Determine dynamic titles
 $displayYear = $filterBatch ? $filterBatch . '-' . substr($filterBatch + 1, -2) : 'All Years';
 $displayBranch = $filterBranch ? $filterBranch : 'All Branches';
 
-// If no branch is selected, fetch aggregate data for branch cards
+// ---------------------------------------------------------
+// DATA FETCHING BASED ON VIEW STATE
+// ---------------------------------------------------------
+
 if (empty($filterBranch)) {
+    // VIEW 1: Fetch aggregate data for branch cards
     $aggQuery = "
         SELECT s.branch, COUNT(*) as total_placed
         FROM tbl_applications a
         JOIN tbl_students s ON a.student_id = s.student_id
         JOIN tbl_companies c ON a.company_id = c.company_id
         WHERE a.status = 'Selected'
+        GROUP BY s.branch ORDER BY s.branch ASC
     ";
-    $aggParams = [];
-    if ($filterBatch) {
-        $aggQuery .= " AND c.batch_year = ?";
-        $aggParams[] = $filterBatch;
-    }
-    $aggQuery .= " GROUP BY s.branch ORDER BY s.branch ASC";
-    
-    $stmtAgg = $pdo->prepare($aggQuery);
-    $stmtAgg->execute($aggParams);
+    $stmtAgg = $pdo->query($aggQuery);
     $branchStats = $stmtAgg->fetchAll();
     
     // Calculate total across all branches
     $totalOverall = array_sum(array_column($branchStats, 'total_placed'));
+    
+} elseif (!empty($filterBranch) && empty($filterBatch)) {
+    // VIEW 2: Fetch available batches for the selected branch
+    $batchQuery = "
+        SELECT c.batch_year, COUNT(*) as total_placed
+        FROM tbl_applications a
+        JOIN tbl_students s ON a.student_id = s.student_id
+        JOIN tbl_companies c ON a.company_id = c.company_id
+        WHERE a.status = 'Selected' AND s.branch = ?
+        GROUP BY c.batch_year
+        ORDER BY c.batch_year DESC
+    ";
+    $stmtBatch = $pdo->prepare($batchQuery);
+    $stmtBatch->execute([$filterBranch]);
+    $availableBatches = $stmtBatch->fetchAll();
+    
 } else {
-    // If a branch is selected, fetch the actual student details for the table
+    // VIEW 3: Fetch the actual student details for the table
     $query = "
         SELECT s.full_name, s.enrollment_no, s.branch, c.company_name, c.batch_year, a.applied_at
         FROM tbl_applications a
         JOIN tbl_students s ON a.student_id = s.student_id
         JOIN tbl_companies c ON a.company_id = c.company_id
-        WHERE a.status = 'Selected' AND s.branch = ?
+        WHERE a.status = 'Selected' AND s.branch = ? AND c.batch_year = ?
+        ORDER BY s.full_name ASC
     ";
-    $params = [$filterBranch];
-    
-    if ($filterBatch) {
-        $query .= " AND c.batch_year = ?";
-        $params[] = $filterBatch;
-    }
-    
-    $query .= " ORDER BY c.batch_year DESC, s.full_name ASC";
-    
     $stmt = $pdo->prepare($query);
-    $stmt->execute($params);
+    $stmt->execute([$filterBranch, $filterBatch]);
     $placedStudents = $stmt->fetchAll();
 }
 ?>
@@ -73,7 +68,7 @@ if (empty($filterBranch)) {
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <!-- SEO Optimization -->
-    <title>Placement Statistics <?= $filterBatch ? ' - ' . $filterBatch : '' ?> | GEC Modasa</title>
+    <title>Placement Statistics <?= $filterBranch ? ' - ' . htmlspecialchars($filterBranch) : '' ?> | GEC Modasa</title>
     <meta name="description" content="View the placement statistics, records, and successfully placed students of Government Engineering College, Modasa.">
     
     <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css" rel="stylesheet">
@@ -130,41 +125,24 @@ if (empty($filterBranch)) {
             max-width: 600px;
             margin: 0 auto;
         }
-
-        /* Filter Controls */
-        .filter-glass {
-            background: rgba(255, 255, 255, 0.95);
-            backdrop-filter: blur(10px);
+        
+        .total-badge {
+            display: inline-block;
+            padding: 8px 20px;
+            background: rgba(255,255,255,0.1);
             border-radius: 100px;
-            padding: 10px 25px;
-            display: inline-flex;
-            align-items: center;
-            gap: 15px;
-            box-shadow: 0 8px 32px rgba(0,0,0,0.08);
-            border: 1px solid rgba(255,255,255,0.4);
-            margin-top: 30px;
-        }
-        .filter-glass select {
-            border: none;
-            background: transparent;
-            font-weight: 600;
-            color: var(--primary-navy);
-            font-size: 1.1rem;
-            cursor: pointer;
-            outline: none;
-            box-shadow: none !important;
-            padding-right: 30px;
-        }
-        .filter-glass select:focus {
-            box-shadow: none;
+            font-weight: 500;
+            font-size: 0.95rem;
         }
 
-        /* Branch Cards (Khatarnak UI) */
-        .branch-grid {
+        /* Generic Grid Layouts */
+        .card-grid {
             margin-top: 40px;
             padding-bottom: 60px;
         }
-        .branch-card {
+
+        /* Branch Cards (Khatarnak UI) */
+        .khatarnak-card {
             background: white;
             border-radius: 20px;
             padding: 30px;
@@ -174,13 +152,15 @@ if (empty($filterBranch)) {
             display: flex;
             flex-direction: column;
             align-items: center;
+            justify-content: center;
             transition: all 0.4s cubic-bezier(0.175, 0.885, 0.32, 1.275);
             box-shadow: 0 10px 40px rgba(0,0,0,0.04);
             border: 1px solid rgba(0,0,0,0.02);
             position: relative;
             overflow: hidden;
+            cursor: pointer;
         }
-        .branch-card::before {
+        .khatarnak-card::before {
             content: '';
             position: absolute;
             top: 0;
@@ -191,14 +171,14 @@ if (empty($filterBranch)) {
             opacity: 0;
             transition: opacity 0.3s ease;
         }
-        .branch-card:hover {
+        .khatarnak-card:hover {
             transform: translateY(-10px);
             box-shadow: 0 20px 50px rgba(0,0,0,0.08);
         }
-        .branch-card:hover::before {
+        .khatarnak-card:hover::before {
             opacity: 1;
         }
-        .branch-icon {
+        .khatarnak-icon {
             width: 70px;
             height: 70px;
             background: rgba(27, 54, 93, 0.05);
@@ -211,22 +191,63 @@ if (empty($filterBranch)) {
             margin-bottom: 20px;
             transition: transform 0.3s ease;
         }
-        .branch-card:hover .branch-icon {
+        .khatarnak-card:hover .khatarnak-icon {
             transform: scale(1.1) rotate(5deg);
             background: var(--primary-navy);
             color: white;
         }
-        .branch-card h3 {
+        .khatarnak-card h3 {
             color: var(--primary-navy);
             font-weight: 700;
             font-size: 1.3rem;
             margin-bottom: 5px;
         }
-        .branch-card p {
-            color: #6c757d;
-            font-size: 0.95rem;
-            margin-bottom: 20px;
+        
+        /* Batch Year Cards */
+        .batch-card {
+            background: white;
+            border-radius: 16px;
+            padding: 30px;
+            text-align: center;
+            text-decoration: none;
+            display: block;
+            transition: all 0.3s ease;
+            box-shadow: 0 8px 25px rgba(0,0,0,0.05);
+            border: 1px solid rgba(0,0,0,0.03);
+            position: relative;
+            overflow: hidden;
         }
+        .batch-card::before {
+            content: '';
+            position: absolute;
+            bottom: 0;
+            left: 0;
+            width: 100%;
+            height: 3px;
+            background: var(--accent-coral);
+            transform: scaleX(0);
+            transform-origin: right;
+            transition: transform 0.4s ease;
+        }
+        .batch-card:hover {
+            transform: translateY(-5px);
+            box-shadow: 0 15px 35px rgba(0,0,0,0.08);
+        }
+        .batch-card:hover::before {
+            transform: scaleX(1);
+            transform-origin: left;
+        }
+        .batch-card h2 {
+            color: var(--primary-navy);
+            font-weight: 800;
+            font-size: 2rem;
+            margin-bottom: 5px;
+        }
+        .batch-card span {
+            color: #6c757d;
+            font-weight: 500;
+        }
+
         .placed-count {
             background: var(--light-bg);
             padding: 10px 20px;
@@ -234,18 +255,9 @@ if (empty($filterBranch)) {
             font-weight: 800;
             color: var(--accent-coral);
             font-size: 1.1rem;
-            margin-top: auto;
-            border: 1px solid rgba(230, 90, 75, 0.1);
-        }
-        
-        .total-badge {
+            margin-top: 15px;
             display: inline-block;
-            margin-top: 20px;
-            padding: 8px 20px;
-            background: rgba(255,255,255,0.1);
-            border-radius: 100px;
-            font-weight: 500;
-            font-size: 0.95rem;
+            border: 1px solid rgba(230, 90, 75, 0.1);
         }
 
         /* Table Styles (Detail View) */
@@ -291,14 +303,11 @@ if (empty($filterBranch)) {
             border-bottom: 2px solid black;
             background-color: rgba(0,0,0,0.02);
         }
-        .text-center {
-            text-align: center !important;
-        }
         
         .back-btn {
             position: absolute;
-            top: 40px;
-            left: 40px;
+            top: -45px;
+            left: 0;
             font-family: 'Inter', sans-serif;
             text-decoration: none;
             color: #6c757d;
@@ -328,27 +337,14 @@ if (empty($filterBranch)) {
 
     <?php if (empty($filterBranch)): ?>
         <!-- ==========================================
-             VIEW 1: Premium Branch Cards (Khatarnak UI)
+             VIEW 1: Premium Branch Cards
              ========================================== -->
         
         <div class="hero-section no-print">
             <div class="container">
                 <h1>Campus Placement Records</h1>
-                <p>Discover the success stories of our brilliant minds securing their future in top-tier organizations.</p>
-                
-                <div class="d-flex justify-content-center align-items-center flex-wrap gap-3 mt-4">
-                    <form action="" method="GET" class="filter-glass m-0">
-                        <i class="fa-solid fa-calendar-check text-muted ps-2"></i>
-                        <select name="batch_year" onchange="this.form.submit()">
-                            <option value="">All Batches</option>
-                            <?php foreach($distinctBatches as $dbatch): ?>
-                                <?php if($dbatch): ?>
-                                    <option value="<?= htmlspecialchars($dbatch) ?>" <?= $filterBatch == $dbatch ? 'selected' : '' ?>>Class of <?= htmlspecialchars($dbatch) ?></option>
-                                <?php endif; ?>
-                            <?php endforeach; ?>
-                        </select>
-                    </form>
-                    
+                <p>Select a department below to explore our placement success stories.</p>
+                <div class="mt-4">
                     <div class="total-badge m-0">
                         <i class="fa-solid fa-trophy text-warning me-2"></i> 
                         Total Placed Students: <strong><?= isset($totalOverall) ? $totalOverall : 0 ?></strong>
@@ -357,37 +353,69 @@ if (empty($filterBranch)) {
             </div>
         </div>
 
-        <div class="container branch-grid no-print">
+        <div class="container card-grid no-print">
             <?php if(empty($branchStats)): ?>
                 <div class="text-center py-5">
                     <i class="fa-solid fa-folder-open display-1 text-muted mb-3 opacity-25"></i>
                     <h3 class="text-muted fw-bold">No placement records found.</h3>
-                    <p class="text-muted">No students were found for the selected criteria.</p>
                 </div>
             <?php else: ?>
                 <div class="row g-4 justify-content-center">
                     <?php foreach($branchStats as $stat): 
-                        // Assign a generic icon based on branch name keywords (just for visuals)
                         $iconClass = 'fa-laptop-code';
                         $branchNameLower = strtolower($stat['branch']);
                         if (strpos($branchNameLower, 'civil') !== false) $iconClass = 'fa-hard-hat';
                         if (strpos($branchNameLower, 'mechanical') !== false || strpos($branchNameLower, 'auto') !== false) $iconClass = 'fa-cogs';
                         if (strpos($branchNameLower, 'electrical') !== false) $iconClass = 'fa-bolt';
-                        if (strpos($branchNameLower, 'electronics') !== false || strpos($branchNameLower, 'ec') !== false) $iconClass = 'fa-microchip';
-                        if (strpos($branchNameLower, 'information') !== false || strpos($branchNameLower, 'it') !== false) $iconClass = 'fa-network-wired';
+                        if (strpos($branchNameLower, 'ec') !== false) $iconClass = 'fa-microchip';
+                        if (strpos($branchNameLower, 'it') !== false) $iconClass = 'fa-network-wired';
                     ?>
                         <div class="col-xl-3 col-lg-4 col-md-6">
-                            <!-- Make the card clickable to go to the detail view -->
-                            <a href="?branch=<?= urlencode($stat['branch']) ?><?= $filterBatch ? '&batch_year=' . urlencode($filterBatch) : '' ?>" class="branch-card">
-                                <div class="branch-icon">
+                            <!-- Click goes to View 2 (Select Year) -->
+                            <a href="?branch=<?= urlencode($stat['branch']) ?>" class="khatarnak-card">
+                                <div class="khatarnak-icon">
                                     <i class="fa-solid <?= $iconClass ?>"></i>
                                 </div>
                                 <h3><?= htmlspecialchars($stat['branch']) ?></h3>
-                                <p>Click to view detailed report</p>
-                                
+                            </a>
+                        </div>
+                    <?php endforeach; ?>
+                </div>
+            <?php endif; ?>
+        </div>
+
+    <?php elseif (!empty($filterBranch) && empty($filterBatch)): ?>
+        <!-- ==========================================
+             VIEW 2: Select Batch Year for specific Branch
+             ========================================== -->
+        
+        <div class="hero-section no-print">
+            <div class="container">
+                <h1><?= htmlspecialchars($filterBranch) ?></h1>
+                <p>Select a specific graduation year to view the detailed placement report.</p>
+            </div>
+        </div>
+
+        <div class="container card-grid no-print position-relative">
+            <a href="placement_statistics.php" class="back-btn mb-3 d-inline-block position-static">
+                <i class="fa-solid fa-arrow-left me-2"></i>Back to Departments
+            </a>
+            
+            <?php if(empty($availableBatches)): ?>
+                <div class="text-center py-5">
+                    <h3 class="text-muted fw-bold">No records found for this department.</h3>
+                </div>
+            <?php else: ?>
+                <div class="row g-4 justify-content-center mt-2">
+                    <?php foreach($availableBatches as $batch): ?>
+                        <div class="col-lg-3 col-md-4 col-sm-6">
+                            <!-- Click goes to View 3 (Table) -->
+                            <a href="?branch=<?= urlencode($filterBranch) ?>&batch_year=<?= urlencode($batch['batch_year']) ?>" class="batch-card">
+                                <span>Placed in</span>
+                                <h2><?= htmlspecialchars($batch['batch_year']) ?></h2>
                                 <div class="placed-count">
                                     <i class="fa-solid fa-user-graduate me-1"></i>
-                                    <?= htmlspecialchars($stat['total_placed']) ?> Placed
+                                    <?= htmlspecialchars($batch['total_placed']) ?> Students
                                 </div>
                             </a>
                         </div>
@@ -398,14 +426,14 @@ if (empty($filterBranch)) {
 
     <?php else: ?>
         <!-- ==========================================
-             VIEW 2: Simple Printable Table (Detail View)
+             VIEW 3: Simple Printable Table
              ========================================== -->
              
         <div class="container pb-5">
             <div class="record-container">
                 
-                <a href="placement_statistics.php<?= $filterBatch ? '?batch_year=' . urlencode($filterBatch) : '' ?>" class="back-btn no-print">
-                    <i class="fa-solid fa-arrow-left me-2"></i>Back to Branches
+                <a href="placement_statistics.php?branch=<?= urlencode($filterBranch) ?>" class="back-btn no-print">
+                    <i class="fa-solid fa-arrow-left me-2"></i>Back to Years
                 </a>
                 
                 <div class="text-end mb-3 no-print">
@@ -423,7 +451,7 @@ if (empty($filterBranch)) {
                 </div>
 
                 <?php if(empty($placedStudents)): ?>
-                    <p class="text-center mt-5">No placement records found for this branch.</p>
+                    <p class="text-center mt-5">No placement records found.</p>
                 <?php else: ?>
                     <table class="record-table">
                         <thead>
@@ -447,7 +475,7 @@ if (empty($filterBranch)) {
                                 <td class="text-center"><?= htmlspecialchars($s['enrollment_no']) ?></td>
                                 <td><?= htmlspecialchars($s['full_name']) ?></td>
                                 <td><?= htmlspecialchars($s['company_name']) ?></td>
-                                <td>On Campus</td>
+                                <td class="text-center">On Campus</td>
                             </tr>
                             <?php endforeach; ?>
                         </tbody>
