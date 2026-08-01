@@ -43,6 +43,7 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
     $category = sanitize_input($_POST['category'] ?? '');
     $district = sanitize_input($_POST['district'] ?? '');
     $course = sanitize_input($_POST['course'] ?? '');
+    $passingYear = filter_input(INPUT_POST, 'passing_year', FILTER_VALIDATE_INT) ?: null;
     $sem5Cgpa = filter_input(INPUT_POST, 'sem5_cgpa', FILTER_VALIDATE_FLOAT);
     $sem5Cpi = filter_input(INPUT_POST, 'sem5_cpi', FILTER_VALIDATE_FLOAT);
     $sem6Cgpa = filter_input(INPUT_POST, 'sem6_cgpa', FILTER_VALIDATE_FLOAT);
@@ -146,11 +147,11 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
                 $profilePicPath = $profilePicPath ?? $existingProfile['profile_pic'];
                 $resumePath = $resumePath ?? $existingProfile['resume_path'];
 
-                $stmtUpdate = $pdo->prepare("UPDATE tbl_student_profile SET first_name=?, middle_name=?, surname=?, father_name=?, mother_name=?, profile_pic=?, gender=?, dob=?, physically_handicap=?, category=?, district=?, course=?, sem5_cgpa=?, sem5_cpi=?, sem6_cgpa=?, sem6_cpi=?, cpi_percentage=?, active_backlogs=?, finishing_school=?, skill_training=?, training_details=?, hsc_percentage=?, ssc_percentage=?, phone_number=?, email=?, resume_path=? WHERE student_id=?");
-                $stmtUpdate->execute([$firstName, $middleName, $surname, $fatherName, $motherName, $profilePicPath, $gender, $dob, $physicallyHandicap, $category, $district, $course, $sem5Cgpa, $sem5Cpi, $sem6Cgpa, $sem6Cpi, $cpiPercentage, $activeBacklogs, $finishingSchool, $skillTraining, $trainingDetails, $hscPercentage, $sscPercentage, $phone, $email, $resumePath, $studentId]);
+                $stmtUpdate = $pdo->prepare("UPDATE tbl_student_profile SET first_name=?, middle_name=?, surname=?, father_name=?, mother_name=?, profile_pic=?, gender=?, dob=?, physically_handicap=?, category=?, district=?, course=?, passing_year=?, sem5_cgpa=?, sem5_cpi=?, sem6_cgpa=?, sem6_cpi=?, cpi_percentage=?, active_backlogs=?, finishing_school=?, skill_training=?, training_details=?, hsc_percentage=?, ssc_percentage=?, phone_number=?, email=?, resume_path=? WHERE student_id=?");
+                $stmtUpdate->execute([$firstName, $middleName, $surname, $fatherName, $motherName, $profilePicPath, $gender, $dob, $physicallyHandicap, $category, $district, $course, $passingYear, $sem5Cgpa, $sem5Cpi, $sem6Cgpa, $sem6Cpi, $cpiPercentage, $activeBacklogs, $finishingSchool, $skillTraining, $trainingDetails, $hscPercentage, $sscPercentage, $phone, $email, $resumePath, $studentId]);
             } else {
-                $stmtInsert = $pdo->prepare("INSERT INTO tbl_student_profile (student_id, first_name, middle_name, surname, father_name, mother_name, profile_pic, gender, dob, physically_handicap, category, district, course, sem5_cgpa, sem5_cpi, sem6_cgpa, sem6_cpi, cpi_percentage, active_backlogs, finishing_school, skill_training, training_details, hsc_percentage, ssc_percentage, phone_number, email, resume_path) VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?)");
-                $stmtInsert->execute([$studentId, $firstName, $middleName, $surname, $fatherName, $motherName, $profilePicPath, $gender, $dob, $physicallyHandicap, $category, $district, $course, $sem5Cgpa, $sem5Cpi, $sem6Cgpa, $sem6Cpi, $cpiPercentage, $activeBacklogs, $finishingSchool, $skillTraining, $trainingDetails, $hscPercentage, $sscPercentage, $phone, $email, $resumePath]);
+                $stmtInsert = $pdo->prepare("INSERT INTO tbl_student_profile (student_id, first_name, middle_name, surname, father_name, mother_name, profile_pic, gender, dob, physically_handicap, category, district, course, passing_year, sem5_cgpa, sem5_cpi, sem6_cgpa, sem6_cpi, cpi_percentage, active_backlogs, finishing_school, skill_training, training_details, hsc_percentage, ssc_percentage, phone_number, email, resume_path) VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?)");
+                $stmtInsert->execute([$studentId, $firstName, $middleName, $surname, $fatherName, $motherName, $profilePicPath, $gender, $dob, $physicallyHandicap, $category, $district, $course, $passingYear, $sem5Cgpa, $sem5Cpi, $sem6Cgpa, $sem6Cpi, $cpiPercentage, $activeBacklogs, $finishingSchool, $skillTraining, $trainingDetails, $hscPercentage, $sscPercentage, $phone, $email, $resumePath]);
             }
 
             // 3. Update Skills
@@ -435,6 +436,12 @@ $mode = (isset($_GET['edit']) || !$isProfileComplete) ? 'edit' : 'view';
                             <div class="row mb-3">
                                 <div class="col-md-6">
                                     <div class="row">
+                                        <div class="col-sm-4 text-muted small">Passing Year</div>
+                                        <div class="col-sm-8 fw-bold text-primary"><?= htmlspecialchars($profile['passing_year'] ?? 'N/A') ?></div>
+                                    </div>
+                                </div>
+                                <div class="col-md-6">
+                                    <div class="row">
                                         <div class="col-sm-4 text-muted small">SSC %</div>
                                         <div class="col-sm-8 fw-medium"><?= htmlspecialchars($profile['ssc_percentage'] ?? 'N/A') ?></div>
                                     </div>
@@ -604,15 +611,19 @@ $mode = (isset($_GET['edit']) || !$isProfileComplete) ? 'edit' : 'view';
                                 <i class="fa-solid fa-triangle-exclamation me-1"></i> Be careful while entering your CPI. Once saved, it cannot be changed in the future.
                             </div>
                             <div class="row g-3 mb-4">
-                                <div class="col-md-4">
+                                <div class="col-md-3">
                                     <label class="form-label">Course (e.g. B.E.)</label>
                                     <input type="text" class="form-control" name="course" value="<?= htmlspecialchars($profile['course'] ?? '') ?>" required>
                                 </div>
-                                <div class="col-md-4">
+                                <div class="col-md-3">
+                                    <label class="form-label">Passing Year</label>
+                                    <input type="number" class="form-control border-primary" name="passing_year" value="<?= htmlspecialchars($profile['passing_year'] ?? '') ?>" min="2000" max="2100" required>
+                                </div>
+                                <div class="col-md-3">
                                     <label class="form-label">SSC Percentage</label>
                                     <input type="number" step="0.01" min="0" max="100" class="form-control" name="ssc_percentage" value="<?= htmlspecialchars($profile['ssc_percentage'] ?? '') ?>">
                                 </div>
-                                <div class="col-md-4">
+                                <div class="col-md-3">
                                     <label class="form-label">HSC Percentage</label>
                                     <input type="number" step="0.01" min="0" max="100" class="form-control" name="hsc_percentage" value="<?= htmlspecialchars($profile['hsc_percentage'] ?? '') ?>">
                                 </div>

@@ -39,6 +39,7 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST' && isset($_POST['action']) && $_POST['
     validate_csrf_token($_POST['csrf_token'] ?? '');
     
     $companyName = sanitize_input($_POST['company_name'] ?? '');
+    $batchYear = filter_input(INPUT_POST, 'batch_year', FILTER_VALIDATE_INT) ?: date('Y');
     $lastDate = sanitize_input($_POST['last_date'] ?? '');
     
     // Determine branches (Now all admins can select multiple branches)
@@ -83,8 +84,8 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST' && isset($_POST['action']) && $_POST['
             }
             
             // Insert Company
-            $stmt = $pdo->prepare("INSERT INTO tbl_companies (company_name, logo_path, document_path, last_date_to_apply, added_by) VALUES (?, ?, ?, ?, ?)");
-            $stmt->execute([$companyName, $logoPath, $docPath, $lastDate, $adminId]);
+            $stmt = $pdo->prepare("INSERT INTO tbl_companies (company_name, batch_year, logo_path, document_path, last_date_to_apply, added_by) VALUES (?, ?, ?, ?, ?, ?)");
+            $stmt->execute([$companyName, $batchYear, $logoPath, $docPath, $lastDate, $adminId]);
             $companyId = $pdo->lastInsertId();
             
             // Insert Branches
@@ -225,6 +226,11 @@ $csrfToken = generate_csrf_token();
                                 </div>
                                 
                                 <div class="mb-3">
+                                    <label class="form-label small">Batch Year (Target Batch)</label>
+                                    <input type="number" class="form-control" name="batch_year" value="<?= date('Y') ?>" min="2000" max="2100" required>
+                                </div>
+                                
+                                <div class="mb-3">
                                     <label class="form-label small">Last Date to Apply</label>
                                     <input type="date" class="form-control" name="last_date" required>
                                 </div>
@@ -269,6 +275,7 @@ $csrfToken = generate_csrf_token();
                                         <thead class="table-light">
                                             <tr>
                                                 <th>Company</th>
+                                                <th>Batch Year</th>
                                                 <th>Last Date</th>
                                                 <th>Added By</th>
                                                 <th>Logo</th>
@@ -290,6 +297,9 @@ $csrfToken = generate_csrf_token();
                                                 <tr>
                                                     <td>
                                                         <div class="fw-bold"><?= htmlspecialchars($c['company_name']) ?></div>
+                                                    </td>
+                                                    <td>
+                                                        <span class="badge bg-primary text-white"><?= htmlspecialchars($c['batch_year'] ?? 'N/A') ?></span>
                                                     </td>
                                                     <td>
                                                         <span class="<?= (strtotime($c['last_date_to_apply']) < time()) ? 'text-danger' : 'text-success' ?>">

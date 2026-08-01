@@ -60,7 +60,7 @@ if ($adminRole === 'superadmin') {
             SELECT a.application_id, a.status, a.round_details, a.applied_at,
                    s.full_name as student_name, s.enrollment_no, s.branch as student_branch,
                    p.resume_path, p.profile_pic,
-                   c.company_name
+                   c.company_name, c.batch_year
             FROM tbl_applications a
             JOIN tbl_students s ON a.student_id = s.student_id
             LEFT JOIN tbl_student_profile p ON s.student_id = p.student_id
@@ -74,7 +74,7 @@ if ($adminRole === 'superadmin') {
             SELECT a.application_id, a.status, a.round_details, a.applied_at,
                    s.full_name as student_name, s.enrollment_no, s.branch as student_branch,
                    p.resume_path, p.profile_pic,
-                   c.company_name
+                   c.company_name, c.batch_year
             FROM tbl_applications a
             JOIN tbl_students s ON a.student_id = s.student_id
             LEFT JOIN tbl_student_profile p ON s.student_id = p.student_id
@@ -90,7 +90,7 @@ if ($adminRole === 'superadmin') {
         SELECT a.application_id, a.status, a.round_details, a.applied_at,
                s.full_name as student_name, s.enrollment_no, s.branch as student_branch,
                p.resume_path, p.profile_pic,
-               c.company_name
+               c.company_name, c.batch_year
         FROM tbl_applications a
         JOIN tbl_students s ON a.student_id = s.student_id
         LEFT JOIN tbl_student_profile p ON s.student_id = p.student_id
@@ -106,14 +106,20 @@ $applications = $stmt->fetchAll();
 $distinctCompanies = array_unique(array_column($applications, 'company_name'));
 sort($distinctCompanies);
 
+// Get distinct batch years
+$distinctBatches = array_unique(array_column($applications, 'batch_year'));
+sort($distinctBatches);
+
 // Additional PHP-based Filtering
 $filterCompany = filter_input(INPUT_GET, 'company', FILTER_SANITIZE_STRING) ?: '';
 $filterStatus = filter_input(INPUT_GET, 'status', FILTER_SANITIZE_STRING) ?: '';
+$filterBatch = filter_input(INPUT_GET, 'batch_year', FILTER_VALIDATE_INT) ?: '';
 
-if ($filterCompany || $filterStatus) {
-    $applications = array_filter($applications, function($app) use ($filterCompany, $filterStatus) {
+if ($filterCompany || $filterStatus || $filterBatch) {
+    $applications = array_filter($applications, function($app) use ($filterCompany, $filterStatus, $filterBatch) {
         if ($filterCompany && $app['company_name'] !== $filterCompany) return false;
         if ($filterStatus && $app['status'] !== $filterStatus) return false;
+        if ($filterBatch && $app['batch_year'] != $filterBatch) return false;
         return true;
     });
 }
@@ -125,7 +131,7 @@ if (isset($_GET['export']) && $_GET['export'] === 'csv') {
     $output = fopen('php://output', 'w');
     
     // Output headers
-    fputcsv($output, ['Applicant Name', 'Enrollment No', 'Branch', 'Company', 'Status', 'Applied At', 'Round Details']);
+    fputcsv($output, ['Applicant Name', 'Enrollment No', 'Branch', 'Company', 'Batch Year', 'Status', 'Applied At', 'Round Details']);
     
     foreach ($applications as $app) {
         fputcsv($output, [
@@ -133,6 +139,7 @@ if (isset($_GET['export']) && $_GET['export'] === 'csv') {
             $app['enrollment_no'],
             $app['student_branch'],
             $app['company_name'],
+            $app['batch_year'],
             $app['status'],
             date('d M Y, h:i A', strtotime($app['applied_at'])),
             $app['round_details'] ?: 'N/A'
@@ -239,6 +246,17 @@ $csrfToken = generate_csrf_token();
                                             <?php endforeach; ?>
                                         </select>
                                     </div>
+                                    
+                                    <div class="col-auto">
+                                        <select name="batch_year" class="form-select form-select-sm" onchange="this.form.submit()">
+                                            <option value="">All Batches</option>
+                                            <?php foreach($distinctBatches as $dbatch): ?>
+                                                <?php if($dbatch): ?>
+                                                    <option value="<?= htmlspecialchars($dbatch) ?>" <?= $filterBatch == $dbatch ? 'selected' : '' ?>><?= htmlspecialchars($dbatch) ?></option>
+                                                <?php endif; ?>
+                                            <?php endforeach; ?>
+                                        </select>
+                                    </div>
 
                                     <div class="col-auto">
                                         <select name="status" class="form-select form-select-sm" onchange="this.form.submit()">
@@ -311,8 +329,8 @@ $csrfToken = generate_csrf_token();
                                                 <span class="text-muted"><?= htmlspecialchars($app['enrollment_no']) ?></span>
                                             </td>
                                             <td>
-                                                <strong><?= htmlspecialchars($app['company_name']) ?></strong><br>
-                                                <small class="text-muted"><?= date('d M Y', strtotime($app['applied_at'])) ?></small>
+                                                <div class="fw-bold"><?= htmlspecialchars($app['company_name']) ?> <span class="badge bg-primary ms-1"><?= htmlspecialchars($app['batch_year'] ?? 'N/A') ?></span></div>
+                                                <div class="small text-muted"><i class="fa-regular fa-clock me-1"></i><?= date('d M, h:i A', strtotime($app['applied_at'])) ?></div>
                                             </td>
                                             <td>
                                                 <?php if ($app['resume_path']): ?>

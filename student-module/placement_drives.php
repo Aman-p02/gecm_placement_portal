@@ -68,6 +68,16 @@ $stmt = $pdo->prepare("
 $stmt->execute([$studentId, $studentBranch]);
 $companies = $stmt->fetchAll();
 
+$distinctBatches = array_unique(array_column($companies, 'batch_year'));
+sort($distinctBatches);
+
+$filterBatch = filter_input(INPUT_GET, 'batch_year', FILTER_VALIDATE_INT) ?: '';
+if ($filterBatch) {
+    $companies = array_filter($companies, function($c) use ($filterBatch) {
+        return $c['batch_year'] == $filterBatch;
+    });
+}
+
 $csrfToken = generate_csrf_token();
 ?>
 <!DOCTYPE html>
@@ -141,7 +151,7 @@ $csrfToken = generate_csrf_token();
                                         </div>
                                     <?php endif; ?>
                                     <div>
-                                        <h4 class="mb-1 text-dark"><?= htmlspecialchars($c['company_name']) ?></h4>
+                                        <h4 class="mb-1 text-dark"><?= htmlspecialchars($c['company_name']) ?> <span class="badge bg-primary fs-6 align-middle ms-1"><?= htmlspecialchars($c['batch_year'] ?? 'N/A') ?></span></h4>
                                     </div>
                                 </div>
                                 <span class="text-muted small"><i class="fa-regular fa-clock me-1"></i><?= date('M d, Y', strtotime($c['created_at'])) ?></span>
