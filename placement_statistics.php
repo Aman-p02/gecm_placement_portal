@@ -377,6 +377,7 @@ if (empty($filterBranch)) {
                                     <i class="fa-solid <?= $iconClass ?>"></i>
                                 </div>
                                 <h3><?= htmlspecialchars($stat['branch']) ?></h3>
+                                <p class="text-muted small mb-0 mt-2">Click to view detailed report</p>
                             </a>
                         </div>
                     <?php endforeach; ?>
