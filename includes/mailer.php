@@ -66,4 +66,50 @@ function sendResetEmail($toEmail, $resetLink) {
         return false;
     }
 }
+
+function sendRegistrationEmail($toEmail, $userName, $role) {
+    $mail = new PHPMailer(true);
+
+    try {
+        $yourEmail = 'haritap40@gmail.com'; 
+        $yourAppPassword = 'xkeq amgh eesp xkra'; 
+        
+        $mail->isSMTP();
+        $mail->Host       = 'smtp.gmail.com';
+        $mail->SMTPAuth   = true;
+        $mail->Username   = $yourEmail;
+        $mail->Password   = $yourAppPassword;
+        $mail->SMTPSecure = PHPMailer::ENCRYPTION_STARTTLS;
+        $mail->Port       = 587;
+
+        $mail->setFrom($yourEmail, 'GEC Placement Portal');
+        $mail->addAddress($toEmail);
+
+        $mail->isHTML(true);
+        $mail->Subject = 'Registration Successful - GEC Placement Portal';
+        
+        $roleDisplay = ucfirst($role);
+        
+        $emailBody = "
+            <div style='font-family: Arial, sans-serif; max-width: 600px; margin: 0 auto; padding: 20px; border: 1px solid #ddd; border-radius: 10px;'>
+                <h2 style='color: #1B365D;'>Welcome to GEC Placement Portal!</h2>
+                <p>Hello <strong>{$userName}</strong>,</p>
+                <p>Your registration as a <strong>{$roleDisplay}</strong> was successful!</p>
+                <p>You can now log in to the portal and start using your account.</p>
+                <div style='text-align: center; margin: 30px 0;'>
+                    <a href='http://localhost/gec_placement_portal' style='background-color: #E65A4B; color: white; padding: 12px 25px; text-decoration: none; border-radius: 5px; font-weight: bold;'>Go to Portal</a>
+                </div>
+                <p>Best regards,<br><strong>GEC Placement Cell</strong></p>
+            </div>
+        ";
+        
+        $mail->Body = $emailBody;
+
+        $mail->send();
+        return true;
+    } catch (Exception $e) {
+        error_log("Registration Message could not be sent. Mailer Error: {$mail->ErrorInfo}");
+        return false;
+    }
+}
 ?>

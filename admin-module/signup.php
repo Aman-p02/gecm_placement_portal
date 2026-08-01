@@ -4,6 +4,7 @@
  */
 require_once __DIR__ . '/includes/db_connect.php';
 require_once __DIR__ . '/includes/admin_auth_check.php';
+require_once __DIR__ . '/../includes/mailer.php';
 
 // Redirect if already logged in
 if (isset($_SESSION['admin_id'])) {
@@ -48,6 +49,10 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
             
             $stmt = $pdo->prepare("INSERT INTO tbl_admins (full_name, email, phone_number, password, role, branch) VALUES (?, ?, ?, ?, ?, ?)");
             if ($stmt->execute([$fullName, $email, $phone, $hashedPassword, $role, $branch])) {
+                
+                // Send registration email
+                sendRegistrationEmail($email, $fullName, $role);
+                
                 $_SESSION['signup_success'] = "Sub Admin Registration successful! You can now login.";
                 header("Location: login.php");
                 exit;

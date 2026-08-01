@@ -1,9 +1,8 @@
 <?php
-/**
- * Student Signup Page
- */
-require_once __DIR__ . '/includes/db_connect.php';
-require_once __DIR__ . '/includes/auth_check.php';
+session_start();
+require_once 'includes/db_connect.php';
+require_once 'includes/functions.php';
+require_once '../includes/mailer.php';
 
 // Redirect if already logged in
 if (isset($_SESSION['student_id'])) {
@@ -49,6 +48,10 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
             $hashedPassword = password_hash($password, PASSWORD_BCRYPT);
             $stmt = $pdo->prepare("INSERT INTO tbl_students (enrollment_no, full_name, branch, email, phone_number, password) VALUES (?, ?, ?, ?, ?, ?)");
             if ($stmt->execute([$enrollmentNo, $fullName, $branch, $email, $phone, $hashedPassword])) {
+                
+                // Send registration email
+                sendRegistrationEmail($email, $fullName, 'student');
+                
                 $_SESSION['signup_success'] = "Registration successful! You can now login.";
                 header("Location: login.php");
                 exit;
