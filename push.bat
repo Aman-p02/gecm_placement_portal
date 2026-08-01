@@ -3,7 +3,7 @@ echo Pushing to GitHub...
 
 git add .
 
-set /p msg=added admin super admin student dashboard: 
+set /p msg=type your message : 
 
 git commit -m "%msg%"
 
