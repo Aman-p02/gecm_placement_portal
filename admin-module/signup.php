@@ -125,20 +125,16 @@ $csrfToken = generate_csrf_token();
                 <div class="row g-2 mb-4">
                     <div class="col-sm-6">
                         <label class="form-label small">Password</label>
-                        <div class="input-group">
-                            <input type="password" class="form-control" name="password" id="signup_password" required>
-                            <button class="btn btn-outline-secondary" type="button" onclick="togglePassword('signup_password', this)">
-                                <i class="fa-solid fa-eye"></i>
-                            </button>
+                        <div class="position-relative">
+                            <input type="password" class="form-control pe-5" name="password" id="signup_password" required>
+                            <i class="fa-solid fa-eye position-absolute top-50 end-0 translate-middle-y me-3 text-muted" style="cursor: pointer; z-index: 10;" onclick="togglePassword('signup_password', this)"></i>
                         </div>
                     </div>
                     <div class="col-sm-6">
                         <label class="form-label small">Confirm Password</label>
-                        <div class="input-group">
-                            <input type="password" class="form-control" name="confirm_password" id="signup_confirm_password" required>
-                            <button class="btn btn-outline-secondary" type="button" onclick="togglePassword('signup_confirm_password', this)">
-                                <i class="fa-solid fa-eye"></i>
-                            </button>
+                        <div class="position-relative">
+                            <input type="password" class="form-control pe-5" name="confirm_password" id="signup_confirm_password" required>
+                            <i class="fa-solid fa-eye position-absolute top-50 end-0 translate-middle-y me-3 text-muted" style="cursor: pointer; z-index: 10;" onclick="togglePassword('signup_confirm_password', this)"></i>
                         </div>
                     </div>
                 </div>
@@ -153,9 +149,8 @@ $csrfToken = generate_csrf_token();
     </div>
 </body>
 <script>
-function togglePassword(inputId, btn) {
+function togglePassword(inputId, icon) {
     const input = document.getElementById(inputId);
-    const icon = btn.querySelector('i');
     if (input.type === 'password') {
         input.type = 'text';
         icon.classList.remove('fa-eye');

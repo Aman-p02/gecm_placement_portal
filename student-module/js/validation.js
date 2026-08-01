@@ -61,7 +61,7 @@ document.addEventListener('DOMContentLoaded', function () {
         btn.addEventListener('click', function() {
             // target the input before this button
             const input = this.previousElementSibling;
-            const icon = this.querySelector('i');
+            const icon = this.tagName === 'I' ? this : this.querySelector('i');
             if (input.type === 'password') {
                 input.type = 'text';
                 icon.classList.remove('fa-eye');

@@ -97,12 +97,10 @@ $csrfToken = generate_csrf_token();
                 
                 <div class="mb-4">
                     <label class="form-label small">Password</label>
-                    <div class="input-group">
-                        <span class="input-group-text bg-light"><i class="fa-solid fa-lock text-muted"></i></span>
-                        <input type="password" class="form-control" name="password" id="admin_password" required>
-                        <button class="btn btn-outline-secondary" type="button" onclick="togglePassword('admin_password', this)">
-                            <i class="fa-solid fa-eye"></i>
-                        </button>
+                    <div class="input-group position-relative">
+                        <span class="input-group-text bg-light border-end-0"><i class="fa-solid fa-lock text-muted"></i></span>
+                        <input type="password" class="form-control border-start-0 pe-5" name="password" id="admin_password" required>
+                        <i class="fa-solid fa-eye position-absolute top-50 end-0 translate-middle-y me-3 text-muted" style="cursor: pointer; z-index: 10;" onclick="togglePassword('admin_password', this)"></i>
                     </div>
                 </div>
 
@@ -116,9 +114,8 @@ $csrfToken = generate_csrf_token();
     </div>
 </body>
 <script>
-function togglePassword(inputId, btn) {
+function togglePassword(inputId, icon) {
     const input = document.getElementById(inputId);
-    const icon = btn.querySelector('i');
     if (input.type === 'password') {
         input.type = 'text';
         icon.classList.remove('fa-eye');

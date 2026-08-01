@@ -126,17 +126,17 @@ $csrfToken = generate_csrf_token();
                 <div class="row g-2 mb-3">
                     <div class="col-sm-6">
                         <label for="password" class="form-label mb-1 small">Password</label>
-                        <div class="input-group input-group-sm">
-                            <input type="password" class="form-control" id="password" name="password" required>
-                            <button class="btn btn-outline-secondary toggle-password" type="button"><i class="fa-solid fa-eye"></i></button>
+                        <div class="position-relative">
+                            <input type="password" class="form-control form-control-sm pe-4" id="password" name="password" required>
+                            <i class="fa-solid fa-eye position-absolute top-50 end-0 translate-middle-y me-2 text-muted toggle-password" style="cursor: pointer; z-index: 10;"></i>
                         </div>
                         <div id="passwordFeedback" class="invalid-feedback">Must have 8+ chars, upper, lower, number & special char.</div>
                     </div>
                     <div class="col-sm-6">
                         <label for="confirm_password" class="form-label mb-1 small">Confirm Password</label>
-                        <div class="input-group input-group-sm">
-                            <input type="password" class="form-control" id="confirm_password" name="confirm_password" required>
-                            <button class="btn btn-outline-secondary toggle-password" type="button"><i class="fa-solid fa-eye"></i></button>
+                        <div class="position-relative">
+                            <input type="password" class="form-control form-control-sm pe-4" id="confirm_password" name="confirm_password" required>
+                            <i class="fa-solid fa-eye position-absolute top-50 end-0 translate-middle-y me-2 text-muted toggle-password" style="cursor: pointer; z-index: 10;"></i>
                         </div>
                     </div>
                 </div>
