@@ -115,11 +115,13 @@ $csrfToken = generate_csrf_token();
                     <label for="branch" class="form-label mb-1 small">Branch</label>
                     <select class="form-select form-select-sm" id="branch" name="branch" required>
                         <option value="">Select Branch</option>
+                        <option value="Automobile Engineering" <?= (isset($branch) && $branch == 'Automobile Engineering') ? 'selected' : '' ?>>Automobile Engineering</option>
+                        <option value="Civil Engineering" <?= (isset($branch) && $branch == 'Civil Engineering') ? 'selected' : '' ?>>Civil Engineering</option>
                         <option value="Computer Engineering" <?= (isset($branch) && $branch == 'Computer Engineering') ? 'selected' : '' ?>>Computer Engineering</option>
+                        <option value="Electrical Engineering" <?= (isset($branch) && $branch == 'Electrical Engineering') ? 'selected' : '' ?>>Electrical Engineering</option>
+                        <option value="Electronics & Communication" <?= (isset($branch) && $branch == 'Electronics & Communication') ? 'selected' : '' ?>>Electronics & Communication</option>
                         <option value="Information Technology" <?= (isset($branch) && $branch == 'Information Technology') ? 'selected' : '' ?>>Information Technology</option>
                         <option value="Mechanical Engineering" <?= (isset($branch) && $branch == 'Mechanical Engineering') ? 'selected' : '' ?>>Mechanical Engineering</option>
-                        <option value="Civil Engineering" <?= (isset($branch) && $branch == 'Civil Engineering') ? 'selected' : '' ?>>Civil Engineering</option>
-                        <option value="Electrical Engineering" <?= (isset($branch) && $branch == 'Electrical Engineering') ? 'selected' : '' ?>>Electrical Engineering</option>
                     </select>
                 </div>
 
