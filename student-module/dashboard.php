@@ -316,129 +316,199 @@ $mode = (isset($_GET['edit']) || !$isProfileComplete) ? 'edit' : 'view';
                                     class="fa-solid fa-pen-to-square me-1"></i>Edit Profile</a>
                         </div>
 
-                        <div class="row g-4 mb-4">
-                            <!-- Personal & Academic Summaries -->
-                            <div class="col-sm-12">
-                                <div class="p-3 rounded bg-light border border-secondary">
-                                    <h6 class="mb-3">Extended Name Details</h6>
-                                    <div class="row g-3">
-                                        <div class="col-md-4">
-                                            <small class="text-muted d-block mb-1">First Name</small>
-                                            <strong class="fs-6"><?= htmlspecialchars($profile['first_name'] ?? 'N/A') ?></strong>
-                                        </div>
-                                        <div class="col-md-4">
-                                            <small class="text-muted d-block mb-1">Middle Name</small>
-                                            <strong class="fs-6"><?= htmlspecialchars($profile['middle_name'] ?? 'N/A') ?></strong>
-                                        </div>
-                                        <div class="col-md-4">
-                                            <small class="text-muted d-block mb-1">Surname</small>
-                                            <strong class="fs-6"><?= htmlspecialchars($profile['surname'] ?? 'N/A') ?></strong>
-                                        </div>
-                                        <div class="col-md-6">
-                                            <small class="text-muted d-block mb-1">Father's Name</small>
-                                            <strong class="fs-6"><?= htmlspecialchars($profile['father_name'] ?? 'N/A') ?></strong>
-                                        </div>
-                                        <div class="col-md-6">
-                                            <small class="text-muted d-block mb-1">Mother's Name</small>
-                                            <strong class="fs-6"><?= htmlspecialchars($profile['mother_name'] ?? 'N/A') ?></strong>
-                                        </div>
+                        <div class="mb-4">
+                            <!-- Personal Details -->
+                            <h5 class="border-bottom pb-2 mb-3 text-secondary">Personal Details</h5>
+                            <div class="row mb-3">
+                                <div class="col-md-6">
+                                    <div class="row">
+                                        <div class="col-sm-4 text-muted small">Enrollment No.</div>
+                                        <div class="col-sm-8 fw-medium"><?= htmlspecialchars($student['enrollment_no']) ?></div>
+                                    </div>
+                                </div>
+                                <div class="col-md-6">
+                                    <div class="row">
+                                        <div class="col-sm-4 text-muted small">First Name</div>
+                                        <div class="col-sm-8 fw-medium"><?= htmlspecialchars($profile['first_name'] ?? 'N/A') ?></div>
                                     </div>
                                 </div>
                             </div>
                             
-                            <div class="col-sm-4">
-                                <div class="p-3 rounded bg-light border border-secondary h-100">
-                                    <small class="text-muted d-block mb-1">Gender / DOB</small>
-                                    <strong class="fs-6 d-block"><?= htmlspecialchars($profile['gender'] ?? 'N/A') ?></strong>
-                                    <strong class="fs-6"><?= htmlspecialchars($profile['dob'] ?? 'N/A') ?></strong>
+                            <div class="row mb-3">
+                                <div class="col-md-6">
+                                    <div class="row">
+                                        <div class="col-sm-4 text-muted small">Middle Name</div>
+                                        <div class="col-sm-8 fw-medium"><?= htmlspecialchars($profile['middle_name'] ?? 'N/A') ?></div>
+                                    </div>
+                                </div>
+                                <div class="col-md-6">
+                                    <div class="row">
+                                        <div class="col-sm-4 text-muted small">Surname</div>
+                                        <div class="col-sm-8 fw-medium"><?= htmlspecialchars($profile['surname'] ?? 'N/A') ?></div>
+                                    </div>
                                 </div>
                             </div>
-                            <div class="col-sm-4">
-                                <div class="p-3 rounded bg-light border border-secondary h-100">
-                                    <small class="text-muted d-block mb-1">Category / District</small>
-                                    <strong class="fs-6 d-block"><?= htmlspecialchars($profile['category'] ?? 'N/A') ?></strong>
-                                    <strong class="fs-6"><?= htmlspecialchars($profile['district'] ?? 'N/A') ?></strong>
+
+                            <div class="row mb-3">
+                                <div class="col-md-6">
+                                    <div class="row">
+                                        <div class="col-sm-4 text-muted small">Father's Name</div>
+                                        <div class="col-sm-8 fw-medium"><?= htmlspecialchars($profile['father_name'] ?? 'N/A') ?></div>
+                                    </div>
+                                </div>
+                                <div class="col-md-6">
+                                    <div class="row">
+                                        <div class="col-sm-4 text-muted small">Mother's Name</div>
+                                        <div class="col-sm-8 fw-medium"><?= htmlspecialchars($profile['mother_name'] ?? 'N/A') ?></div>
+                                    </div>
                                 </div>
                             </div>
-                            <div class="col-sm-4">
-                                <div class="p-3 rounded bg-light border border-secondary h-100">
-                                    <small class="text-muted d-block mb-1">Course</small>
-                                    <strong class="fs-6 d-block"><?= htmlspecialchars($profile['course'] ?? 'N/A') ?></strong>
-                                    <?php if(!empty($profile['physically_handicap'])): ?>
-                                        <span class="badge bg-info text-dark mt-1">Physically Handicapped</span>
-                                    <?php endif; ?>
+
+                            <div class="row mb-3">
+                                <div class="col-md-6">
+                                    <div class="row">
+                                        <div class="col-sm-4 text-muted small">Email Address</div>
+                                        <div class="col-sm-8 fw-medium"><?= htmlspecialchars($student['email']) ?></div>
+                                    </div>
+                                </div>
+                                <div class="col-md-6">
+                                    <div class="row">
+                                        <div class="col-sm-4 text-muted small">Contact Number</div>
+                                        <div class="col-sm-8 fw-medium"><?= htmlspecialchars($student['phone_number']) ?></div>
+                                    </div>
+                                </div>
+                            </div>
+
+                            <div class="row mb-4">
+                                <div class="col-md-6">
+                                    <div class="row">
+                                        <div class="col-sm-4 text-muted small">Date of Birth</div>
+                                        <div class="col-sm-8 fw-medium"><?= htmlspecialchars($profile['dob'] ?? 'N/A') ?></div>
+                                    </div>
+                                </div>
+                                <div class="col-md-6">
+                                    <div class="row">
+                                        <div class="col-sm-4 text-muted small">Gender</div>
+                                        <div class="col-sm-8 fw-medium"><?= htmlspecialchars($profile['gender'] ?? 'N/A') ?></div>
+                                    </div>
                                 </div>
                             </div>
                             
-                            <!-- Academic Details -->
-                            <div class="col-sm-3">
-                                <div class="p-3 rounded bg-light border border-secondary text-center h-100">
-                                    <small class="text-muted d-block mb-1">SSC %</small>
-                                    <strong class="fs-5"><?= htmlspecialchars($profile['ssc_percentage'] ?? 'N/A') ?></strong>
+                            <div class="row mb-4">
+                                <div class="col-md-6">
+                                    <div class="row">
+                                        <div class="col-sm-4 text-muted small">Category</div>
+                                        <div class="col-sm-8 fw-medium"><?= htmlspecialchars($profile['category'] ?? 'N/A') ?></div>
+                                    </div>
+                                </div>
+                                <div class="col-md-6">
+                                    <div class="row">
+                                        <div class="col-sm-4 text-muted small">District</div>
+                                        <div class="col-sm-8 fw-medium"><?= htmlspecialchars($profile['district'] ?? 'N/A') ?></div>
+                                    </div>
                                 </div>
                             </div>
-                            <div class="col-sm-3">
-                                <div class="p-3 rounded bg-light border border-secondary text-center h-100">
-                                    <small class="text-muted d-block mb-1">HSC %</small>
-                                    <strong class="fs-5"><?= htmlspecialchars($profile['hsc_percentage'] ?? 'N/A') ?></strong>
-                                </div>
-                            </div>
-                            <div class="col-sm-3">
-                                <div class="p-3 rounded bg-light border border-secondary text-center h-100">
-                                    <small class="text-muted d-block mb-1">Sem 5 CPI</small>
-                                    <strong class="fs-5"><?= htmlspecialchars($profile['sem5_cpi'] ?? 'N/A') ?></strong>
-                                </div>
-                            </div>
-                            <div class="col-sm-3">
-                                <div class="p-3 rounded bg-light border border-secondary text-center h-100">
-                                    <small class="text-muted d-block mb-1">Current CPI</small>
-                                    <strong class="fs-5"><?= htmlspecialchars($profile['sem6_cpi'] ?? 'N/A') ?></strong>
-                                </div>
-                            </div>
+
+                            <!-- Academic Information -->
+                            <h5 class="border-bottom pb-2 mb-3 text-secondary mt-5">Academic Information</h5>
                             
-                            <!-- Critical Placement Info -->
-                            <div class="col-sm-6">
-                                <div class="p-3 rounded bg-light border border-secondary text-center">
-                                    <small class="text-muted d-block mb-1">Calculated B.E. Percentage</small>
-                                    <strong class="fs-4 text-success"><?= htmlspecialchars($profile['cpi_percentage'] ?? 'N/A') ?>%</strong>
+                            <div class="row mb-3">
+                                <div class="col-md-6">
+                                    <div class="row">
+                                        <div class="col-sm-4 text-muted small">Branch</div>
+                                        <div class="col-sm-8 fw-medium"><?= htmlspecialchars($student['branch']) ?></div>
+                                    </div>
+                                </div>
+                                <div class="col-md-6">
+                                    <div class="row">
+                                        <div class="col-sm-4 text-muted small">Course</div>
+                                        <div class="col-sm-8 fw-medium">
+                                            <?= htmlspecialchars($profile['course'] ?? 'N/A') ?>
+                                            <?php if(!empty($profile['physically_handicap'])): ?>
+                                                <span class="badge bg-info text-dark ms-2">Physically Handicapped</span>
+                                            <?php endif; ?>
+                                        </div>
+                                    </div>
                                 </div>
                             </div>
-                            <div class="col-sm-6">
-                                <div class="p-3 rounded bg-light border border-secondary text-center">
-                                    <small class="text-muted d-block mb-1">Active Backlogs (ATKT)</small>
-                                    <strong class="fs-4 text-danger"><?= htmlspecialchars($profile['active_backlogs'] ?? '0') ?></strong>
+
+                            <div class="row mb-3">
+                                <div class="col-md-6">
+                                    <div class="row">
+                                        <div class="col-sm-4 text-muted small">SSC %</div>
+                                        <div class="col-sm-8 fw-medium"><?= htmlspecialchars($profile['ssc_percentage'] ?? 'N/A') ?></div>
+                                    </div>
+                                </div>
+                                <div class="col-md-6">
+                                    <div class="row">
+                                        <div class="col-sm-4 text-muted small">HSC %</div>
+                                        <div class="col-sm-8 fw-medium"><?= htmlspecialchars($profile['hsc_percentage'] ?? 'N/A') ?></div>
+                                    </div>
                                 </div>
                             </div>
+
+                            <div class="row mb-3">
+                                <div class="col-md-6">
+                                    <div class="row">
+                                        <div class="col-sm-4 text-muted small">Sem 5 CPI</div>
+                                        <div class="col-sm-8 fw-medium"><?= htmlspecialchars($profile['sem5_cpi'] ?? 'N/A') ?></div>
+                                    </div>
+                                </div>
+                                <div class="col-md-6">
+                                    <div class="row">
+                                        <div class="col-sm-4 text-muted small">Current CPI</div>
+                                        <div class="col-sm-8 fw-medium"><?= htmlspecialchars($profile['sem6_cpi'] ?? 'N/A') ?></div>
+                                    </div>
+                                </div>
+                            </div>
+
+                            <div class="row mb-3">
+                                <div class="col-md-6">
+                                    <div class="row">
+                                        <div class="col-sm-4 text-muted small">B.E. Percentage</div>
+                                        <div class="col-sm-8 fw-bold text-success"><?= htmlspecialchars($profile['cpi_percentage'] ?? 'N/A') ?>%</div>
+                                    </div>
+                                </div>
+                                <div class="col-md-6">
+                                    <div class="row">
+                                        <div class="col-sm-4 text-muted small">Active Backlogs</div>
+                                        <div class="col-sm-8 fw-bold <?= empty($profile['active_backlogs']) ? 'text-success' : 'text-danger' ?>">
+                                            <?= htmlspecialchars($profile['active_backlogs'] ?? '0') ?>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
 
                             <!-- Training Details -->
                             <?php if(!empty($profile['finishing_school']) || !empty($profile['skill_training']) || !empty($profile['training_details'])): ?>
-                            <div class="col-sm-12">
-                                <div class="p-3 rounded bg-light border border-secondary">
-                                    <h6 class="mb-2">Training & Certifications</h6>
-                                    <div class="d-flex gap-2 mb-2">
-                                        <?php if(!empty($profile['finishing_school'])): ?>
-                                            <span class="badge bg-success"><i class="fa-solid fa-check me-1"></i> Finishing School</span>
-                                        <?php endif; ?>
-                                        <?php if(!empty($profile['skill_training'])): ?>
-                                            <span class="badge bg-success"><i class="fa-solid fa-check me-1"></i> Skill Training</span>
-                                        <?php endif; ?>
-                                    </div>
-                                    <p class="mb-0 text-muted small"><?= nl2br(htmlspecialchars($profile['training_details'] ?? '')) ?></p>
+                            <div class="mb-4">
+                                <h5 class="border-bottom pb-2 mb-3 text-secondary mt-5">Training & Certifications</h5>
+                                <div class="d-flex flex-wrap gap-2 mb-2">
+                                    <?php if(!empty($profile['finishing_school'])): ?>
+                                        <span class="badge bg-success"><i class="fa-solid fa-check me-1"></i> Finishing School</span>
+                                    <?php endif; ?>
+                                    <?php if(!empty($profile['skill_training'])): ?>
+                                        <span class="badge bg-success"><i class="fa-solid fa-check me-1"></i> Skill Training</span>
+                                    <?php endif; ?>
+                                </div>
+                                <?php if(!empty($profile['training_details'])): ?>
+                                    <p class="mb-0 text-muted small"><?= nl2br(htmlspecialchars($profile['training_details'])) ?></p>
+                                <?php endif; ?>
+                            </div>
+                            <?php endif; ?>
+                            
+                            <!-- Skills -->
+                            <?php if(!empty($skills)): ?>
+                            <div class="mb-4">
+                                <h5 class="border-bottom pb-2 mb-3 text-secondary mt-4">Technical Skills</h5>
+                                <div class="d-flex flex-wrap gap-2">
+                                    <?php foreach($skills as $skill): ?>
+                                        <span class="badge bg-secondary text-uppercase py-2 px-3"><?= htmlspecialchars($skill) ?></span>
+                                    <?php endforeach; ?>
                                 </div>
                             </div>
                             <?php endif; ?>
-                        </div>
-
-                        <h5 class="mb-3">Technical Skills</h5>
-                        <?php if (empty($skills)): ?>
-                            <p class="text-muted">No skills added yet.</p>
-                        <?php else: ?>
-                            <div class="skills-container">
-                                <?php foreach ($skills as $s): ?>
-                                    <span class="badge bg-secondary p-2 px-3 fw-normal"><?= htmlspecialchars($s) ?></span>
-                                <?php endforeach; ?>
-                            </div>
-                        <?php endif; ?>
 
                     <?php else: ?>
                         <!-- EDIT MODE -->
