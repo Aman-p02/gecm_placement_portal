@@ -18,13 +18,13 @@ function sendResetEmail($toEmail, $resetLink) {
 
     try {
         // --- 1. ENTER YOUR GMAIL CREDENTIALS HERE ---
-        $yourEmail = 'YOUR_GMAIL@gmail.com'; 
+        $yourEmail = 'haritap40@gmail.com'; 
         // Instructions for App Password:
         // 1. Go to Google Account Settings -> Security
         // 2. Enable 2-Step Verification
         // 3. Search for "App Passwords"
         // 4. Generate a new App Password for "Mail" and paste the 16-letter code below:
-        $yourAppPassword = 'YOUR_16_LETTER_APP_PASSWORD'; 
+        $yourAppPassword = 'xkeq amgh eesp xkra'; 
         
         // --- Server settings ---
         $mail->isSMTP();
