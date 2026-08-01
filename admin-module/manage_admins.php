@@ -30,7 +30,7 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST' && isset($_POST['action']) && $_POST['
     
     if ($deleteId) {
         $stmt = $pdo->prepare("DELETE FROM tbl_admins WHERE admin_id = ? AND role = 'subadmin'");
-        if ($stmt->execute()) {
+        if ($stmt->execute([$deleteId])) {
             $_SESSION['page_success'] = "Sub-admin removed successfully.";
         } else {
             $_SESSION['page_error'] = "Failed to remove sub-admin.";
