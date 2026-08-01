@@ -100,17 +100,13 @@ $csrfToken = generate_csrf_token();
                 <button type="submit" class="btn btn-accent w-100 mb-3">Login</button>
             </form>
             
-            <a href="../placement_statistics.php" class="btn btn-outline-primary w-100 fw-medium">
-                <i class="fa-solid fa-chart-pie me-2"></i>View Placement Statistics
-            </a>
+
 
             <div class="mt-4 text-center">
                 <p class="text-muted">Don't have an account? <a href="signup.php" style="color: var(--accent-coral); font-weight: 500;">Register Here</a></p>
             </div>
             
-            <div class="text-center mt-3 border-top pt-3">
-                <a href="../admin-module/login.php" class="small text-muted text-decoration-none">Go to Admin Login</a>
-            </div>
+
         </div>
     </div>
 </body>
