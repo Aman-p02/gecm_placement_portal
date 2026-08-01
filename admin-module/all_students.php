@@ -157,9 +157,10 @@ if ($adminRole === 'superadmin') {
 // Additional PHP-based Filtering
 $filterStatus = filter_input(INPUT_GET, 'status', FILTER_SANITIZE_STRING) ?: '';
 $filterCpi = filter_input(INPUT_GET, 'min_cpi', FILTER_VALIDATE_FLOAT) ?: '';
+$filterSearchName = filter_input(INPUT_GET, 'search_name', FILTER_SANITIZE_STRING) ?: '';
 
-if ($filterStatus || $filterCpi) {
-    $students = array_filter($students, function($stu) use ($filterStatus, $filterCpi) {
+if ($filterStatus || $filterCpi !== '' || $filterSearchName) {
+    $students = array_filter($students, function($stu) use ($filterStatus, $filterCpi, $filterSearchName) {
         $isComplete = !empty($stu['first_name']) && !empty($stu['district']) && !empty($stu['course']) && !empty($stu['sem5_cpi']);
         
         // Status Filter
@@ -173,6 +174,27 @@ if ($filterStatus || $filterCpi) {
             if ($cpi < $filterCpi) return false;
         }
 
+        // Search Name Filter
+        if ($filterSearchName) {
+            $search = strtolower($filterSearchName);
+            $names = [
+                $stu['full_name'] ?? '',
+                $stu['first_name'] ?? '',
+                $stu['middle_name'] ?? '',
+                $stu['surname'] ?? '',
+                $stu['father_name'] ?? '',
+                $stu['mother_name'] ?? ''
+            ];
+            $match = false;
+            foreach ($names as $name) {
+                if (strpos(strtolower($name), $search) !== false) {
+                    $match = true;
+                    break;
+                }
+            }
+            if (!$match) return false;
+        }
+
         return true;
     });
 }
@@ -184,7 +206,7 @@ if (isset($_GET['export']) && $_GET['export'] === 'csv') {
     $output = fopen('php://output', 'w');
     
     // Output headers
-    fputcsv($output, ['Enrollment No', 'Full Name', 'Branch', 'Email', 'Phone', 'Sem 5 CPI', 'Sem 6 CPI', 'Active Backlogs', 'Profile Status']);
+    fputcsv($output, ['Enrollment No', 'Full Name', 'First Name', 'Middle Name', 'Surname', 'Father Name', 'Mother Name', 'Branch', 'Email', 'Phone', 'Sem 5 CPI', 'Sem 6 CPI', 'Active Backlogs', 'Profile Status']);
     
     foreach ($students as $stu) {
         $isComplete = !empty($stu['first_name']) && !empty($stu['district']) && !empty($stu['course']) && !empty($stu['sem5_cpi']);
@@ -193,6 +215,11 @@ if (isset($_GET['export']) && $_GET['export'] === 'csv') {
         fputcsv($output, [
             $stu['enrollment_no'],
             $stu['full_name'],
+            $stu['first_name'],
+            $stu['middle_name'],
+            $stu['surname'],
+            $stu['father_name'],
+            $stu['mother_name'],
             $stu['branch'],
             $stu['email'],
             $stu['phone_number'],
@@ -305,6 +332,13 @@ $csrfToken = generate_csrf_token();
                                         </select>
                                     </div>
                                     
+                                    <div class="col-auto">
+                                        <div class="input-group input-group-sm">
+                                            <span class="input-group-text"><i class="fa-solid fa-search"></i></span>
+                                            <input type="text" name="search_name" class="form-control" value="<?= htmlspecialchars($filterSearchName) ?>" placeholder="Search Name..." style="width: 140px;">
+                                        </div>
+                                    </div>
+
                                     <div class="col-auto">
                                         <div class="input-group input-group-sm">
                                             <span class="input-group-text">Min CPI</span>
