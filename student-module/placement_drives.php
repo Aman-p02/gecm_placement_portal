@@ -7,13 +7,68 @@ require_once __DIR__ . '/includes/auth_check.php';
 
 // Secure the page
 require_login();
+require_profile_completion($pdo);
 
 $studentId = $_SESSION['student_id'];
 
-// Fetch basic student info for navbar
-$stmt = $pdo->prepare("SELECT full_name FROM tbl_students WHERE student_id = ?");
+// Fetch basic student info and branch
+$stmt = $pdo->prepare("SELECT full_name, branch FROM tbl_students WHERE student_id = ?");
 $stmt->execute([$studentId]);
 $student = $stmt->fetch();
+
+$studentBranch = $student['branch'];
+
+// Handle application submission
+$success = '';
+$error = '';
+
+if (isset($_SESSION['page_success'])) {
+    $success = $_SESSION['page_success'];
+    unset($_SESSION['page_success']);
+}
+if (isset($_SESSION['page_error'])) {
+    $error = $_SESSION['page_error'];
+    unset($_SESSION['page_error']);
+}
+
+if ($_SERVER['REQUEST_METHOD'] === 'POST' && isset($_POST['action']) && $_POST['action'] === 'apply') {
+    validate_csrf_token($_POST['csrf_token'] ?? '');
+    $companyId = filter_input(INPUT_POST, 'company_id', FILTER_VALIDATE_INT);
+    
+    if ($companyId) {
+        try {
+            $stmt = $pdo->prepare("INSERT INTO tbl_applications (student_id, company_id) VALUES (?, ?)");
+            $stmt->execute([$studentId, $companyId]);
+            $_SESSION['page_success'] = "Successfully applied!";
+            header("Location: placement_drives.php");
+            exit;
+        } catch (PDOException $e) {
+            // 23000 is integrity constraint violation (duplicate key)
+            if ($e->getCode() == 23000) {
+                $_SESSION['page_error'] = "You have already applied to this company.";
+            } else {
+                $_SESSION['page_error'] = "An error occurred while applying.";
+            }
+            header("Location: placement_drives.php");
+            exit;
+        }
+    }
+}
+
+// Fetch available companies for the student's branch
+// Also check if the student has already applied
+$stmt = $pdo->prepare("
+    SELECT c.*, 
+           (SELECT COUNT(*) FROM tbl_applications a WHERE a.student_id = ? AND a.company_id = c.company_id) as has_applied
+    FROM tbl_companies c
+    JOIN tbl_company_branches cb ON c.company_id = cb.company_id
+    WHERE cb.branch_name = ?
+    ORDER BY c.created_at DESC
+");
+$stmt->execute([$studentId, $studentBranch]);
+$companies = $stmt->fetchAll();
+
+$csrfToken = generate_csrf_token();
 ?>
 <!DOCTYPE html>
 <html lang="en">
@@ -58,56 +113,67 @@ $student = $stmt->fetch();
     <div class="container py-5" style="margin-top: 2rem;">
         <h3 class="mb-4">Available Placement Drives</h3>
         
-        <div class="row g-4">
-            <!-- Mock Company Card 1 -->
-            <div class="col-md-6">
-                <div class="custom-card h-100 d-flex flex-column">
-                    <div class="d-flex justify-content-between align-items-start mb-3">
-                        <div>
-                            <h4 class="mb-1 text-dark">Tech Mahindra</h4>
-                            <span class="badge bg-secondary">Software Developer</span>
-                        </div>
-                        <span class="text-muted small"><i class="fa-regular fa-clock me-1"></i>2 days ago</span>
-                    </div>
-                    
-                    <p class="text-muted mb-3 flex-grow-1">Hiring 2026 batch students. Excellent problem-solving skills and knowledge of web technologies required.</p>
-                    
-                    <div class="p-3 bg-light border rounded mb-4">
-                        <h6 class="mb-2 text-dark"><i class="fa-solid fa-paperclip text-muted me-2"></i>Company Document</h6>
-                        <p class="small text-muted mb-2">Contains salary breakdown, bond details, and criteria.</p>
-                        <a href="#" class="btn btn-sm btn-outline-secondary w-100" target="_blank">
-                            <i class="fa-solid fa-file-pdf text-danger me-1"></i> View Document (PDF)
-                        </a>
-                    </div>
-                    
-                    <button class="btn btn-accent w-100 fw-bold">Apply Now</button>
-                </div>
-            </div>
+        <?php if ($error): ?>
+            <div class="alert alert-danger alert-dismissible fade show"><?= htmlspecialchars($error) ?> <button type="button" class="btn-close" data-bs-dismiss="alert"></button></div>
+        <?php endif; ?>
+        <?php if ($success): ?>
+            <div class="alert alert-success alert-dismissible fade show"><?= htmlspecialchars($success) ?> <button type="button" class="btn-close" data-bs-dismiss="alert"></button></div>
+        <?php endif; ?>
 
-            <!-- Mock Company Card 2 -->
-            <div class="col-md-6">
-                <div class="custom-card h-100 d-flex flex-column">
-                    <div class="d-flex justify-content-between align-items-start mb-3">
-                        <div>
-                            <h4 class="mb-1 text-dark">L&T Technology Services</h4>
-                            <span class="badge bg-secondary">Embedded Engineer</span>
-                        </div>
-                        <span class="text-muted small"><i class="fa-regular fa-clock me-1"></i>5 days ago</span>
-                    </div>
-                    
-                    <p class="text-muted mb-3 flex-grow-1">Looking for EC/IC branch students with strong fundamentals in C programming and microcontrollers.</p>
-                    
-                    <div class="p-3 bg-light border rounded mb-4">
-                        <h6 class="mb-2 text-dark"><i class="fa-solid fa-paperclip text-muted me-2"></i>Company Document</h6>
-                        <p class="small text-muted mb-2">Official poster with requirements and 2-year bond agreement.</p>
-                        <a href="#" class="btn btn-sm btn-outline-secondary w-100" target="_blank">
-                            <i class="fa-solid fa-image text-primary me-1"></i> View Details (JPG)
-                        </a>
-                    </div>
-                    
-                    <button class="btn btn-accent w-100 fw-bold">Apply Now</button>
+        <div class="row g-4">
+            <?php if (empty($companies)): ?>
+                <div class="col-12 text-center py-5 text-muted">
+                    <i class="fa-solid fa-folder-open fs-1 mb-3"></i>
+                    <h5>No companies available right now</h5>
+                    <p>Check back later when placement drives are added for your branch.</p>
                 </div>
-            </div>
+            <?php else: ?>
+                <?php foreach ($companies as $c): ?>
+                    <div class="col-md-6">
+                        <div class="custom-card h-100 d-flex flex-column border-top border-4 border-warning">
+                            <div class="d-flex justify-content-between align-items-start mb-3">
+                                <div class="d-flex gap-3 align-items-center">
+                                    <?php if ($c['logo_path']): ?>
+                                        <img src="../admin-module/<?= htmlspecialchars($c['logo_path']) ?>" alt="Logo" style="width: 50px; height: 50px; object-fit: contain; border-radius: 8px;">
+                                    <?php else: ?>
+                                        <div class="bg-light rounded d-flex align-items-center justify-content-center" style="width: 50px; height: 50px;">
+                                            <i class="fa-solid fa-building text-muted fs-4"></i>
+                                        </div>
+                                    <?php endif; ?>
+                                    <div>
+                                        <h4 class="mb-1 text-dark"><?= htmlspecialchars($c['company_name']) ?></h4>
+                                    </div>
+                                </div>
+                                <span class="text-muted small"><i class="fa-regular fa-clock me-1"></i><?= date('M d, Y', strtotime($c['created_at'])) ?></span>
+                            </div>
+                            
+                            <p class="text-muted mb-3 flex-grow-1">Last Date to Apply: <strong class="<?= (strtotime($c['last_date_to_apply']) < time()) ? 'text-danger' : 'text-success' ?>"><?= date('d M Y', strtotime($c['last_date_to_apply'])) ?></strong></p>
+                            
+                            <?php if ($c['document_path']): ?>
+                            <div class="p-3 bg-light border rounded mb-4">
+                                <h6 class="mb-2 text-dark"><i class="fa-solid fa-paperclip text-muted me-2"></i>Company Document</h6>
+                                <a href="../admin-module/<?= htmlspecialchars($c['document_path']) ?>" class="btn btn-sm btn-outline-secondary w-100" target="_blank">
+                                    <i class="fa-solid fa-file-pdf text-danger me-1"></i> View Document (PDF)
+                                </a>
+                            </div>
+                            <?php endif; ?>
+                            
+                            <?php if ($c['has_applied'] > 0): ?>
+                                <button class="btn btn-secondary w-100 fw-bold" disabled><i class="fa-solid fa-check me-2"></i>Applied</button>
+                            <?php elseif (strtotime($c['last_date_to_apply']) < time()): ?>
+                                <button class="btn btn-danger w-100 fw-bold" disabled>Deadline Passed</button>
+                            <?php else: ?>
+                                <form action="placement_drives.php" method="POST" class="mt-auto">
+                                    <input type="hidden" name="csrf_token" value="<?= $csrfToken ?>">
+                                    <input type="hidden" name="action" value="apply">
+                                    <input type="hidden" name="company_id" value="<?= htmlspecialchars($c['company_id']) ?>">
+                                    <button type="submit" class="btn btn-accent w-100 fw-bold">Apply Now</button>
+                                </form>
+                            <?php endif; ?>
+                        </div>
+                    </div>
+                <?php endforeach; ?>
+            <?php endif; ?>
         </div>
     </div>
 

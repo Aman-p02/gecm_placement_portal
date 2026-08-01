@@ -20,14 +20,20 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
     $enrollmentNo = sanitize_input($_POST['enrollment_no'] ?? '');
     $fullName = sanitize_input($_POST['full_name'] ?? '');
     $branch = sanitize_input($_POST['branch'] ?? '');
+    $email = sanitize_input($_POST['email'] ?? '');
+    $phone = sanitize_input($_POST['phone'] ?? '');
     $password = $_POST['password'] ?? '';
     $confirmPassword = $_POST['confirm_password'] ?? '';
 
     // Basic Server-side Validation
-    if (empty($enrollmentNo) || empty($fullName) || empty($branch) || empty($password)) {
+    if (empty($enrollmentNo) || empty($fullName) || empty($branch) || empty($email) || empty($phone) || empty($password)) {
         $error = "All fields are required.";
     } elseif (!preg_match('/^[0-9]{12}$/', $enrollmentNo)) {
         $error = "Invalid Enrollment Number. It must be exactly 12 digits.";
+    } elseif (!filter_var($email, FILTER_VALIDATE_EMAIL)) {
+        $error = "Invalid email format.";
+    } elseif (!preg_match('/^[0-9]{10}$/', $phone)) {
+        $error = "Phone number must be exactly 10 digits.";
     } elseif ($password !== $confirmPassword) {
         $error = "Passwords do not match.";
     } elseif (strlen($password) < 8 || !preg_match('/[A-Z]/', $password) || !preg_match('/[a-z]/', $password) || !preg_match('/[0-9]/', $password) || !preg_match('/[\W_]/', $password)) {
@@ -41,8 +47,8 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
         } else {
             // Insert new student
             $hashedPassword = password_hash($password, PASSWORD_BCRYPT);
-            $stmt = $pdo->prepare("INSERT INTO tbl_students (enrollment_no, full_name, branch, password) VALUES (?, ?, ?, ?)");
-            if ($stmt->execute([$enrollmentNo, $fullName, $branch, $hashedPassword])) {
+            $stmt = $pdo->prepare("INSERT INTO tbl_students (enrollment_no, full_name, branch, email, phone_number, password) VALUES (?, ?, ?, ?, ?, ?)");
+            if ($stmt->execute([$enrollmentNo, $fullName, $branch, $email, $phone, $hashedPassword])) {
                 $_SESSION['signup_success'] = "Registration successful! You can now login.";
                 header("Location: login.php");
                 exit;
@@ -89,6 +95,19 @@ $csrfToken = generate_csrf_token();
                         <label for="full_name" class="form-label mb-1 small">Full Name</label>
                         <input type="text" class="form-control form-control-sm" id="full_name" name="full_name"
                             value="<?= htmlspecialchars($fullName ?? '') ?>" required>
+                    </div>
+                </div>
+
+                <div class="row g-2 mb-2">
+                    <div class="col-sm-6">
+                        <label for="email" class="form-label mb-1 small">Email Address</label>
+                        <input type="email" class="form-control form-control-sm" id="email" name="email"
+                            value="<?= htmlspecialchars($email ?? '') ?>" required>
+                    </div>
+                    <div class="col-sm-6">
+                        <label for="phone" class="form-label mb-1 small">Phone Number</label>
+                        <input type="tel" class="form-control form-control-sm" id="phone" name="phone"
+                            value="<?= htmlspecialchars($phone ?? '') ?>" pattern="[0-9]{10}" title="10 digit mobile number" required>
                     </div>
                 </div>
 

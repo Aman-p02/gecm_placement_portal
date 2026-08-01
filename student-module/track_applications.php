@@ -7,6 +7,7 @@ require_once __DIR__ . '/includes/auth_check.php';
 
 // Secure the page
 require_login();
+require_profile_completion($pdo);
 
 $studentId = $_SESSION['student_id'];
 
@@ -14,6 +15,17 @@ $studentId = $_SESSION['student_id'];
 $stmt = $pdo->prepare("SELECT full_name FROM tbl_students WHERE student_id = ?");
 $stmt->execute([$studentId]);
 $student = $stmt->fetch();
+
+// Fetch applications
+$stmt = $pdo->prepare("
+    SELECT a.status, a.round_details, a.applied_at, c.company_name, c.logo_path
+    FROM tbl_applications a
+    JOIN tbl_companies c ON a.company_id = c.company_id
+    WHERE a.student_id = ?
+    ORDER BY a.applied_at DESC
+");
+$stmt->execute([$studentId]);
+$applications = $stmt->fetchAll();
 ?>
 <!DOCTYPE html>
 <html lang="en">
@@ -58,41 +70,52 @@ $student = $stmt->fetch();
     <div class="container py-5" style="margin-top: 2rem;">
         <h3 class="mb-4">My Applications</h3>
         
-        <div class="custom-card mb-4 border-start border-4 border-warning">
-            <div class="d-flex justify-content-between align-items-center">
-                <div>
-                    <h5 class="mb-1">Tata Consultancy Services (TCS)</h5>
-                    <p class="text-muted mb-0 small">Applied on: 12 Aug 2026</p>
-                </div>
-                <span class="badge bg-warning text-dark px-3 py-2">In Progress</span>
+        <?php if (empty($applications)): ?>
+            <div class="text-center py-5 text-muted">
+                <i class="fa-solid fa-file-invoice fs-1 mb-3"></i>
+                <h5>You haven't applied to any companies yet.</h5>
+                <p>Go to <a href="placement_drives.php" style="color: var(--accent-coral);">Placement Drives</a> to find opportunities.</p>
             </div>
-            <hr class="text-muted my-3">
-            <p class="mb-0"><strong>Status:</strong> Cleared Aptitude Test. Pending Technical Interview (Round 2).</p>
-        </div>
-
-        <div class="custom-card mb-4 border-start border-4 border-danger">
-            <div class="d-flex justify-content-between align-items-center">
-                <div>
-                    <h5 class="mb-1">Infosys</h5>
-                    <p class="text-muted mb-0 small">Applied on: 05 Aug 2026</p>
+        <?php else: ?>
+            <?php foreach ($applications as $app): 
+                $borderClass = 'border-secondary';
+                $badgeClass = 'bg-secondary';
+                if ($app['status'] === 'Applied' || $app['status'] === 'In Progress') {
+                    $borderClass = 'border-warning';
+                    $badgeClass = 'bg-warning text-dark';
+                } elseif ($app['status'] === 'Rejected') {
+                    $borderClass = 'border-danger';
+                    $badgeClass = 'bg-danger';
+                } elseif ($app['status'] === 'Selected') {
+                    $borderClass = 'border-success';
+                    $badgeClass = 'bg-success';
+                }
+            ?>
+                <div class="custom-card mb-4 border-start border-4 <?= $borderClass ?>">
+                    <div class="d-flex justify-content-between align-items-center flex-wrap gap-3">
+                        <div class="d-flex gap-3 align-items-center">
+                            <?php if ($app['logo_path']): ?>
+                                <img src="../admin-module/<?= htmlspecialchars($app['logo_path']) ?>" alt="Logo" style="width: 40px; height: 40px; object-fit: contain; border-radius: 6px;">
+                            <?php else: ?>
+                                <div class="bg-light rounded d-flex align-items-center justify-content-center" style="width: 40px; height: 40px;">
+                                    <i class="fa-solid fa-building text-muted fs-5"></i>
+                                </div>
+                            <?php endif; ?>
+                            <div>
+                                <h5 class="mb-1"><?= htmlspecialchars($app['company_name']) ?></h5>
+                                <p class="text-muted mb-0 small">Applied on: <?= date('d M Y, h:i A', strtotime($app['applied_at'])) ?></p>
+                            </div>
+                        </div>
+                        <div class="text-end">
+                            <span class="badge <?= $badgeClass ?> px-3 py-2 mb-1"><?= htmlspecialchars($app['status']) ?></span>
+                            <?php if (!empty($app['round_details'])): ?>
+                                <div class="small text-muted mt-1" style="max-width: 250px;"><?= htmlspecialchars($app['round_details']) ?></div>
+                            <?php endif; ?>
+                        </div>
+                    </div>
                 </div>
-                <span class="badge bg-danger px-3 py-2">Rejected</span>
-            </div>
-            <hr class="text-muted my-3">
-            <p class="mb-0"><strong>Status:</strong> Not selected in the HR Round.</p>
-        </div>
-
-        <div class="custom-card mb-4 border-start border-4 border-success">
-            <div class="d-flex justify-content-between align-items-center">
-                <div>
-                    <h5 class="mb-1">Cognizant</h5>
-                    <p class="text-muted mb-0 small">Applied on: 01 Aug 2026</p>
-                </div>
-                <span class="badge bg-success px-3 py-2">Selected</span>
-            </div>
-            <hr class="text-muted my-3">
-            <p class="mb-0"><strong>Status:</strong> Congratulations! You have been selected. Offer letter sent to email.</p>
-        </div>
+            <?php endforeach; ?>
+        <?php endif; ?>
     </div>
 
     <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/js/bootstrap.bundle.min.js"></script>

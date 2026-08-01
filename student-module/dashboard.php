@@ -15,6 +15,11 @@ $enrollmentNo = $_SESSION['enrollment_no'];
 $error = '';
 $success = '';
 
+if (isset($_SESSION['dashboard_error'])) {
+    $error = $_SESSION['dashboard_error'];
+    unset($_SESSION['dashboard_error']);
+}
+
 if (isset($_SESSION['dashboard_success'])) {
     $success = $_SESSION['dashboard_success'];
     unset($_SESSION['dashboard_success']);
@@ -24,14 +29,37 @@ if (isset($_SESSION['dashboard_success'])) {
 if ($_SERVER['REQUEST_METHOD'] === 'POST') {
     validate_csrf_token($_POST['csrf_token'] ?? '');
 
-    // Sanitize basic inputs
+    $firstName = sanitize_input($_POST['first_name'] ?? '');
+    $middleName = sanitize_input($_POST['middle_name'] ?? '');
+    $surname = sanitize_input($_POST['surname'] ?? '');
+    $fatherName = sanitize_input($_POST['father_name'] ?? '');
+    $motherName = sanitize_input($_POST['mother_name'] ?? '');
+
     $email = sanitize_input($_POST['email'] ?? '');
     $phone = sanitize_input($_POST['phone_number'] ?? '');
+    $gender = sanitize_input($_POST['gender'] ?? '');
+    $dob = sanitize_input($_POST['dob'] ?? '');
+    $physicallyHandicap = isset($_POST['physically_handicap']) ? 1 : 0;
+    $category = sanitize_input($_POST['category'] ?? '');
+    $district = sanitize_input($_POST['district'] ?? '');
+    $course = sanitize_input($_POST['course'] ?? '');
     $sem5Cgpa = filter_input(INPUT_POST, 'sem5_cgpa', FILTER_VALIDATE_FLOAT);
     $sem5Cpi = filter_input(INPUT_POST, 'sem5_cpi', FILTER_VALIDATE_FLOAT);
     $sem6Cgpa = filter_input(INPUT_POST, 'sem6_cgpa', FILTER_VALIDATE_FLOAT);
     $sem6Cpi = filter_input(INPUT_POST, 'sem6_cpi', FILTER_VALIDATE_FLOAT);
     $activeBacklogs = filter_input(INPUT_POST, 'active_backlogs', FILTER_VALIDATE_INT) ?? 0;
+    
+    // Calculate CPI Percentage from Sem 6 CPI
+    $cpiPercentage = null;
+    if ($sem6Cpi !== false && $sem6Cpi !== null) {
+        $cpiPercentage = max(0, ($sem6Cpi - 0.5) * 10);
+    }
+    
+    $finishingSchool = isset($_POST['finishing_school']) ? 1 : 0;
+    $skillTraining = isset($_POST['skill_training']) ? 1 : 0;
+    $trainingDetails = sanitize_input($_POST['training_details'] ?? '');
+    $hscPercentage = filter_input(INPUT_POST, 'hsc_percentage', FILTER_VALIDATE_FLOAT);
+    $sscPercentage = filter_input(INPUT_POST, 'ssc_percentage', FILTER_VALIDATE_FLOAT);
 
     // Validation
     if (!filter_var($email, FILTER_VALIDATE_EMAIL)) {
@@ -118,11 +146,11 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
                 $profilePicPath = $profilePicPath ?? $existingProfile['profile_pic'];
                 $resumePath = $resumePath ?? $existingProfile['resume_path'];
 
-                $stmtUpdate = $pdo->prepare("UPDATE tbl_student_profile SET profile_pic=?, sem5_cgpa=?, sem5_cpi=?, sem6_cgpa=?, sem6_cpi=?, active_backlogs=?, phone_number=?, email=?, resume_path=? WHERE student_id=?");
-                $stmtUpdate->execute([$profilePicPath, $sem5Cgpa, $sem5Cpi, $sem6Cgpa, $sem6Cpi, $activeBacklogs, $phone, $email, $resumePath, $studentId]);
+                $stmtUpdate = $pdo->prepare("UPDATE tbl_student_profile SET first_name=?, middle_name=?, surname=?, father_name=?, mother_name=?, profile_pic=?, gender=?, dob=?, physically_handicap=?, category=?, district=?, course=?, sem5_cgpa=?, sem5_cpi=?, sem6_cgpa=?, sem6_cpi=?, cpi_percentage=?, active_backlogs=?, finishing_school=?, skill_training=?, training_details=?, hsc_percentage=?, ssc_percentage=?, phone_number=?, email=?, resume_path=? WHERE student_id=?");
+                $stmtUpdate->execute([$firstName, $middleName, $surname, $fatherName, $motherName, $profilePicPath, $gender, $dob, $physicallyHandicap, $category, $district, $course, $sem5Cgpa, $sem5Cpi, $sem6Cgpa, $sem6Cpi, $cpiPercentage, $activeBacklogs, $finishingSchool, $skillTraining, $trainingDetails, $hscPercentage, $sscPercentage, $phone, $email, $resumePath, $studentId]);
             } else {
-                $stmtInsert = $pdo->prepare("INSERT INTO tbl_student_profile (student_id, profile_pic, sem5_cgpa, sem5_cpi, sem6_cgpa, sem6_cpi, active_backlogs, phone_number, email, resume_path) VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?)");
-                $stmtInsert->execute([$studentId, $profilePicPath, $sem5Cgpa, $sem5Cpi, $sem6Cgpa, $sem6Cpi, $activeBacklogs, $phone, $email, $resumePath]);
+                $stmtInsert = $pdo->prepare("INSERT INTO tbl_student_profile (student_id, first_name, middle_name, surname, father_name, mother_name, profile_pic, gender, dob, physically_handicap, category, district, course, sem5_cgpa, sem5_cpi, sem6_cgpa, sem6_cpi, cpi_percentage, active_backlogs, finishing_school, skill_training, training_details, hsc_percentage, ssc_percentage, phone_number, email, resume_path) VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?)");
+                $stmtInsert->execute([$studentId, $firstName, $middleName, $surname, $fatherName, $motherName, $profilePicPath, $gender, $dob, $physicallyHandicap, $category, $district, $course, $sem5Cgpa, $sem5Cpi, $sem6Cgpa, $sem6Cpi, $cpiPercentage, $activeBacklogs, $finishingSchool, $skillTraining, $trainingDetails, $hscPercentage, $sscPercentage, $phone, $email, $resumePath]);
             }
 
             // 3. Update Skills
@@ -167,7 +195,7 @@ $skills = $stmt->fetchAll(PDO::FETCH_COLUMN);
 $skillsString = implode(',', $skills);
 
 $csrfToken = generate_csrf_token();
-$isProfileComplete = !empty($profile);
+$isProfileComplete = !empty($profile) && !empty($profile['district']) && !empty($profile['course']) && !empty($profile['sem5_cpi']) && !empty($profile['first_name']) && !empty($profile['surname']) && !empty($profile['father_name']) && !empty($profile['mother_name']);
 
 // Setup view mode (if profile is complete, show summary first, else edit mode)
 $mode = (isset($_GET['edit']) || !$isProfileComplete) ? 'edit' : 'view';
@@ -199,12 +227,14 @@ $mode = (isset($_GET['edit']) || !$isProfileComplete) ? 'edit' : 'view';
                     <li class="nav-item">
                         <a class="nav-link active fw-medium" href="dashboard.php">Profile</a>
                     </li>
+                    <?php if ($isProfileComplete): ?>
                     <li class="nav-item">
                         <a class="nav-link fw-medium" href="placement_drives.php">Placement Drives</a>
                     </li>
                     <li class="nav-item">
                         <a class="nav-link fw-medium" href="track_applications.php">My Applications</a>
                     </li>
+                    <?php endif; ?>
                 </ul>
                 <div class="d-flex align-items-center gap-3 ms-auto mt-3 mt-lg-0">
                     <span class="fw-medium text-dark">Hi, <?= htmlspecialchars($student['full_name']) ?></span>
@@ -287,36 +317,116 @@ $mode = (isset($_GET['edit']) || !$isProfileComplete) ? 'edit' : 'view';
                         </div>
 
                         <div class="row g-4 mb-4">
-                            <div class="col-sm-6">
+                            <!-- Personal & Academic Summaries -->
+                            <div class="col-sm-12">
                                 <div class="p-3 rounded bg-light border border-secondary">
-                                    <small class="text-muted d-block mb-1">Semester 5 CGPA</small>
-                                    <strong class="fs-5"><?= htmlspecialchars($profile['sem5_cgpa'] ?? 'N/A') ?></strong>
+                                    <h6 class="mb-3">Extended Name Details</h6>
+                                    <div class="row g-3">
+                                        <div class="col-md-4">
+                                            <small class="text-muted d-block mb-1">First Name</small>
+                                            <strong class="fs-6"><?= htmlspecialchars($profile['first_name'] ?? 'N/A') ?></strong>
+                                        </div>
+                                        <div class="col-md-4">
+                                            <small class="text-muted d-block mb-1">Middle Name</small>
+                                            <strong class="fs-6"><?= htmlspecialchars($profile['middle_name'] ?? 'N/A') ?></strong>
+                                        </div>
+                                        <div class="col-md-4">
+                                            <small class="text-muted d-block mb-1">Surname</small>
+                                            <strong class="fs-6"><?= htmlspecialchars($profile['surname'] ?? 'N/A') ?></strong>
+                                        </div>
+                                        <div class="col-md-6">
+                                            <small class="text-muted d-block mb-1">Father's Name</small>
+                                            <strong class="fs-6"><?= htmlspecialchars($profile['father_name'] ?? 'N/A') ?></strong>
+                                        </div>
+                                        <div class="col-md-6">
+                                            <small class="text-muted d-block mb-1">Mother's Name</small>
+                                            <strong class="fs-6"><?= htmlspecialchars($profile['mother_name'] ?? 'N/A') ?></strong>
+                                        </div>
+                                    </div>
                                 </div>
                             </div>
-                            <div class="col-sm-6">
-                                <div class="p-3 rounded bg-light border border-secondary">
-                                    <small class="text-muted d-block mb-1">Semester 5 CPI</small>
+                            
+                            <div class="col-sm-4">
+                                <div class="p-3 rounded bg-light border border-secondary h-100">
+                                    <small class="text-muted d-block mb-1">Gender / DOB</small>
+                                    <strong class="fs-6 d-block"><?= htmlspecialchars($profile['gender'] ?? 'N/A') ?></strong>
+                                    <strong class="fs-6"><?= htmlspecialchars($profile['dob'] ?? 'N/A') ?></strong>
+                                </div>
+                            </div>
+                            <div class="col-sm-4">
+                                <div class="p-3 rounded bg-light border border-secondary h-100">
+                                    <small class="text-muted d-block mb-1">Category / District</small>
+                                    <strong class="fs-6 d-block"><?= htmlspecialchars($profile['category'] ?? 'N/A') ?></strong>
+                                    <strong class="fs-6"><?= htmlspecialchars($profile['district'] ?? 'N/A') ?></strong>
+                                </div>
+                            </div>
+                            <div class="col-sm-4">
+                                <div class="p-3 rounded bg-light border border-secondary h-100">
+                                    <small class="text-muted d-block mb-1">Course</small>
+                                    <strong class="fs-6 d-block"><?= htmlspecialchars($profile['course'] ?? 'N/A') ?></strong>
+                                    <?php if(!empty($profile['physically_handicap'])): ?>
+                                        <span class="badge bg-info text-dark mt-1">Physically Handicapped</span>
+                                    <?php endif; ?>
+                                </div>
+                            </div>
+                            
+                            <!-- Academic Details -->
+                            <div class="col-sm-3">
+                                <div class="p-3 rounded bg-light border border-secondary text-center h-100">
+                                    <small class="text-muted d-block mb-1">SSC %</small>
+                                    <strong class="fs-5"><?= htmlspecialchars($profile['ssc_percentage'] ?? 'N/A') ?></strong>
+                                </div>
+                            </div>
+                            <div class="col-sm-3">
+                                <div class="p-3 rounded bg-light border border-secondary text-center h-100">
+                                    <small class="text-muted d-block mb-1">HSC %</small>
+                                    <strong class="fs-5"><?= htmlspecialchars($profile['hsc_percentage'] ?? 'N/A') ?></strong>
+                                </div>
+                            </div>
+                            <div class="col-sm-3">
+                                <div class="p-3 rounded bg-light border border-secondary text-center h-100">
+                                    <small class="text-muted d-block mb-1">Sem 5 CPI</small>
                                     <strong class="fs-5"><?= htmlspecialchars($profile['sem5_cpi'] ?? 'N/A') ?></strong>
                                 </div>
                             </div>
-                            <div class="col-sm-6">
-                                <div class="p-3 rounded bg-light border border-secondary">
-                                    <small class="text-muted d-block mb-1">Current CGPA (Upto 6th Sem)</small>
-                                    <strong class="fs-5"><?= htmlspecialchars($profile['sem6_cgpa'] ?? 'N/A') ?></strong>
-                                </div>
-                            </div>
-                            <div class="col-sm-6">
-                                <div class="p-3 rounded bg-light border border-secondary">
-                                    <small class="text-muted d-block mb-1">Current CPI (Upto 6th Sem)</small>
+                            <div class="col-sm-3">
+                                <div class="p-3 rounded bg-light border border-secondary text-center h-100">
+                                    <small class="text-muted d-block mb-1">Current CPI</small>
                                     <strong class="fs-5"><?= htmlspecialchars($profile['sem6_cpi'] ?? 'N/A') ?></strong>
                                 </div>
                             </div>
-                            <div class="col-sm-12">
+                            
+                            <!-- Critical Placement Info -->
+                            <div class="col-sm-6">
                                 <div class="p-3 rounded bg-light border border-secondary text-center">
-                                    <small class="text-muted d-block mb-1">Active Backlogs (ATKT)</small>
-                                    <strong class="fs-5 text-danger"><?= htmlspecialchars($profile['active_backlogs'] ?? '0') ?></strong>
+                                    <small class="text-muted d-block mb-1">Calculated B.E. Percentage</small>
+                                    <strong class="fs-4 text-success"><?= htmlspecialchars($profile['cpi_percentage'] ?? 'N/A') ?>%</strong>
                                 </div>
                             </div>
+                            <div class="col-sm-6">
+                                <div class="p-3 rounded bg-light border border-secondary text-center">
+                                    <small class="text-muted d-block mb-1">Active Backlogs (ATKT)</small>
+                                    <strong class="fs-4 text-danger"><?= htmlspecialchars($profile['active_backlogs'] ?? '0') ?></strong>
+                                </div>
+                            </div>
+
+                            <!-- Training Details -->
+                            <?php if(!empty($profile['finishing_school']) || !empty($profile['skill_training']) || !empty($profile['training_details'])): ?>
+                            <div class="col-sm-12">
+                                <div class="p-3 rounded bg-light border border-secondary">
+                                    <h6 class="mb-2">Training & Certifications</h6>
+                                    <div class="d-flex gap-2 mb-2">
+                                        <?php if(!empty($profile['finishing_school'])): ?>
+                                            <span class="badge bg-success"><i class="fa-solid fa-check me-1"></i> Finishing School</span>
+                                        <?php endif; ?>
+                                        <?php if(!empty($profile['skill_training'])): ?>
+                                            <span class="badge bg-success"><i class="fa-solid fa-check me-1"></i> Skill Training</span>
+                                        <?php endif; ?>
+                                    </div>
+                                    <p class="mb-0 text-muted small"><?= nl2br(htmlspecialchars($profile['training_details'] ?? '')) ?></p>
+                                </div>
+                            </div>
+                            <?php endif; ?>
                         </div>
 
                         <h5 class="mb-3">Technical Skills</h5>
@@ -344,6 +454,66 @@ $mode = (isset($_GET['edit']) || !$isProfileComplete) ? 'edit' : 'view';
                         <form action="dashboard.php" method="POST" enctype="multipart/form-data">
                             <input type="hidden" name="csrf_token" value="<?= $csrfToken ?>">
 
+                            <h5 class="mb-3">Personal Details</h5>
+                            <div class="row g-3 mb-4">
+                                <div class="col-md-4">
+                                    <label class="form-label">First Name</label>
+                                    <input type="text" class="form-control" name="first_name" value="<?= htmlspecialchars($profile['first_name'] ?? '') ?>" required>
+                                </div>
+                                <div class="col-md-4">
+                                    <label class="form-label">Middle Name</label>
+                                    <input type="text" class="form-control" name="middle_name" value="<?= htmlspecialchars($profile['middle_name'] ?? '') ?>">
+                                </div>
+                                <div class="col-md-4">
+                                    <label class="form-label">Surname</label>
+                                    <input type="text" class="form-control" name="surname" value="<?= htmlspecialchars($profile['surname'] ?? '') ?>" required>
+                                </div>
+                                <div class="col-md-6">
+                                    <label class="form-label">Father's Name</label>
+                                    <input type="text" class="form-control" name="father_name" value="<?= htmlspecialchars($profile['father_name'] ?? '') ?>" required>
+                                </div>
+                                <div class="col-md-6">
+                                    <label class="form-label">Mother's Name</label>
+                                    <input type="text" class="form-control" name="mother_name" value="<?= htmlspecialchars($profile['mother_name'] ?? '') ?>" required>
+                                </div>
+
+                                <div class="col-md-4">
+                                    <label class="form-label">Gender</label>
+                                    <select class="form-select" name="gender" required>
+                                        <option value="">Select</option>
+                                        <option value="Male" <?= (isset($profile['gender']) && $profile['gender'] === 'Male') ? 'selected' : '' ?>>Male</option>
+                                        <option value="Female" <?= (isset($profile['gender']) && $profile['gender'] === 'Female') ? 'selected' : '' ?>>Female</option>
+                                        <option value="Other" <?= (isset($profile['gender']) && $profile['gender'] === 'Other') ? 'selected' : '' ?>>Other</option>
+                                    </select>
+                                </div>
+                                <div class="col-md-4">
+                                    <label class="form-label">Date of Birth</label>
+                                    <input type="date" class="form-control" name="dob" value="<?= htmlspecialchars($profile['dob'] ?? '') ?>" required>
+                                </div>
+                                <div class="col-md-4">
+                                    <label class="form-label">Category</label>
+                                    <select class="form-select" name="category" required>
+                                        <option value="">Select</option>
+                                        <option value="General" <?= (isset($profile['category']) && $profile['category'] === 'General') ? 'selected' : '' ?>>General</option>
+                                        <option value="OBC" <?= (isset($profile['category']) && $profile['category'] === 'OBC') ? 'selected' : '' ?>>OBC</option>
+                                        <option value="SC" <?= (isset($profile['category']) && $profile['category'] === 'SC') ? 'selected' : '' ?>>SC</option>
+                                        <option value="ST" <?= (isset($profile['category']) && $profile['category'] === 'ST') ? 'selected' : '' ?>>ST</option>
+                                    </select>
+                                </div>
+                                <div class="col-md-6">
+                                    <label class="form-label">District</label>
+                                    <input type="text" class="form-control" name="district" value="<?= htmlspecialchars($profile['district'] ?? '') ?>" required>
+                                </div>
+                                <div class="col-md-6 d-flex align-items-end pb-2">
+                                    <div class="form-check">
+                                        <input class="form-check-input" type="checkbox" name="physically_handicap" id="physically_handicap" <?= !empty($profile['physically_handicap']) ? 'checked' : '' ?>>
+                                        <label class="form-check-label" for="physically_handicap">
+                                            Physically Handicapped?
+                                        </label>
+                                    </div>
+                                </div>
+                            </div>
+
                             <h5 class="mb-3">Contact Info</h5>
                             <div class="row g-3 mb-4">
                                 <div class="col-md-6">
@@ -360,7 +530,22 @@ $mode = (isset($_GET['edit']) || !$isProfileComplete) ? 'edit' : 'view';
                             </div>
 
                             <h5 class="mb-3">Academic Details</h5>
+                            <div class="alert alert-warning py-2 small">
+                                <i class="fa-solid fa-triangle-exclamation me-1"></i> Be careful while entering your CPI. Once saved, it cannot be changed in the future.
+                            </div>
                             <div class="row g-3 mb-4">
+                                <div class="col-md-4">
+                                    <label class="form-label">Course (e.g. B.E.)</label>
+                                    <input type="text" class="form-control" name="course" value="<?= htmlspecialchars($profile['course'] ?? '') ?>" required>
+                                </div>
+                                <div class="col-md-4">
+                                    <label class="form-label">SSC Percentage</label>
+                                    <input type="number" step="0.01" min="0" max="100" class="form-control" name="ssc_percentage" value="<?= htmlspecialchars($profile['ssc_percentage'] ?? '') ?>">
+                                </div>
+                                <div class="col-md-4">
+                                    <label class="form-label">HSC Percentage</label>
+                                    <input type="number" step="0.01" min="0" max="100" class="form-control" name="hsc_percentage" value="<?= htmlspecialchars($profile['hsc_percentage'] ?? '') ?>">
+                                </div>
                                 <div class="col-md-3">
                                     <label class="form-label">Sem 5 CGPA</label>
                                     <input type="number" step="0.01" min="0" max="10" class="form-control" name="sem5_cgpa"
@@ -369,23 +554,45 @@ $mode = (isset($_GET['edit']) || !$isProfileComplete) ? 'edit' : 'view';
                                 <div class="col-md-3">
                                     <label class="form-label">Sem 5 CPI</label>
                                     <input type="number" step="0.01" min="0" max="10" class="form-control" name="sem5_cpi"
-                                        value="<?= htmlspecialchars($profile['sem5_cpi'] ?? '') ?>">
+                                        value="<?= htmlspecialchars($profile['sem5_cpi'] ?? '') ?>" <?= !empty($profile['sem5_cpi']) ? 'readonly' : '' ?> required>
                                 </div>
                                 <div class="col-md-3">
-                                    <label class="form-label">Current CGPA</label>
+                                    <label class="form-label">Sem 6 CGPA</label>
                                     <input type="number" step="0.01" min="0" max="10" class="form-control" name="sem6_cgpa"
                                         value="<?= htmlspecialchars($profile['sem6_cgpa'] ?? '') ?>">
                                 </div>
                                 <div class="col-md-3">
-                                    <label class="form-label">Current CPI</label>
+                                    <label class="form-label">Sem 6 CPI (Current)</label>
                                     <input type="number" step="0.01" min="0" max="10" class="form-control" name="sem6_cpi"
-                                        value="<?= htmlspecialchars($profile['sem6_cpi'] ?? '') ?>">
+                                        value="<?= htmlspecialchars($profile['sem6_cpi'] ?? '') ?>" <?= !empty($profile['sem6_cpi']) ? 'readonly' : '' ?>>
                                 </div>
                                 <div class="col-md-12 mt-3">
                                     <label class="form-label text-danger fw-medium"><i class="fa-solid fa-triangle-exclamation me-1"></i>Active Backlogs (ATKT)</label>
                                     <input type="number" min="0" max="20" class="form-control border-danger" name="active_backlogs"
                                         value="<?= htmlspecialchars($profile['active_backlogs'] ?? '0') ?>">
                                     <small class="text-muted">Enter 0 if you have no active backlogs.</small>
+                                </div>
+                            </div>
+
+                            <h5 class="mb-3">Training & Certifications</h5>
+                            <div class="row g-3 mb-4">
+                                <div class="col-md-6">
+                                    <div class="form-check mb-2">
+                                        <input class="form-check-input" type="checkbox" name="finishing_school" id="finishing_school" <?= !empty($profile['finishing_school']) ? 'checked' : '' ?>>
+                                        <label class="form-check-label" for="finishing_school">
+                                            Completed Finishing School Training?
+                                        </label>
+                                    </div>
+                                    <div class="form-check">
+                                        <input class="form-check-input" type="checkbox" name="skill_training" id="skill_training" <?= !empty($profile['skill_training']) ? 'checked' : '' ?>>
+                                        <label class="form-check-label" for="skill_training">
+                                            Completed other Skill Training?
+                                        </label>
+                                    </div>
+                                </div>
+                                <div class="col-md-12">
+                                    <label class="form-label">Training Details (If any)</label>
+                                    <textarea class="form-control" name="training_details" rows="2" placeholder="Mention your training provider and course name..."><?= htmlspecialchars($profile['training_details'] ?? '') ?></textarea>
                                 </div>
                             </div>
 
