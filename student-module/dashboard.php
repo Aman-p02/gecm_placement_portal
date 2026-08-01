@@ -76,9 +76,19 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
             $stmtBranch->execute([$studentId]);
             $studentBranch = $stmtBranch->fetchColumn();
             
-            // Format branch name to be safe for directory naming
-            $safeBranchName = trim(preg_replace('/[^a-zA-Z0-9\-_ ]/', '', $studentBranch));
-
+            // Map full branch names to short codes
+            $branchCodeMap = [
+                'Computer Engineering' => 'CE',
+                'Information Technology' => 'IT',
+                'Mechanical Engineering' => 'ME',
+                'Civil Engineering' => 'Civil',
+                'Electrical Engineering' => 'EE',
+                'Electronics & Communication' => 'EC',
+                'Automobile Engineering' => 'Auto'
+            ];
+            
+            // Format branch name to be safe for directory naming, using short code if available
+            $safeBranchName = $branchCodeMap[$studentBranch] ?? trim(preg_replace('/[^a-zA-Z0-9\-_ ]/', '', $studentBranch));
             // 1. Handle File Uploads securely
             $uploadDirPics = __DIR__ . '/uploads/profile_pics/' . $safeBranchName . '/';
             $uploadDirResumes = __DIR__ . '/uploads/resumes/' . $safeBranchName . '/';
