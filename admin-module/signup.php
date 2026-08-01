@@ -125,11 +125,21 @@ $csrfToken = generate_csrf_token();
                 <div class="row g-2 mb-4">
                     <div class="col-sm-6">
                         <label class="form-label small">Password</label>
-                        <input type="password" class="form-control" name="password" required>
+                        <div class="input-group">
+                            <input type="password" class="form-control" name="password" id="signup_password" required>
+                            <button class="btn btn-outline-secondary" type="button" onclick="togglePassword('signup_password', this)">
+                                <i class="fa-solid fa-eye"></i>
+                            </button>
+                        </div>
                     </div>
                     <div class="col-sm-6">
                         <label class="form-label small">Confirm Password</label>
-                        <input type="password" class="form-control" name="confirm_password" required>
+                        <div class="input-group">
+                            <input type="password" class="form-control" name="confirm_password" id="signup_confirm_password" required>
+                            <button class="btn btn-outline-secondary" type="button" onclick="togglePassword('signup_confirm_password', this)">
+                                <i class="fa-solid fa-eye"></i>
+                            </button>
+                        </div>
                     </div>
                 </div>
 
@@ -142,4 +152,19 @@ $csrfToken = generate_csrf_token();
         </div>
     </div>
 </body>
+<script>
+function togglePassword(inputId, btn) {
+    const input = document.getElementById(inputId);
+    const icon = btn.querySelector('i');
+    if (input.type === 'password') {
+        input.type = 'text';
+        icon.classList.remove('fa-eye');
+        icon.classList.add('fa-eye-slash');
+    } else {
+        input.type = 'password';
+        icon.classList.remove('fa-eye-slash');
+        icon.classList.add('fa-eye');
+    }
+}
+</script>
 </html>
