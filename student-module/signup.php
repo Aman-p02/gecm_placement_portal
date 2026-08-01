@@ -1,9 +1,7 @@
 <?php
-session_start();
-require_once 'includes/db_connect.php';
-require_once 'includes/functions.php';
-require_once '../includes/mailer.php';
-
+require_once __DIR__ . '/includes/db_connect.php';
+require_once __DIR__ . '/includes/auth_check.php';
+require_once __DIR__ . '/../includes/mailer.php';
 // Redirect if already logged in
 if (isset($_SESSION['student_id'])) {
     header('Location: dashboard.php');

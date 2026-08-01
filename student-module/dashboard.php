@@ -447,7 +447,7 @@ $mode = (isset($_GET['edit']) || !$isProfileComplete) ? 'edit' : 'view';
                                 <div class="col-md-6">
                                     <div class="row">
                                         <div class="col-sm-4 text-muted small">Passing Year</div>
-                                        <div class="col-sm-8 fw-bold text-primary"><?= htmlspecialchars($profile['passing_year'] ?? 'N/A') ?></div>
+                                        <div class="col-sm-8 fw-bold"><?= htmlspecialchars($profile['passing_year'] ?? 'N/A') ?></div>
                                     </div>
                                 </div>
                                 <div class="col-md-6">
