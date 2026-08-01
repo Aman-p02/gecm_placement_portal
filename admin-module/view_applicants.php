@@ -5,6 +5,7 @@
  */
 require_once __DIR__ . '/includes/db_connect.php';
 require_once __DIR__ . '/includes/admin_auth_check.php';
+require_once __DIR__ . '/../includes/mailer.php';
 
 // Secure the page
 require_admin_login();
@@ -39,6 +40,22 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST' && isset($_POST['action']) && $_POST['
         try {
             $stmt = $pdo->prepare("UPDATE tbl_applications SET status = ?, round_details = ? WHERE application_id = ?");
             $stmt->execute([$status, $roundDetails, $applicationId]);
+            
+            // Fetch info for email
+            $infoStmt = $pdo->prepare("
+                SELECT s.email, s.full_name, c.company_name 
+                FROM tbl_applications a
+                JOIN tbl_students s ON a.student_id = s.student_id
+                JOIN tbl_companies c ON a.company_id = c.company_id
+                WHERE a.application_id = ?
+            ");
+            $infoStmt->execute([$applicationId]);
+            $info = $infoStmt->fetch();
+            
+            if ($info) {
+                sendStatusUpdateEmail($info['email'], $info['full_name'], $info['company_name'], $status);
+            }
+            
             $_SESSION['page_success'] = "Application status updated successfully.";
         } catch (Exception $e) {
             $_SESSION['page_error'] = "Error updating status.";

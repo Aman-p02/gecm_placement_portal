@@ -5,6 +5,7 @@
  */
 require_once __DIR__ . '/includes/db_connect.php';
 require_once __DIR__ . '/includes/admin_auth_check.php';
+require_once __DIR__ . '/../includes/mailer.php';
 
 // Secure the page
 require_admin_login();
@@ -87,6 +88,16 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST' && isset($_POST['action']) && $_POST['
         $newStatus = $currentStatus ? 0 : 1;
         $stmt = $pdo->prepare("UPDATE tbl_students SET is_blocked = ? WHERE student_id = ?");
         if ($stmt->execute([$newStatus, $studentId])) {
+            
+            // Fetch student info for email
+            $infoStmt = $pdo->prepare("SELECT email, full_name FROM tbl_students WHERE student_id = ?");
+            $infoStmt->execute([$studentId]);
+            $info = $infoStmt->fetch();
+            
+            if ($info) {
+                sendBlockStatusEmail($info['email'], $info['full_name'], $newStatus);
+            }
+            
             $_SESSION['page_success'] = $newStatus ? "Student has been blocked." : "Student has been unblocked.";
         } else {
             $_SESSION['page_error'] = "Failed to update student status.";

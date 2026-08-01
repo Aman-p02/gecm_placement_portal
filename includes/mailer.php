@@ -114,4 +114,104 @@ function sendRegistrationEmail($toEmail, $userName, $role)
         return false;
     }
 }
+
+function sendStatusUpdateEmail($toEmail, $userName, $companyName, $status) {
+    $mail = new PHPMailer(true);
+    try {
+        $yourEmail = 'haritap40@gmail.com';
+        $yourAppPassword = 'xkeq amgh eesp xkra';
+
+        $mail->isSMTP();
+        $mail->Host = 'smtp.gmail.com';
+        $mail->SMTPAuth = true;
+        $mail->Username = $yourEmail;
+        $mail->Password = $yourAppPassword;
+        $mail->SMTPSecure = PHPMailer::ENCRYPTION_STARTTLS;
+        $mail->Port = 587;
+
+        $mail->setFrom($yourEmail, 'GEC Placement Portal');
+        $mail->addAddress($toEmail);
+        $mail->isHTML(true);
+
+        if ($status === 'Selected') {
+            $mail->Subject = 'Congratulations! You are Selected - GEC Placement Portal';
+            $msgTitle = "Congratulations!";
+            $msgBody = "We are thrilled to inform you that you have been <strong>Selected</strong> for placement at <strong>{$companyName}</strong>!";
+            $color = "#28a745"; // Green
+        } else {
+            $mail->Subject = 'Application Status Update - GEC Placement Portal';
+            $msgTitle = "Status Update";
+            $msgBody = "Your application status for <strong>{$companyName}</strong> has been updated to: <strong>{$status}</strong>.";
+            $color = "#1B365D"; // Navy
+        }
+
+        $emailBody = "
+            <div style='font-family: Arial, sans-serif; max-width: 600px; margin: 0 auto; padding: 20px; border: 1px solid #ddd; border-radius: 10px;'>
+                <h2 style='color: {$color};'>{$msgTitle}</h2>
+                <p>Hello <strong>{$userName}</strong>,</p>
+                <p>{$msgBody}</p>
+                <div style='text-align: center; margin: 30px 0;'>
+                    <a href='http://localhost/gec_placement_portal' style='background-color: #E65A4B; color: white; padding: 12px 25px; text-decoration: none; border-radius: 5px; font-weight: bold;'>View Dashboard</a>
+                </div>
+                <p>Best regards,<br><strong>GEC Modasa Placement Cell</strong></p>
+            </div>
+        ";
+        
+        $mail->Body = $emailBody;
+        $mail->send();
+        return true;
+    } catch (Exception $e) {
+        error_log("Status Update Message could not be sent. Mailer Error: {$mail->ErrorInfo}");
+        return false;
+    }
+}
+
+function sendBlockStatusEmail($toEmail, $userName, $isBlocked) {
+    $mail = new PHPMailer(true);
+    try {
+        $yourEmail = 'haritap40@gmail.com';
+        $yourAppPassword = 'xkeq amgh eesp xkra';
+
+        $mail->isSMTP();
+        $mail->Host = 'smtp.gmail.com';
+        $mail->SMTPAuth = true;
+        $mail->Username = $yourEmail;
+        $mail->Password = $yourAppPassword;
+        $mail->SMTPSecure = PHPMailer::ENCRYPTION_STARTTLS;
+        $mail->Port = 587;
+
+        $mail->setFrom($yourEmail, 'GEC Placement Portal');
+        $mail->addAddress($toEmail);
+        $mail->isHTML(true);
+
+        if ($isBlocked) {
+            $mail->Subject = 'Account Suspended - GEC Placement Portal';
+            $msgTitle = "Account Suspended";
+            $msgBody = "Your account on the GEC Placement Portal has been <strong>suspended/blocked</strong> by the administration. You will not be able to log in or apply for placements.";
+            $color = "#dc3545"; // Red
+        } else {
+            $mail->Subject = 'Account Reactivated - GEC Placement Portal';
+            $msgTitle = "Account Reactivated";
+            $msgBody = "Good news! Your account on the GEC Placement Portal has been <strong>reactivated</strong> by the administration. You can now log in and continue using the portal.";
+            $color = "#28a745"; // Green
+        }
+
+        $emailBody = "
+            <div style='font-family: Arial, sans-serif; max-width: 600px; margin: 0 auto; padding: 20px; border: 1px solid #ddd; border-radius: 10px;'>
+                <h2 style='color: {$color};'>{$msgTitle}</h2>
+                <p>Hello <strong>{$userName}</strong>,</p>
+                <p>{$msgBody}</p>
+                <p>If you have any questions, please contact the placement coordinator.</p>
+                <p>Best regards,<br><strong>GEC Modasa Placement Cell</strong></p>
+            </div>
+        ";
+        
+        $mail->Body = $emailBody;
+        $mail->send();
+        return true;
+    } catch (Exception $e) {
+        error_log("Block Status Message could not be sent. Mailer Error: {$mail->ErrorInfo}");
+        return false;
+    }
+}
 ?>
