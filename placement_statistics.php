@@ -78,7 +78,7 @@ if (empty($filterBranch)) {
         :root {
             --primary-navy: #1B365D;
             --accent-coral: #E65A4B;
-            --light-bg: #f8faff;
+            --light-bg: #e9eef6;
         }
         body {
             background-color: var(--light-bg);
@@ -154,8 +154,8 @@ if (empty($filterBranch)) {
             align-items: center;
             justify-content: center;
             transition: all 0.4s cubic-bezier(0.175, 0.885, 0.32, 1.275);
-            box-shadow: 0 10px 40px rgba(0,0,0,0.04);
-            border: 1px solid rgba(0,0,0,0.02);
+            box-shadow: 0 10px 30px rgba(0,0,0,0.08);
+            border: 1px solid rgba(0,0,0,0.04);
             position: relative;
             overflow: hidden;
             cursor: pointer;
@@ -179,22 +179,24 @@ if (empty($filterBranch)) {
             opacity: 1;
         }
         .khatarnak-icon {
-            width: 70px;
-            height: 70px;
-            background: rgba(27, 54, 93, 0.05);
+            width: 80px;
+            height: 80px;
+            background: linear-gradient(135deg, rgba(27, 54, 93, 0.1) 0%, rgba(230, 90, 75, 0.1) 100%);
             color: var(--primary-navy);
             border-radius: 50%;
             display: flex;
             align-items: center;
             justify-content: center;
-            font-size: 1.8rem;
-            margin-bottom: 20px;
-            transition: transform 0.3s ease;
+            font-size: 2.2rem;
+            margin-bottom: 25px;
+            transition: all 0.4s ease;
+            box-shadow: inset 0 0 10px rgba(0,0,0,0.02);
         }
         .khatarnak-card:hover .khatarnak-icon {
-            transform: scale(1.1) rotate(5deg);
-            background: var(--primary-navy);
+            transform: scale(1.1) rotate(8deg);
+            background: linear-gradient(135deg, var(--primary-navy) 0%, var(--accent-coral) 100%);
             color: white;
+            box-shadow: 0 10px 20px rgba(230, 90, 75, 0.3);
         }
         .khatarnak-card h3 {
             color: var(--primary-navy);
@@ -317,6 +319,21 @@ if (empty($filterBranch)) {
         .back-btn:hover {
             color: var(--primary-navy);
         }
+        @media (max-width: 576px) {
+            .brand-text {
+                font-size: 1.2rem;
+                display: block;
+                margin-bottom: 8px;
+            }
+            .top-navbar .container {
+                flex-direction: column;
+                justify-content: center !important;
+                text-align: center;
+            }
+            .hero-section h1 {
+                font-size: 1.8rem;
+            }
+        }
 
         @media print {
             .no-print { display: none !important; }
@@ -330,8 +347,9 @@ if (empty($filterBranch)) {
 
     <!-- Navbar -->
     <nav class="navbar top-navbar no-print">
-        <div class="container d-flex justify-content-center align-items-center">
+        <div class="container d-flex justify-content-between align-items-center">
             <span class="brand-text">GEC Modasa <span>Placement Statistics</span></span>
+            <a href="student-module/login.php" class="btn btn-outline-primary btn-sm fw-bold px-3 py-2 rounded-pill">Student Login</a>
         </div>
     </nav>
 
