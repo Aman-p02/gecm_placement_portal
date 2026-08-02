@@ -96,9 +96,10 @@ if (empty($filterBranch)) {
         .brand-text {
             color: var(--primary-navy);
             font-weight: 800;
-            font-size: 1.5rem;
+            font-size: 1.6rem;
             text-decoration: none;
             letter-spacing: -0.5px;
+            text-align: center;
         }
         .brand-text span {
             color: var(--accent-coral);
@@ -321,9 +322,8 @@ if (empty($filterBranch)) {
         }
         @media (max-width: 576px) {
             .brand-text {
-                font-size: 1.2rem;
+                font-size: 1.25rem;
                 display: block;
-                margin-bottom: 8px;
             }
             .top-navbar .container {
                 flex-direction: column;
@@ -353,9 +353,9 @@ if (empty($filterBranch)) {
     </nav>
     
     <!-- Full-Width Student Login Button -->
-    <div class="no-print pt-4 pb-2">
-        <div class="container text-center">
-            <a href="student-module/login.php" class="btn w-100 fw-bold" style="background-color: var(--primary-navy); color: white; border-radius: 10px; padding: 12px 0; font-size: 1.1rem; box-shadow: 0 5px 15px rgba(27, 54, 93, 0.15); transition: all 0.3s ease;">
+    <div class="no-print pt-2 pb-3">
+        <div class="container text-center px-4">
+            <a href="student-module/login.php" class="btn w-100 fw-bold" style="background-color: var(--primary-navy); color: white; border-radius: 8px; padding: 10px 0; font-size: 1rem; box-shadow: 0 5px 15px rgba(27, 54, 93, 0.15); transition: all 0.3s ease;">
                 <i class="fa-solid fa-user-graduate me-2"></i> Student Login
             </a>
         </div>

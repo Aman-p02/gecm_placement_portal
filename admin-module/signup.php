@@ -84,6 +84,8 @@ $csrfToken = generate_csrf_token();
         .btn-accent:hover { background-color: #d14d3f; color: white; }
         .brand-text { color: var(--primary-navy); font-weight: 700; }
         .brand-text span { color: var(--accent-coral); }
+        .form-control, .form-select { background-color: #fcfcfc; border: 1.5px solid #b0b8c1; padding: 0.6rem 1rem; border-radius: 8px; }
+        .form-control:focus, .form-select:focus { border-color: var(--accent-coral); box-shadow: 0 0 0 0.25rem rgba(230, 90, 75, 0.25); background-color: #ffffff; }
     </style>
 </head>
 <body>
