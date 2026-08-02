@@ -353,9 +353,9 @@ if (empty($filterBranch)) {
     </nav>
     
     <!-- Full-Width Student Login Button -->
-    <div class="no-print" style="background-color: white; border-top: 1px solid rgba(0,0,0,0.05);">
-        <div class="container py-2 text-center">
-            <a href="student-module/login.php" class="btn w-100 fw-bold" style="background-color: var(--primary-navy); color: white; border-radius: 8px; padding: 10px 0; font-size: 1.1rem; box-shadow: 0 4px 10px rgba(27, 54, 93, 0.2);">
+    <div class="no-print pt-4 pb-2">
+        <div class="container text-center">
+            <a href="student-module/login.php" class="btn w-100 fw-bold" style="background-color: var(--primary-navy); color: white; border-radius: 10px; padding: 12px 0; font-size: 1.1rem; box-shadow: 0 5px 15px rgba(27, 54, 93, 0.15); transition: all 0.3s ease;">
                 <i class="fa-solid fa-user-graduate me-2"></i> Student Login
             </a>
         </div>
