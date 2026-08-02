@@ -62,3 +62,4 @@ function require_profile_completion($pdo) {
         exit;
     }
 }
+

@@ -65,46 +65,11 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST' && $validToken) {
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Admin Reset Password - GEC Placement</title>
-    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css" rel="stylesheet">
-    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
-    <style>
-        :root {
-            --primary-navy: #1B365D;
-            --accent-coral: #E65A4B;
-        }
-        body {
-            background-color: #f4f6f9;
-            height: 100vh;
-            display: flex;
-            align-items: center;
-            justify-content: center;
-        }
-        .auth-card {
-            background: white;
-            border-radius: 12px;
-            box-shadow: 0 4px 20px rgba(0,0,0,0.08);
-            overflow: hidden;
-            width: 100%;
-            max-width: 450px;
-        }
-        .auth-header {
-            background: var(--primary-navy);
-            color: white;
-            padding: 30px;
-            text-align: center;
-        }
-        .btn-accent {
-            background-color: var(--accent-coral);
-            color: white;
-            font-weight: 500;
-        }
-        .btn-accent:hover {
-            background-color: #d94a3b;
-            color: white;
-        }
-    </style>
+    <link href="../assets/bootstrap/css/bootstrap.min.css" rel="stylesheet">
+    <link rel="stylesheet" href="../assets/fontawesome/css/all.min.css">
+    <link rel="stylesheet" href="css/admin_style.css">
 </head>
-<body>
+<body class="auth-page">
     <div class="auth-card">
         <div class="auth-header">
             <h3 class="m-0"><i class="fa-solid fa-building-columns me-2"></i>GEC Placement</h3>
@@ -165,3 +130,5 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST' && $validToken) {
     </script>
 </body>
 </html>
+
+

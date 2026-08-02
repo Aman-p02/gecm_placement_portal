@@ -29,14 +29,16 @@ $applications = $stmt->fetchAll();
 ?>
 <!DOCTYPE html>
 <html lang="en">
+
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>My Applications - GEC Placement Portal</title>
-    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css" rel="stylesheet">
-    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <title>My Applications - GEC Modasa Placement Portal</title>
+    <link href="../assets/bootstrap/css/bootstrap.min.css" rel="stylesheet">
+    <link rel="stylesheet" href="../assets/fontawesome/css/all.min.css">
     <link rel="stylesheet" href="css/dashboard.css">
 </head>
+
 <body>
 
     <!-- Navbar -->
@@ -60,7 +62,8 @@ $applications = $stmt->fetchAll();
                 </ul>
                 <div class="d-flex align-items-center gap-3 ms-auto mt-3 mt-lg-0">
                     <span class="fw-medium text-dark">Hi, <?= htmlspecialchars($student['full_name']) ?></span>
-                    <a href="logout.php" class="btn btn-outline-danger btn-sm"><i class="fa-solid fa-right-from-bracket me-1"></i> Logout</a>
+                    <a href="logout.php" class="btn btn-outline-danger btn-sm"><i
+                            class="fa-solid fa-right-from-bracket me-1"></i> Logout</a>
                 </div>
             </div>
         </div>
@@ -69,15 +72,16 @@ $applications = $stmt->fetchAll();
     <!-- Content -->
     <div class="container py-5" style="margin-top: 2rem;">
         <h3 class="mb-4">My Applications</h3>
-        
+
         <?php if (empty($applications)): ?>
             <div class="text-center py-5 text-muted">
                 <i class="fa-solid fa-file-invoice fs-1 mb-3"></i>
                 <h5>You haven't applied to any companies yet.</h5>
-                <p>Go to <a href="placement_drives.php" style="color: var(--accent-coral);">Placement Drives</a> to find opportunities.</p>
+                <p>Go to <a href="placement_drives.php" style="color: var(--accent-coral);">Placement Drives</a> to find
+                    opportunities.</p>
             </div>
         <?php else: ?>
-            <?php foreach ($applications as $app): 
+            <?php foreach ($applications as $app):
                 $borderClass = 'border-secondary';
                 $badgeClass = 'bg-secondary';
                 if ($app['status'] === 'Applied' || $app['status'] === 'In Progress') {
@@ -90,26 +94,32 @@ $applications = $stmt->fetchAll();
                     $borderClass = 'border-success';
                     $badgeClass = 'bg-success';
                 }
-            ?>
+                ?>
                 <div class="custom-card mb-4 border-start border-4 <?= $borderClass ?>">
                     <div class="d-flex justify-content-between align-items-center flex-wrap gap-3">
                         <div class="d-flex gap-3 align-items-center">
                             <?php if ($app['logo_path']): ?>
-                                <img src="../admin-module/<?= htmlspecialchars($app['logo_path']) ?>" alt="Logo" style="width: 40px; height: 40px; object-fit: contain; border-radius: 6px;">
+                                <img src="../admin-module/<?= htmlspecialchars($app['logo_path']) ?>" alt="Logo"
+                                    style="width: 40px; height: 40px; object-fit: contain; border-radius: 6px;">
                             <?php else: ?>
-                                <div class="bg-light rounded d-flex align-items-center justify-content-center" style="width: 40px; height: 40px;">
+                                <div class="bg-light rounded d-flex align-items-center justify-content-center"
+                                    style="width: 40px; height: 40px;">
                                     <i class="fa-solid fa-building text-muted fs-5"></i>
                                 </div>
                             <?php endif; ?>
                             <div>
                                 <h5 class="mb-1"><?= htmlspecialchars($app['company_name']) ?></h5>
-                                <p class="text-muted mb-0 small">Applied on: <?= date('d M Y, h:i A', strtotime($app['applied_at'])) ?></p>
+                                <p class="text-muted mb-0 small">Applied on:
+                                    <?= date('d M Y, h:i A', strtotime($app['applied_at'])) ?>
+                                </p>
                             </div>
                         </div>
                         <div class="text-end">
                             <span class="badge <?= $badgeClass ?> px-3 py-2 mb-1"><?= htmlspecialchars($app['status']) ?></span>
                             <?php if (!empty($app['round_details'])): ?>
-                                <div class="small text-muted mt-1" style="max-width: 250px;"><?= htmlspecialchars($app['round_details']) ?></div>
+                                <div class="small text-muted mt-1" style="max-width: 250px;">
+                                    <?= htmlspecialchars($app['round_details']) ?>
+                                </div>
                             <?php endif; ?>
                         </div>
                     </div>
@@ -118,6 +128,7 @@ $applications = $stmt->fetchAll();
         <?php endif; ?>
     </div>
 
-    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/js/bootstrap.bundle.min.js"></script>
+    <script src="../assets/bootstrap/js/bootstrap.bundle.min.js"></script>
 </body>
+
 </html>

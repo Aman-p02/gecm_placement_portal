@@ -155,29 +155,11 @@ $csrfToken = generate_csrf_token();
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Manage Companies - GEC Placement</title>
-    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css" rel="stylesheet">
-    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
-    <style>
-        :root {
-            <?php if ($adminRole === 'superadmin'): ?>
-            --primary-navy: #000000; /* Pure Black */
-            --accent-coral: #F1C40F; /* Gold Accent */
-            <?php else: ?>
-            --primary-navy: #1B365D;
-            --accent-coral: #E65A4B;
-            <?php endif; ?>
-        }
-        body { background-color: #f4f6f9; }
-        .sidebar { min-height: 100vh; background: var(--primary-navy); color: white; padding-top: 20px; }
-        .sidebar a { color: rgba(255,255,255,0.8); text-decoration: none; display: block; padding: 12px 20px; transition: 0.3s; }
-        .sidebar a:hover, .sidebar a.active { background: rgba(255,255,255,0.1); color: white; border-left: 4px solid var(--accent-coral); }
-        .topbar { background: white; padding: 15px 30px; box-shadow: 0 2px 10px rgba(0,0,0,0.05); }
-        .custom-card { background: white; border-radius: 10px; padding: 20px; box-shadow: 0 4px 6px rgba(0,0,0,0.05); }
-        .btn-accent { background-color: var(--accent-coral); color: white; font-weight: 500; }
-        .btn-accent:hover { background-color: #d14d3f; color: white; }
-    </style>
+    <link href="../assets/bootstrap/css/bootstrap.min.css" rel="stylesheet">
+    <link rel="stylesheet" href="../assets/fontawesome/css/all.min.css">
+    <link rel="stylesheet" href="css/admin_style.css">
 </head>
-<body>
+<body class="<?= ($adminRole === 'superadmin') ? 'theme-superadmin' : '' ?>">
     <div class="d-flex">
         <!-- Sidebar -->
         <div class="sidebar" style="width: 250px;">
@@ -352,6 +334,8 @@ $csrfToken = generate_csrf_token();
         </div>
     </div>
     
-    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/js/bootstrap.bundle.min.js"></script>
+    <script src="../assets/bootstrap/js/bootstrap.bundle.min.js"></script>
 </body>
 </html>
+
+

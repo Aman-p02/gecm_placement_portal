@@ -71,8 +71,8 @@ if (empty($filterBranch)) {
     <title>Placement Statistics <?= $filterBranch ? ' - ' . htmlspecialchars($filterBranch) : '' ?> | GEC Modasa</title>
     <meta name="description" content="View the placement statistics, records, and successfully placed students of Government Engineering College, Modasa.">
     
-    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css" rel="stylesheet">
-    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <link href="assets/bootstrap/css/bootstrap.min.css" rel="stylesheet">
+    <link rel="stylesheet" href="assets/fontawesome/css/all.min.css">
     
     <style>
         :root {
@@ -512,6 +512,7 @@ if (empty($filterBranch)) {
         </div>
     <?php endif; ?>
 
-    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/js/bootstrap.bundle.min.js"></script>
+    <script src="assets/bootstrap/js/bootstrap.bundle.min.js"></script>
 </body>
 </html>
+

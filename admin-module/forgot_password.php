@@ -29,7 +29,7 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
 
             require_once '../includes/mailer.php';
             $resetLink = "http://" . $_SERVER['HTTP_HOST'] . dirname($_SERVER['PHP_SELF']) . "/reset_password.php?token=" . $token;
-            
+
             if (sendResetEmail($email, $resetLink)) {
                 $success = "A password reset link has been sent to your email. Please check your inbox (and spam folder).";
             } else {
@@ -44,50 +44,17 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
 ?>
 <!DOCTYPE html>
 <html lang="en">
+
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Admin Forgot Password - GEC Placement</title>
-    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css" rel="stylesheet">
-    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
-    <style>
-        :root {
-            --primary-navy: #1B365D;
-            --accent-coral: #E65A4B;
-        }
-        body {
-            background-color: #f4f6f9;
-            height: 100vh;
-            display: flex;
-            align-items: center;
-            justify-content: center;
-        }
-        .auth-card {
-            background: white;
-            border-radius: 12px;
-            box-shadow: 0 4px 20px rgba(0,0,0,0.08);
-            overflow: hidden;
-            width: 100%;
-            max-width: 450px;
-        }
-        .auth-header {
-            background: var(--primary-navy);
-            color: white;
-            padding: 30px;
-            text-align: center;
-        }
-        .btn-accent {
-            background-color: var(--accent-coral);
-            color: white;
-            font-weight: 500;
-        }
-        .btn-accent:hover {
-            background-color: #d94a3b;
-            color: white;
-        }
-    </style>
+    <title>Admin Forgot Password - GEC Modasa Placement</title>
+    <link href="../assets/bootstrap/css/bootstrap.min.css" rel="stylesheet">
+    <link rel="stylesheet" href="../assets/fontawesome/css/all.min.css">
+    <link rel="stylesheet" href="css/admin_style.css">
 </head>
-<body>
+
+<body class="auth-page">
     <div class="auth-card">
         <div class="auth-header">
             <h3 class="m-0"><i class="fa-solid fa-building-columns me-2"></i>GEC Placement</h3>
@@ -95,7 +62,8 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
         </div>
         <div class="p-4">
             <h5 class="mb-3 text-center text-dark">Forgot Password</h5>
-            <p class="text-muted text-center small mb-4">Enter your registered email address and we'll send you a link to reset your password.</p>
+            <p class="text-muted text-center small mb-4">Enter your registered email address and we'll send you a link
+                to reset your password.</p>
 
             <?php if ($error): ?>
                 <div class="alert alert-danger py-2 small"><?= htmlspecialchars($error) ?></div>
@@ -108,7 +76,8 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
                 <div class="mb-4">
                     <label class="form-label small fw-medium">Email Address</label>
                     <div class="input-group">
-                        <span class="input-group-text bg-light border-end-0"><i class="fa-solid fa-envelope text-muted"></i></span>
+                        <span class="input-group-text bg-light border-end-0"><i
+                                class="fa-solid fa-envelope text-muted"></i></span>
                         <input type="email" class="form-control border-start-0" name="email" required>
                     </div>
                 </div>
@@ -116,10 +85,13 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
                 <button type="submit" class="btn btn-accent w-100 py-2 mb-3">Send Reset Link</button>
 
                 <div class="text-center">
-                    <a href="login.php" class="small text-decoration-none text-muted"><i class="fa-solid fa-arrow-left me-1"></i> Back to Login</a>
+                    <a href="login.php" class="small text-decoration-none text-muted"><i
+                            class="fa-solid fa-arrow-left me-1"></i> Back to Login</a>
                 </div>
             </form>
         </div>
     </div>
 </body>
+
 </html>
+

@@ -24,3 +24,4 @@ try {
     error_log("Database Connection Error: " . $e->getMessage());
     die("A database error occurred. Please try again later.");
 }
+

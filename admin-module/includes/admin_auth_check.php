@@ -35,3 +35,4 @@ function validate_csrf_token($token) {
 function sanitize_input($data) {
     return htmlspecialchars(trim($data), ENT_QUOTES, 'UTF-8');
 }
+

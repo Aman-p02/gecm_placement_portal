@@ -70,27 +70,13 @@ $csrfToken = generate_csrf_token();
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Admin Signup - GEC Placement Portal</title>
-    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css" rel="stylesheet">
-    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
-    <style>
-        :root {
-            --primary-navy: #1B365D;
-            --accent-coral: #E65A4B;
-        }
-        body { background-color: #f8f9fa; display: flex; align-items: center; justify-content: center; min-height: 100vh; }
-        .auth-container { max-width: 500px; width: 100%; padding: 15px; }
-        .custom-card { background: white; border-radius: 15px; padding: 30px; box-shadow: 0 10px 30px rgba(0,0,0,0.05); }
-        .btn-accent { background-color: var(--accent-coral); color: white; font-weight: 500; }
-        .btn-accent:hover { background-color: #d14d3f; color: white; }
-        .brand-text { color: var(--primary-navy); font-weight: 700; }
-        .brand-text span { color: var(--accent-coral); }
-        .form-control, .form-select { background-color: #fcfcfc; border: 1.5px solid #b0b8c1; padding: 0.6rem 1rem; border-radius: 8px; }
-        .form-control:focus, .form-select:focus { border-color: var(--accent-coral); box-shadow: 0 0 0 0.25rem rgba(230, 90, 75, 0.25); background-color: #ffffff; }
-    </style>
+    <link href="../assets/bootstrap/css/bootstrap.min.css" rel="stylesheet">
+    <link rel="stylesheet" href="../assets/fontawesome/css/all.min.css">
+    <link rel="stylesheet" href="css/admin_style.css">
 </head>
-<body>
+<body class="auth-page">
     <div class="container auth-container">
-        <div class="custom-card border-top border-4 border-warning">
+        <div class="custom-card auth-styled border-top border-4 border-warning">
             <h4 class="text-center mb-2 brand-text">GEC Modasa <span>Admin</span></h4>
             <h6 class="text-center mb-3 text-muted">Register Sub-Admin Account</h6>
 
@@ -172,3 +158,5 @@ function togglePassword(inputId, icon) {
 }
 </script>
 </html>
+
+
