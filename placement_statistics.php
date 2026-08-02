@@ -347,11 +347,19 @@ if (empty($filterBranch)) {
 
     <!-- Navbar -->
     <nav class="navbar top-navbar no-print">
-        <div class="container d-flex justify-content-between align-items-center">
+        <div class="container d-flex justify-content-center align-items-center">
             <span class="brand-text">GEC Modasa <span>Placement Statistics</span></span>
-            <a href="student-module/login.php" class="btn btn-outline-primary btn-sm fw-bold px-3 py-2 rounded-pill">Student Login</a>
         </div>
     </nav>
+    
+    <!-- Full-Width Student Login Button -->
+    <div class="no-print" style="background-color: white; border-top: 1px solid rgba(0,0,0,0.05);">
+        <div class="container py-2 text-center">
+            <a href="student-module/login.php" class="btn w-100 fw-bold" style="background-color: var(--primary-navy); color: white; border-radius: 8px; padding: 10px 0; font-size: 1.1rem; box-shadow: 0 4px 10px rgba(27, 54, 93, 0.2);">
+                <i class="fa-solid fa-user-graduate me-2"></i> Student Login
+            </a>
+        </div>
+    </div>
 
     <?php if (empty($filterBranch)): ?>
         <!-- ==========================================
