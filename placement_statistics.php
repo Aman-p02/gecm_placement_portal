@@ -85,91 +85,104 @@ if (empty($filterBranch)) {
             font-family: 'Inter', sans-serif;
             color: #333;
         }
-        /* ── Navbar ─────────────────────────────── */
-        .top-navbar {
-            background-color: var(--primary-navy);
-            box-shadow: 0 4px 20px rgba(27,54,93,0.25);
+        /* ── Floating Pill Navbar ─────────────────── */
+        .navbar-wrapper {
             position: sticky;
             top: 0;
             z-index: 1050;
+            padding: 12px 0;
+            background: transparent;
         }
-        /* Row 1: Brand + Login */
-        .navbar-top-row {
+        .navbar-pill {
+            background: #faf9f7;
+            border-radius: 100px;
+            box-shadow: 0 4px 24px rgba(0,0,0,0.10), 0 1px 4px rgba(0,0,0,0.06);
             display: flex;
             align-items: center;
             justify-content: space-between;
-            padding: 14px 0;
-            border-bottom: 1px solid rgba(255,255,255,0.1);
+            padding: 10px 10px 10px 24px;
+            gap: 16px;
+            border: 1px solid rgba(0,0,0,0.06);
         }
         .brand-text {
-            color: white;
+            color: var(--primary-navy);
             font-weight: 800;
-            font-size: 1.55rem;
-            letter-spacing: -0.5px;
-            line-height: 1;
+            font-size: 1.15rem;
+            letter-spacing: -0.3px;
+            white-space: nowrap;
+            flex-shrink: 0;
         }
         .brand-text span {
             color: var(--accent-coral);
         }
-        .login-btn {
-            background-color: var(--accent-coral) !important;
-            color: white !important;
-            border-radius: 8px;
-            font-size: 0.9rem;
-            font-weight: 700;
-            border: none;
-            box-shadow: 0 4px 14px rgba(230,90,75,0.35);
-            transition: background 0.2s ease, transform 0.15s ease, box-shadow 0.2s ease;
-        }
-        .login-btn:hover {
-            background-color: #d44a3a !important;
-            transform: translateY(-1px);
-            box-shadow: 0 6px 18px rgba(230,90,75,0.45);
-        }
-        /* Row 2: Nav Links */
-        .navbar-links-row {
+        /* Center Nav Links */
+        .nav-pill-links {
             display: flex;
             align-items: center;
+            gap: 4px;
+            flex: 1;
             justify-content: center;
-            gap: 0;
-            padding: 0;
-            background-color: rgba(255,255,255,0.06);
         }
-        .navbar-links-row a {
-            color: rgba(255,255,255,0.75);
+        .nav-pill-links a {
+            color: #444;
             text-decoration: none;
-            font-size: 0.875rem;
-            font-weight: 600;
-            padding: 11px 18px;
+            font-size: 0.78rem;
+            font-weight: 700;
+            letter-spacing: 0.07em;
+            text-transform: uppercase;
+            padding: 8px 14px;
+            border-radius: 100px;
             white-space: nowrap;
-            position: relative;
-            transition: color 0.2s ease;
-            letter-spacing: 0.01em;
+            transition: background 0.18s ease, color 0.18s ease;
         }
-        .navbar-links-row a::after {
-            content: '';
-            position: absolute;
-            bottom: 0;
-            left: 18px;
-            right: 18px;
-            height: 2px;
-            background: var(--accent-coral);
-            border-radius: 2px 2px 0 0;
-            transform: scaleX(0);
-            transition: transform 0.25s ease;
+        .nav-pill-links a:hover {
+            background: rgba(27,54,93,0.07);
+            color: var(--primary-navy);
         }
-        .navbar-links-row a:hover {
-            color: white;
-        }
-        .navbar-links-row a:hover::after {
-            transform: scaleX(1);
-        }
-        .navbar-links-row .sep {
-            width: 1px;
-            height: 14px;
-            background: rgba(255,255,255,0.18);
+        /* Right Buttons */
+        .nav-pill-actions {
+            display: flex;
+            align-items: center;
+            gap: 8px;
             flex-shrink: 0;
-            align-self: center;
+        }
+        .btn-nav-filled {
+            background-color: var(--primary-navy);
+            color: white;
+            border: none;
+            border-radius: 100px;
+            padding: 9px 22px;
+            font-size: 0.85rem;
+            font-weight: 700;
+            text-decoration: none;
+            transition: background 0.2s ease, transform 0.15s ease;
+            display: inline-flex;
+            align-items: center;
+            gap: 7px;
+        }
+        .btn-nav-filled:hover {
+            background-color: #0f2340;
+            color: white;
+            transform: translateY(-1px);
+        }
+        .btn-nav-outline {
+            background: white;
+            color: #333;
+            border: 1.5px solid #d0d0d0;
+            border-radius: 100px;
+            padding: 8px 20px;
+            font-size: 0.85rem;
+            font-weight: 600;
+            text-decoration: none;
+            transition: border-color 0.2s ease, background 0.2s ease;
+            display: inline-flex;
+            align-items: center;
+            gap: 7px;
+        }
+        .btn-nav-outline:hover {
+            border-color: var(--primary-navy);
+            color: var(--primary-navy);
+            background: #f0f3f8;
         }
         
         /* Premium Hero Section */
@@ -412,33 +425,36 @@ if (empty($filterBranch)) {
 </head>
 <body>
 
-    <!-- ═══════════ NAVBAR ═══════════ -->
-    <nav class="top-navbar no-print">
+    <!-- ═══════════ FLOATING PILL NAVBAR ═══════════ -->
+    <div class="navbar-wrapper no-print">
         <div class="container">
+            <nav class="navbar-pill">
 
-            <!-- Row 1: Brand + Student Login -->
-            <div class="navbar-top-row">
-                <span class="brand-text">GEC Modasa <span>Placement Statistics</span></span>
-                <a href="student-module/login.php" class="btn fw-bold px-4 py-2 login-btn">
-                    <i class="fa-solid fa-user-graduate me-2"></i> Student Login
-                </a>
-            </div>
+                <!-- Brand -->
+                <span class="brand-text">GEC Modasa <span>Placement</span></span>
 
-            <!-- Row 2: Horizontal Nav Links -->
-            <div class="navbar-links-row d-none d-lg-flex">
-                <a href="#">Training and Placement</a>
-                <div class="sep"></div>
-                <a href="#">Placement Rules &amp; Guidelines</a>
-                <div class="sep"></div>
-                <a href="#">Major Recruiters</a>
-                <div class="sep"></div>
-                <a href="#">Placement Activities</a>
-                <div class="sep"></div>
-                <a href="#">Placement Team</a>
-            </div>
+                <!-- Center Nav Links (desktop) -->
+                <div class="nav-pill-links d-none d-lg-flex">
+                    <a href="#">Training &amp; Placement</a>
+                    <a href="#">Rules &amp; Guidelines</a>
+                    <a href="#">Major Recruiters</a>
+                    <a href="#">Placement Activities</a>
+                    <a href="#">Placement Team</a>
+                </div>
 
+                <!-- Right Action Buttons -->
+                <div class="nav-pill-actions">
+                    <a href="student-module/login.php" class="btn-nav-filled">
+                        <i class="fa-solid fa-user-graduate"></i> Student Login
+                    </a>
+                    <a href="admin-module/login.php" class="btn-nav-outline d-none d-md-inline-flex">
+                        <i class="fa-solid fa-shield-halved"></i> Admin
+                    </a>
+                </div>
+
+            </nav>
         </div>
-    </nav>
+    </div>
 
     <?php if (empty($filterBranch)): ?>
         <!-- ==========================================
