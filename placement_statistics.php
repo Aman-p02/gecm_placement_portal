@@ -85,24 +85,104 @@ if (empty($filterBranch)) {
             font-family: 'Inter', sans-serif;
             color: #333;
         }
-        .top-navbar {
-            background-color: white;
-            box-shadow: 0 4px 20px rgba(0,0,0,0.03);
-            padding: 15px 0;
+        /* ── Floating Pill Navbar ─────────────────── */
+        .navbar-wrapper {
             position: sticky;
             top: 0;
-            z-index: 1000;
+            z-index: 1050;
+            padding: 12px 0;
+            background: transparent;
+        }
+        .navbar-pill {
+            background: #faf9f7;
+            border-radius: 100px;
+            box-shadow: 0 4px 24px rgba(0,0,0,0.10), 0 1px 4px rgba(0,0,0,0.06);
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+            padding: 10px 10px 10px 24px;
+            gap: 16px;
+            border: 1px solid rgba(0,0,0,0.06);
         }
         .brand-text {
             color: var(--primary-navy);
             font-weight: 800;
-            font-size: 1.6rem;
-            text-decoration: none;
-            letter-spacing: -0.5px;
-            text-align: center;
+            font-size: 1.15rem;
+            letter-spacing: -0.3px;
+            white-space: nowrap;
+            flex-shrink: 0;
         }
         .brand-text span {
             color: var(--accent-coral);
+        }
+        /* Center Nav Links */
+        .nav-pill-links {
+            display: flex;
+            align-items: center;
+            gap: 4px;
+            flex: 1;
+            justify-content: center;
+        }
+        .nav-pill-links a {
+            color: #444;
+            text-decoration: none;
+            font-size: 0.78rem;
+            font-weight: 700;
+            letter-spacing: 0.07em;
+            text-transform: uppercase;
+            padding: 8px 14px;
+            border-radius: 100px;
+            white-space: nowrap;
+            transition: background 0.18s ease, color 0.18s ease;
+        }
+        .nav-pill-links a:hover {
+            background: rgba(27,54,93,0.07);
+            color: var(--primary-navy);
+        }
+        /* Right Buttons */
+        .nav-pill-actions {
+            display: flex;
+            align-items: center;
+            gap: 8px;
+            flex-shrink: 0;
+        }
+        .btn-nav-filled {
+            background-color: var(--primary-navy);
+            color: white;
+            border: none;
+            border-radius: 100px;
+            padding: 9px 22px;
+            font-size: 0.85rem;
+            font-weight: 700;
+            text-decoration: none;
+            transition: background 0.2s ease, transform 0.15s ease;
+            display: inline-flex;
+            align-items: center;
+            gap: 7px;
+        }
+        .btn-nav-filled:hover {
+            background-color: #0f2340;
+            color: white;
+            transform: translateY(-1px);
+        }
+        .btn-nav-outline {
+            background: white;
+            color: #333;
+            border: 1.5px solid #d0d0d0;
+            border-radius: 100px;
+            padding: 8px 20px;
+            font-size: 0.85rem;
+            font-weight: 600;
+            text-decoration: none;
+            transition: border-color 0.2s ease, background 0.2s ease;
+            display: inline-flex;
+            align-items: center;
+            gap: 7px;
+        }
+        .btn-nav-outline:hover {
+            border-color: var(--primary-navy);
+            color: var(--primary-navy);
+            background: #f0f3f8;
         }
         
         /* Premium Hero Section */
@@ -345,23 +425,34 @@ if (empty($filterBranch)) {
 </head>
 <body>
 
-    <!-- Navbar -->
-    <nav class="navbar top-navbar no-print">
-        <div class="container d-flex justify-content-center justify-content-md-between align-items-center">
-            <span class="brand-text text-center text-md-start">GEC Modasa <span>Placement Statistics</span></span>
-            
-            <a href="student-module/login.php" class="btn fw-bold px-4 py-2 d-none d-md-inline-block" style="background-color: var(--primary-navy); color: white; border-radius: 8px; box-shadow: 0 5px 15px rgba(27, 54, 93, 0.15); transition: all 0.3s ease;">
-                <i class="fa-solid fa-user-graduate me-2"></i> Student Login
-            </a>
-        </div>
-    </nav>
-    
-    <!-- Full-Width Student Login Button (Mobile Only) -->
-    <div class="no-print pt-2 pb-3 d-block d-md-none">
-        <div class="container text-center px-4">
-            <a href="student-module/login.php" class="btn w-100 fw-bold" style="background-color: var(--primary-navy); color: white; border-radius: 8px; padding: 10px 0; font-size: 1rem; box-shadow: 0 5px 15px rgba(27, 54, 93, 0.15); transition: all 0.3s ease;">
-                <i class="fa-solid fa-user-graduate me-2"></i> Student Login
-            </a>
+    <!-- ═══════════ FLOATING PILL NAVBAR ═══════════ -->
+    <div class="navbar-wrapper no-print">
+        <div class="container">
+            <nav class="navbar-pill">
+
+                <!-- Brand -->
+                <span class="brand-text">GEC Modasa <span>Placement</span></span>
+
+                <!-- Center Nav Links (desktop) -->
+                <div class="nav-pill-links d-none d-lg-flex">
+                    <a href="#">Training &amp; Placement</a>
+                    <a href="#">Rules &amp; Guidelines</a>
+                    <a href="#">Major Recruiters</a>
+                    <a href="#">Placement Activities</a>
+                    <a href="#">Placement Team</a>
+                </div>
+
+                <!-- Right Action Buttons -->
+                <div class="nav-pill-actions">
+                    <a href="student-module/login.php" class="btn-nav-filled">
+                        <i class="fa-solid fa-user-graduate"></i> Student Login
+                    </a>
+                    <a href="admin-module/login.php" class="btn-nav-outline d-none d-md-inline-flex">
+                        <i class="fa-solid fa-shield-halved"></i> Admin
+                    </a>
+                </div>
+
+            </nav>
         </div>
     </div>
 
