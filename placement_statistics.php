@@ -85,24 +85,91 @@ if (empty($filterBranch)) {
             font-family: 'Inter', sans-serif;
             color: #333;
         }
+        /* ── Navbar ─────────────────────────────── */
         .top-navbar {
-            background-color: white;
-            box-shadow: 0 4px 20px rgba(0,0,0,0.03);
-            padding: 15px 0;
+            background-color: var(--primary-navy);
+            box-shadow: 0 4px 20px rgba(27,54,93,0.25);
             position: sticky;
             top: 0;
-            z-index: 1000;
+            z-index: 1050;
+        }
+        /* Row 1: Brand + Login */
+        .navbar-top-row {
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+            padding: 14px 0;
+            border-bottom: 1px solid rgba(255,255,255,0.1);
         }
         .brand-text {
-            color: var(--primary-navy);
+            color: white;
             font-weight: 800;
-            font-size: 1.6rem;
-            text-decoration: none;
+            font-size: 1.55rem;
             letter-spacing: -0.5px;
-            text-align: center;
+            line-height: 1;
         }
         .brand-text span {
             color: var(--accent-coral);
+        }
+        .login-btn {
+            background-color: var(--accent-coral) !important;
+            color: white !important;
+            border-radius: 8px;
+            font-size: 0.9rem;
+            font-weight: 700;
+            border: none;
+            box-shadow: 0 4px 14px rgba(230,90,75,0.35);
+            transition: background 0.2s ease, transform 0.15s ease, box-shadow 0.2s ease;
+        }
+        .login-btn:hover {
+            background-color: #d44a3a !important;
+            transform: translateY(-1px);
+            box-shadow: 0 6px 18px rgba(230,90,75,0.45);
+        }
+        /* Row 2: Nav Links */
+        .navbar-links-row {
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            gap: 0;
+            padding: 0;
+            background-color: rgba(255,255,255,0.06);
+        }
+        .navbar-links-row a {
+            color: rgba(255,255,255,0.75);
+            text-decoration: none;
+            font-size: 0.875rem;
+            font-weight: 600;
+            padding: 11px 18px;
+            white-space: nowrap;
+            position: relative;
+            transition: color 0.2s ease;
+            letter-spacing: 0.01em;
+        }
+        .navbar-links-row a::after {
+            content: '';
+            position: absolute;
+            bottom: 0;
+            left: 18px;
+            right: 18px;
+            height: 2px;
+            background: var(--accent-coral);
+            border-radius: 2px 2px 0 0;
+            transform: scaleX(0);
+            transition: transform 0.25s ease;
+        }
+        .navbar-links-row a:hover {
+            color: white;
+        }
+        .navbar-links-row a:hover::after {
+            transform: scaleX(1);
+        }
+        .navbar-links-row .sep {
+            width: 1px;
+            height: 14px;
+            background: rgba(255,255,255,0.18);
+            flex-shrink: 0;
+            align-self: center;
         }
         
         /* Premium Hero Section */
@@ -345,25 +412,33 @@ if (empty($filterBranch)) {
 </head>
 <body>
 
-    <!-- Navbar -->
-    <nav class="navbar top-navbar no-print">
-        <div class="container d-flex justify-content-center justify-content-md-between align-items-center">
-            <span class="brand-text text-center text-md-start">GEC Modasa <span>Placement Statistics</span></span>
-            
-            <a href="student-module/login.php" class="btn fw-bold px-4 py-2 d-none d-md-inline-block" style="background-color: var(--primary-navy); color: white; border-radius: 8px; box-shadow: 0 5px 15px rgba(27, 54, 93, 0.15); transition: all 0.3s ease;">
-                <i class="fa-solid fa-user-graduate me-2"></i> Student Login
-            </a>
+    <!-- ═══════════ NAVBAR ═══════════ -->
+    <nav class="top-navbar no-print">
+        <div class="container">
+
+            <!-- Row 1: Brand + Student Login -->
+            <div class="navbar-top-row">
+                <span class="brand-text">GEC Modasa <span>Placement Statistics</span></span>
+                <a href="student-module/login.php" class="btn fw-bold px-4 py-2 login-btn">
+                    <i class="fa-solid fa-user-graduate me-2"></i> Student Login
+                </a>
+            </div>
+
+            <!-- Row 2: Horizontal Nav Links -->
+            <div class="navbar-links-row d-none d-lg-flex">
+                <a href="#">Training and Placement</a>
+                <div class="sep"></div>
+                <a href="#">Placement Rules &amp; Guidelines</a>
+                <div class="sep"></div>
+                <a href="#">Major Recruiters</a>
+                <div class="sep"></div>
+                <a href="#">Placement Activities</a>
+                <div class="sep"></div>
+                <a href="#">Placement Team</a>
+            </div>
+
         </div>
     </nav>
-    
-    <!-- Full-Width Student Login Button (Mobile Only) -->
-    <div class="no-print pt-2 pb-3 d-block d-md-none">
-        <div class="container text-center px-4">
-            <a href="student-module/login.php" class="btn w-100 fw-bold" style="background-color: var(--primary-navy); color: white; border-radius: 8px; padding: 10px 0; font-size: 1rem; box-shadow: 0 5px 15px rgba(27, 54, 93, 0.15); transition: all 0.3s ease;">
-                <i class="fa-solid fa-user-graduate me-2"></i> Student Login
-            </a>
-        </div>
-    </div>
 
     <?php if (empty($filterBranch)): ?>
         <!-- ==========================================
