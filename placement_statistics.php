@@ -143,7 +143,7 @@ if (empty($filterBranch)) {
         }
 
         /* Branch Cards (Khatarnak UI) */
-        .khatarnak-card {
+        .department-card {
             background: white;
             border-radius: 20px;
             padding: 30px;
@@ -161,7 +161,7 @@ if (empty($filterBranch)) {
             overflow: hidden;
             cursor: pointer;
         }
-        .khatarnak-card::before {
+        .department-card::before {
             content: '';
             position: absolute;
             top: 0;
@@ -172,14 +172,14 @@ if (empty($filterBranch)) {
             opacity: 0;
             transition: opacity 0.3s ease;
         }
-        .khatarnak-card:hover {
+        .department-card:hover {
             transform: translateY(-10px);
             box-shadow: 0 20px 50px rgba(0,0,0,0.08);
         }
-        .khatarnak-card:hover::before {
+        .department-card:hover::before {
             opacity: 1;
         }
-        .khatarnak-icon {
+        .department-icon {
             width: 80px;
             height: 80px;
             background: linear-gradient(135deg, rgba(27, 54, 93, 0.1) 0%, rgba(230, 90, 75, 0.1) 100%);
@@ -193,13 +193,13 @@ if (empty($filterBranch)) {
             transition: all 0.4s ease;
             box-shadow: inset 0 0 10px rgba(0,0,0,0.02);
         }
-        .khatarnak-card:hover .khatarnak-icon {
+        .department-card:hover .department-icon {
             transform: scale(1.1) rotate(8deg);
             background: linear-gradient(135deg, var(--primary-navy) 0%, var(--accent-coral) 100%);
             color: white;
             box-shadow: 0 10px 20px rgba(230, 90, 75, 0.3);
         }
-        .khatarnak-card h3 {
+        .department-card h3 {
             color: var(--primary-navy);
             font-weight: 700;
             font-size: 1.3rem;
@@ -402,8 +402,8 @@ if (empty($filterBranch)) {
                     ?>
                         <div class="col-xl-3 col-lg-4 col-md-6">
                             <!-- Click goes to View 2 (Select Year) -->
-                            <a href="?branch=<?= urlencode($stat['branch']) ?>" class="khatarnak-card">
-                                <div class="khatarnak-icon">
+                            <a href="?branch=<?= urlencode($stat['branch']) ?>" class="department-card">
+                                <div class="department-icon">
                                     <i class="fa-solid <?= $iconClass ?>"></i>
                                 </div>
                                 <h3><?= htmlspecialchars($stat['branch']) ?></h3>
