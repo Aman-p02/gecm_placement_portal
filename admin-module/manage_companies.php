@@ -1,7 +1,7 @@
 <?php
 /**
  * Manage Companies (Admin)
- * Allows adding and viewing companies based on role.
+ * Allows adding, editing, and viewing companies based on role.
  */
 require_once __DIR__ . '/includes/db_connect.php';
 require_once __DIR__ . '/includes/admin_auth_check.php';
@@ -42,7 +42,6 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST' && isset($_POST['action']) && $_POST['
     $batchYear = filter_input(INPUT_POST, 'batch_year', FILTER_VALIDATE_INT) ?: date('Y');
     $lastDate = sanitize_input($_POST['last_date'] ?? '');
     
-    // Determine branches (Now all admins can select multiple branches)
     $selectedBranches = $_POST['branches'] ?? [];
     
     if (empty($companyName) || empty($lastDate) || empty($selectedBranches)) {
@@ -53,7 +52,6 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST' && isset($_POST['action']) && $_POST['
         try {
             $pdo->beginTransaction();
             
-            // Handle Files
             $uploadDir = __DIR__ . '/uploads/companies/';
             if (!is_dir($uploadDir)) {
                 mkdir($uploadDir, 0777, true);
@@ -83,12 +81,10 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST' && isset($_POST['action']) && $_POST['
                 }
             }
             
-            // Insert Company
             $stmt = $pdo->prepare("INSERT INTO tbl_companies (company_name, batch_year, logo_path, document_path, last_date_to_apply, added_by) VALUES (?, ?, ?, ?, ?, ?)");
             $stmt->execute([$companyName, $batchYear, $logoPath, $docPath, $lastDate, $adminId]);
             $companyId = $pdo->lastInsertId();
             
-            // Insert Branches
             $stmtBranch = $pdo->prepare("INSERT INTO tbl_company_branches (company_id, branch_name) VALUES (?, ?)");
             foreach ($selectedBranches as $b) {
                 $stmtBranch->execute([$companyId, $b]);
@@ -103,6 +99,78 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST' && isset($_POST['action']) && $_POST['
         header("Location: manage_companies.php");
         exit;
     }
+}
+
+// Handle Edit Company
+if ($_SERVER['REQUEST_METHOD'] === 'POST' && isset($_POST['action']) && $_POST['action'] === 'edit_company') {
+    validate_csrf_token($_POST['csrf_token'] ?? '');
+
+    $companyId   = filter_input(INPUT_POST, 'company_id', FILTER_VALIDATE_INT);
+    $companyName = sanitize_input($_POST['company_name'] ?? '');
+    $batchYear   = filter_input(INPUT_POST, 'batch_year', FILTER_VALIDATE_INT) ?: date('Y');
+    $lastDate    = sanitize_input($_POST['last_date'] ?? '');
+    $selectedBranches = $_POST['branches'] ?? [];
+
+    if (!$companyId || empty($companyName) || empty($lastDate) || empty($selectedBranches)) {
+        $_SESSION['page_error'] = "All fields and at least one branch are required.";
+        header("Location: manage_companies.php");
+        exit;
+    }
+
+    try {
+        $pdo->beginTransaction();
+
+        $uploadDir = __DIR__ . '/uploads/companies/';
+        if (!is_dir($uploadDir)) mkdir($uploadDir, 0777, true);
+
+        // Fetch existing file paths
+        $stmtOld = $pdo->prepare("SELECT logo_path, document_path FROM tbl_companies WHERE company_id = ?");
+        $stmtOld->execute([$companyId]);
+        $oldData = $stmtOld->fetch();
+
+        $logoPath = $oldData['logo_path'];  // keep existing by default
+        if (isset($_FILES['logo']) && $_FILES['logo']['error'] === UPLOAD_ERR_OK) {
+            $ext = strtolower(pathinfo($_FILES['logo']['name'], PATHINFO_EXTENSION));
+            if (in_array($ext, ['jpg', 'jpeg', 'png', 'webp'])) {
+                $newLogoName = uniqid('logo_') . '.' . $ext;
+                move_uploaded_file($_FILES['logo']['tmp_name'], $uploadDir . $newLogoName);
+                $logoPath = 'uploads/companies/' . $newLogoName;
+            } else {
+                throw new Exception("Logo must be an image (jpg, png, webp).");
+            }
+        }
+
+        $docPath = $oldData['document_path'];  // keep existing by default
+        if (isset($_FILES['document']) && $_FILES['document']['error'] === UPLOAD_ERR_OK) {
+            $ext = strtolower(pathinfo($_FILES['document']['name'], PATHINFO_EXTENSION));
+            if ($ext === 'pdf') {
+                $newDocName = uniqid('doc_') . '.pdf';
+                move_uploaded_file($_FILES['document']['tmp_name'], $uploadDir . $newDocName);
+                $docPath = 'uploads/companies/' . $newDocName;
+            } else {
+                throw new Exception("Document must be a PDF.");
+            }
+        }
+
+        // Update company record
+        $stmtUpdate = $pdo->prepare("UPDATE tbl_companies SET company_name=?, batch_year=?, last_date_to_apply=?, logo_path=?, document_path=? WHERE company_id=?");
+        $stmtUpdate->execute([$companyName, $batchYear, $lastDate, $logoPath, $docPath, $companyId]);
+
+        // Refresh branches: delete old, insert new
+        $pdo->prepare("DELETE FROM tbl_company_branches WHERE company_id = ?")->execute([$companyId]);
+        $stmtBranch = $pdo->prepare("INSERT INTO tbl_company_branches (company_id, branch_name) VALUES (?, ?)");
+        foreach ($selectedBranches as $b) {
+            $stmtBranch->execute([$companyId, $b]);
+        }
+
+        $pdo->commit();
+        $_SESSION['page_success'] = "Company updated successfully!";
+    } catch (Exception $e) {
+        $pdo->rollBack();
+        $_SESSION['page_error'] = $e->getMessage();
+    }
+    header("Location: manage_companies.php");
+    exit;
 }
 
 // Handle Delete Company (Superadmin Only)
@@ -145,6 +213,14 @@ if ($adminRole === 'superadmin') {
     ");
     $stmt->execute([$adminBranch]);
     $companies = $stmt->fetchAll();
+}
+
+// Pre-fetch branches for all companies (for edit modal)
+$companyBranchMap = [];
+foreach ($companies as $c) {
+    $stmtB = $pdo->prepare("SELECT branch_name FROM tbl_company_branches WHERE company_id = ?");
+    $stmtB->execute([$c['company_id']]);
+    $companyBranchMap[$c['company_id']] = $stmtB->fetchAll(PDO::FETCH_COLUMN);
 }
 
 $csrfToken = generate_csrf_token();
@@ -263,19 +339,12 @@ $csrfToken = generate_csrf_token();
                                                 <th>Logo</th>
                                                 <th>Document</th>
                                                 <th>Branches</th>
-                                                <?php if ($adminRole === 'superadmin'): ?>
-                                                    <th>Action</th>
-                                                <?php endif; ?>
+                                                <th>Action</th>
                                             </tr>
                                         </thead>
                                         <tbody>
                                             <?php foreach ($companies as $c): ?>
-                                                <?php
-                                                    // Fetch branches for this company
-                                                    $stmtB = $pdo->prepare("SELECT branch_name FROM tbl_company_branches WHERE company_id = ?");
-                                                    $stmtB->execute([$c['company_id']]);
-                                                    $bList = $stmtB->fetchAll(PDO::FETCH_COLUMN);
-                                                ?>
+                                                <?php $bList = $companyBranchMap[$c['company_id']] ?? []; ?>
                                                 <tr>
                                                     <td>
                                                         <div class="fw-bold"><?= htmlspecialchars($c['company_name']) ?></div>
@@ -308,18 +377,35 @@ $csrfToken = generate_csrf_token();
                                                             <span class="badge bg-light text-dark border mb-1"><?= htmlspecialchars($branchName) ?></span><br>
                                                         <?php endforeach; ?>
                                                     </td>
-                                                    <?php if ($adminRole === 'superadmin'): ?>
                                                     <td>
-                                                        <form action="manage_companies.php" method="POST" class="d-inline" onsubmit="return confirm('CRITICAL WARNING: Are you sure you want to permanently delete this company? All related applications will also be deleted.');">
-                                                            <input type="hidden" name="csrf_token" value="<?= $csrfToken ?>">
-                                                            <input type="hidden" name="action" value="delete_company">
-                                                            <input type="hidden" name="company_id" value="<?= $c['company_id'] ?>">
-                                                            <button type="submit" class="btn btn-sm btn-outline-danger" title="Delete Company">
-                                                                <i class="fa-solid fa-trash-can"></i>
+                                                        <div class="d-flex gap-1">
+                                                            <!-- Edit Button -->
+                                                            <button type="button"
+                                                                class="btn btn-sm btn-outline-primary"
+                                                                title="Edit Company"
+                                                                onclick="openEditModal(
+                                                                    <?= $c['company_id'] ?>,
+                                                                    <?= htmlspecialchars(json_encode($c['company_name'])) ?>,
+                                                                    <?= (int)$c['batch_year'] ?>,
+                                                                    '<?= htmlspecialchars($c['last_date_to_apply']) ?>',
+                                                                    <?= htmlspecialchars(json_encode($bList)) ?>
+                                                                )">
+                                                                <i class="fa-solid fa-pen-to-square"></i>
                                                             </button>
-                                                        </form>
+
+                                                            <!-- Delete Button (superadmin only) -->
+                                                            <?php if ($adminRole === 'superadmin'): ?>
+                                                            <form action="manage_companies.php" method="POST" class="d-inline" onsubmit="return confirm('CRITICAL WARNING: Are you sure you want to permanently delete this company? All related applications will also be deleted.');">
+                                                                <input type="hidden" name="csrf_token" value="<?= $csrfToken ?>">
+                                                                <input type="hidden" name="action" value="delete_company">
+                                                                <input type="hidden" name="company_id" value="<?= $c['company_id'] ?>">
+                                                                <button type="submit" class="btn btn-sm btn-outline-danger" title="Delete Company">
+                                                                    <i class="fa-solid fa-trash-can"></i>
+                                                                </button>
+                                                            </form>
+                                                            <?php endif; ?>
+                                                        </div>
                                                     </td>
-                                                    <?php endif; ?>
                                                 </tr>
                                             <?php endforeach; ?>
                                         </tbody>
@@ -333,9 +419,90 @@ $csrfToken = generate_csrf_token();
             </div>
         </div>
     </div>
-    
+
+    <!-- ═══════════ EDIT COMPANY MODAL ═══════════ -->
+    <div class="modal fade" id="editCompanyModal" tabindex="-1" aria-labelledby="editCompanyModalLabel" aria-hidden="true">
+        <div class="modal-dialog modal-lg">
+            <div class="modal-content">
+                <div class="modal-header" style="background: var(--primary-navy, #1B365D);">
+                    <h5 class="modal-title text-white" id="editCompanyModalLabel">
+                        <i class="fa-solid fa-pen-to-square me-2"></i>Edit Company
+                    </h5>
+                    <button type="button" class="btn-close btn-close-white" data-bs-dismiss="modal"></button>
+                </div>
+                <form action="manage_companies.php" method="POST" enctype="multipart/form-data">
+                    <div class="modal-body">
+                        <input type="hidden" name="csrf_token" value="<?= $csrfToken ?>">
+                        <input type="hidden" name="action" value="edit_company">
+                        <input type="hidden" name="company_id" id="edit_company_id">
+
+                        <div class="row g-3">
+                            <div class="col-md-6">
+                                <label class="form-label small fw-semibold">Company Name <span class="text-danger">*</span></label>
+                                <input type="text" class="form-control" name="company_name" id="edit_company_name" required>
+                            </div>
+                            <div class="col-md-3">
+                                <label class="form-label small fw-semibold">Batch Year <span class="text-danger">*</span></label>
+                                <input type="number" class="form-control" name="batch_year" id="edit_batch_year" min="2000" max="2100" required>
+                            </div>
+                            <div class="col-md-3">
+                                <label class="form-label small fw-semibold">Last Date to Apply <span class="text-danger">*</span></label>
+                                <input type="date" class="form-control" name="last_date" id="edit_last_date" required>
+                            </div>
+                            <div class="col-md-6">
+                                <label class="form-label small fw-semibold">Replace Logo (optional)</label>
+                                <input type="file" class="form-control" name="logo" accept="image/jpeg, image/png, image/webp">
+                                <div class="form-text">Leave blank to keep existing logo.</div>
+                            </div>
+                            <div class="col-md-6">
+                                <label class="form-label small fw-semibold">Replace Job Description PDF (optional)</label>
+                                <input type="file" class="form-control" name="document" accept="application/pdf">
+                                <div class="form-text">Leave blank to keep existing document.</div>
+                            </div>
+                            <div class="col-12">
+                                <label class="form-label small fw-semibold">Eligible Branches <span class="text-danger">*</span></label>
+                                <div class="p-3 border rounded bg-light d-flex flex-wrap gap-3" id="edit_branches_container">
+                                    <?php foreach ($allBranches as $b): ?>
+                                        <div class="form-check">
+                                            <input class="form-check-input edit-branch-check" type="checkbox"
+                                                name="branches[]"
+                                                value="<?= htmlspecialchars($b) ?>"
+                                                id="edit_branch_<?= md5($b) ?>">
+                                            <label class="form-check-label small" for="edit_branch_<?= md5($b) ?>"><?= htmlspecialchars($b) ?></label>
+                                        </div>
+                                    <?php endforeach; ?>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="modal-footer">
+                        <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Cancel</button>
+                        <button type="submit" class="btn btn-primary">
+                            <i class="fa-solid fa-floppy-disk me-1"></i> Save Changes
+                        </button>
+                    </div>
+                </form>
+            </div>
+        </div>
+    </div>
+
     <script src="../assets/bootstrap/js/bootstrap.bundle.min.js"></script>
+    <script>
+        function openEditModal(id, name, batchYear, lastDate, branches) {
+            // Populate fields
+            document.getElementById('edit_company_id').value   = id;
+            document.getElementById('edit_company_name').value = name;
+            document.getElementById('edit_batch_year').value   = batchYear;
+            document.getElementById('edit_last_date').value    = lastDate;
+
+            // Reset all branch checkboxes then check the ones that match
+            document.querySelectorAll('.edit-branch-check').forEach(cb => {
+                cb.checked = branches.includes(cb.value);
+            });
+
+            // Show the modal
+            new bootstrap.Modal(document.getElementById('editCompanyModal')).show();
+        }
+    </script>
 </body>
 </html>
-
-
