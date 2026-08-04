@@ -13,25 +13,27 @@ $displayYear = $filterBatch ? $filterBatch . '-' . substr($filterBatch + 1, -2) 
 $displayBranch = $filterBranch ? $filterBranch : 'All Branches';
 
 // ---------------------------------------------------------
+// GLOBAL DATA FETCHING
+// ---------------------------------------------------------
+// Fetch aggregate data for branches (used in navbar dropdown and default view)
+$aggQuery = "
+    SELECT s.branch, COUNT(*) as total_placed
+    FROM tbl_applications a
+    JOIN tbl_students s ON a.student_id = s.student_id
+    JOIN tbl_companies c ON a.company_id = c.company_id
+    WHERE a.status = 'Selected'
+    GROUP BY s.branch ORDER BY s.branch ASC
+";
+$stmtAgg = $pdo->query($aggQuery);
+$branchStats = $stmtAgg->fetchAll();
+$totalOverall = array_sum(array_column($branchStats, 'total_placed'));
+
+// ---------------------------------------------------------
 // DATA FETCHING BASED ON VIEW STATE
 // ---------------------------------------------------------
 
 if (empty($filterBranch)) {
-    // VIEW 1: Fetch aggregate data for branch cards
-    $aggQuery = "
-        SELECT s.branch, COUNT(*) as total_placed
-        FROM tbl_applications a
-        JOIN tbl_students s ON a.student_id = s.student_id
-        JOIN tbl_companies c ON a.company_id = c.company_id
-        WHERE a.status = 'Selected'
-        GROUP BY s.branch ORDER BY s.branch ASC
-    ";
-    $stmtAgg = $pdo->query($aggQuery);
-    $branchStats = $stmtAgg->fetchAll();
-    
-    // Calculate total across all branches
-    $totalOverall = array_sum(array_column($branchStats, 'total_placed'));
-    
+    // Already fetched globally
 } elseif (!empty($filterBranch) && empty($filterBatch)) {
     // VIEW 2: Fetch available batches for the selected branch
     $batchQuery = "
@@ -90,19 +92,14 @@ if (empty($filterBranch)) {
             position: sticky;
             top: 0;
             z-index: 1050;
-            padding: 12px 0;
+            padding: 0;
             background: transparent;
         }
         .navbar-pill {
             background: #faf9f7;
-            border-radius: 100px;
-            box-shadow: 0 4px 24px rgba(0,0,0,0.10), 0 1px 4px rgba(0,0,0,0.06);
-            display: flex;
-            align-items: center;
-            justify-content: space-between;
-            padding: 10px 10px 10px 24px;
-            gap: 16px;
-            border: 1px solid rgba(0,0,0,0.06);
+            border-radius: 0;
+            box-shadow: 0 4px 24px rgba(0,0,0,0.06), 0 1px 4px rgba(0,0,0,0.04);
+            border-bottom: 1px solid rgba(0,0,0,0.06);
         }
         .brand-text {
             color: var(--primary-navy);
@@ -118,20 +115,16 @@ if (empty($filterBranch)) {
         /* Center Nav Links */
         .nav-pill-links {
             display: flex;
-            align-items: center;
             gap: 4px;
             flex: 1;
-            justify-content: center;
-            overflow-x: auto;
-            scrollbar-width: none;
         }
         .nav-pill-links::-webkit-scrollbar {
             display: none;
         }
-        .nav-pill-links a {
+        .nav-pill-links a.nav-link {
             color: #444;
             text-decoration: none;
-            font-size: 0.78rem;
+            font-size: 0.85rem;
             font-weight: 700;
             letter-spacing: 0.07em;
             text-transform: uppercase;
@@ -430,31 +423,54 @@ if (empty($filterBranch)) {
 </head>
 <body>
 
-    <!-- ═══════════ FLOATING PILL NAVBAR ═══════════ -->
+    <!-- ═══════════ FULL WIDTH NAVBAR ═══════════ -->
     <div class="navbar-wrapper no-print">
-        <div class="container">
-            <nav class="navbar-pill">
-
+        <nav class="navbar navbar-expand-lg navbar-pill py-2">
+            <div class="container-fluid px-4">
+                
                 <!-- Brand -->
-                <span class="brand-text">GEC Modasa <span>Placement</span></span>
+                <a href="#" class="navbar-brand brand-text text-decoration-none">GEC Modasa <span>Placement</span></a>
 
-                <!-- Center Nav Links (desktop) -->
-                <div class="nav-pill-links d-none d-lg-flex">
-                    <a href="#">Training &amp; Placement</a>
-                    <a href="#">Rules &amp; Guidelines</a>
-                    <a href="#">Major Recruiters</a>
-                    <a href="#">Placement Activities</a>
-                    <a href="#">Placement Team</a>
+                <!-- Hamburger Button -->
+                <button class="navbar-toggler border-0 shadow-none" type="button" data-bs-toggle="collapse" data-bs-target="#mainNavbar" aria-controls="mainNavbar" aria-expanded="false" aria-label="Toggle navigation">
+                    <span class="navbar-toggler-icon"></span>
+                </button>
+
+                <!-- Collapsible Content -->
+                <div class="collapse navbar-collapse" id="mainNavbar">
+                    
+                    <!-- Center Nav Links -->
+                    <ul class="navbar-nav flex-column flex-lg-row mx-auto mt-3 mt-lg-0 text-center text-lg-start nav-pill-links w-100 justify-content-center">
+                        <li class="nav-item dropdown">
+                            <a class="nav-link dropdown-toggle" href="#" id="trainingDropdown" role="button" data-bs-toggle="dropdown" aria-expanded="false">
+                                Training &amp; Placement
+                            </a>
+                            <ul class="dropdown-menu dropdown-menu-center text-center text-lg-start" aria-labelledby="trainingDropdown" style="border:none; box-shadow: 0 4px 12px rgba(0,0,0,0.1);">
+                                <?php if(empty($branchStats)): ?>
+                                    <li><a class="dropdown-item" href="#">No records available</a></li>
+                                <?php else: ?>
+                                    <?php foreach($branchStats as $stat): ?>
+                                        <li><a class="dropdown-item fw-bold text-muted" href="?branch=<?= urlencode($stat['branch']) ?>"><?= htmlspecialchars($stat['branch']) ?></a></li>
+                                    <?php endforeach; ?>
+                                <?php endif; ?>
+                            </ul>
+                        </li>
+                        <li class="nav-item"><a class="nav-link" href="#">Rules &amp; Guidelines</a></li>
+                        <li class="nav-item"><a class="nav-link" href="#">Major Recruiters</a></li>
+                        <li class="nav-item"><a class="nav-link" href="#">Placement Activities</a></li>
+                        <li class="nav-item"><a class="nav-link" href="#">Placement Team</a></li>
+                    </ul>
+
+                    <!-- Right Action Buttons -->
+                    <div class="nav-pill-actions mt-3 mt-lg-0 mb-2 mb-lg-0 text-center d-none d-lg-block">
+                        <a href="student-module/login.php" class="btn-nav-filled">
+                            <i class="fa-solid fa-user-graduate"></i> Student Login
+                        </a>
+                    </div>
+                    
                 </div>
-
-                <div class="nav-pill-actions">
-                    <a href="student-module/login.php" class="btn-nav-filled">
-                        <i class="fa-solid fa-user-graduate"></i> Student Login
-                    </a>
-                </div>
-
-            </nav>
-        </div>
+            </div>
+        </nav>
     </div>
 
     <?php if (empty($filterBranch)): ?>
@@ -476,35 +492,13 @@ if (empty($filterBranch)) {
         </div>
 
         <div class="container card-grid no-print">
-            <?php if(empty($branchStats)): ?>
-                <div class="text-center py-5">
-                    <i class="fa-solid fa-folder-open display-1 text-muted mb-3 opacity-25"></i>
-                    <h3 class="text-muted fw-bold">No placement records found.</h3>
+            <div class="row g-4 justify-content-center">
+                <div class="col-12 d-block d-md-none mt-4 text-center">
+                    <a href="student-module/login.php" class="btn btn-nav-filled py-3 px-5 fs-5 rounded-pill shadow-sm" style="background: var(--primary-navy); color: white;">
+                        <i class="fa-solid fa-user-graduate me-2"></i> Student Login
+                    </a>
                 </div>
-            <?php else: ?>
-                <div class="row g-4 justify-content-center">
-                    <?php foreach($branchStats as $stat): 
-                        $iconClass = 'fa-laptop-code';
-                        $branchNameLower = strtolower($stat['branch']);
-                        if (strpos($branchNameLower, 'civil') !== false) $iconClass = 'fa-hard-hat';
-                        if (strpos($branchNameLower, 'mechanical') !== false || strpos($branchNameLower, 'auto') !== false) $iconClass = 'fa-cogs';
-                        if (strpos($branchNameLower, 'electrical') !== false) $iconClass = 'fa-bolt';
-                        if (strpos($branchNameLower, 'ec') !== false) $iconClass = 'fa-microchip';
-                        if (strpos($branchNameLower, 'it') !== false) $iconClass = 'fa-network-wired';
-                    ?>
-                        <div class="col-xl-3 col-lg-4 col-md-6">
-                            <!-- Click goes to View 2 (Select Year) -->
-                            <a href="?branch=<?= urlencode($stat['branch']) ?>" class="department-card">
-                                <div class="department-icon">
-                                    <i class="fa-solid <?= $iconClass ?>"></i>
-                                </div>
-                                <h3><?= htmlspecialchars($stat['branch']) ?></h3>
-                                <p class="text-muted small mb-0 mt-2">Click to view detailed report</p>
-                            </a>
-                        </div>
-                    <?php endforeach; ?>
-                </div>
-            <?php endif; ?>
+            </div>
         </div>
 
     <?php elseif (!empty($filterBranch) && empty($filterBatch)): ?>
