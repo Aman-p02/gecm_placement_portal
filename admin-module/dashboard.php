@@ -79,7 +79,7 @@ if ($adminRole === 'superadmin') {
             </div>
 
             <div class="container-fluid p-4">
-                <h3 class="mb-4" style="color: var(--primary-navy);">Welcome to Admin Panel</h3>
+               
                 
                 <div class="row g-4">
                     <?php if ($adminRole === 'superadmin'): ?>

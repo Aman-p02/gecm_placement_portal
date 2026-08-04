@@ -7,6 +7,7 @@ require_once __DIR__ . '/admin-module/includes/db_connect.php';
 // Handle URL Parameters
 $filterBranch = filter_input(INPUT_GET, 'branch', FILTER_SANITIZE_STRING) ?: '';
 $filterBatch = filter_input(INPUT_GET, 'batch_year', FILTER_VALIDATE_INT) ?: '';
+$showPlacement = isset($_GET['view']) && $_GET['view'] === 'placement';
 
 // Determine dynamic titles
 $displayYear = $filterBatch ? $filterBatch . '-' . substr($filterBatch + 1, -2) : 'All Years';
@@ -514,8 +515,7 @@ if (empty($filterBranch)) {
                     <!-- Center Nav Links -->
                     <ul
                         class="navbar-nav flex-column flex-lg-row mx-auto mt-3 mt-lg-0 text-center text-lg-start nav-pill-links w-100 justify-content-center">
-                        <li class="nav-item"><a class="nav-link" href="training_and_placement.php">Training &amp;
-                                Placement</a></li>
+                        <li class="nav-item"><a class="nav-link <?= $showPlacement && empty($filterBranch) ? 'active fw-bold' : '' ?>" href="placement_statistics.php?view=placement">Training &amp; Placement</a></li>
                         <li class="nav-item"><a class="nav-link" href="#">Rules &amp; Guidelines</a></li>
                         <li class="nav-item"><a class="nav-link" href="#">Major Recruiters</a></li>
                         <li class="nav-item"><a class="nav-link" href="#">Placement Activities</a></li>
@@ -534,11 +534,71 @@ if (empty($filterBranch)) {
         </nav>
     </div>
 
-    <?php if (empty($filterBranch)): ?>
+    <?php if (empty($filterBranch) && !$showPlacement): ?>
         <!-- ==========================================
-             VIEW 1: Premium Branch Cards
+             DEFAULT LANDING VIEW
              ========================================== -->
+        <div class="hero-section no-print">
+            <div class="container">
+                <h1>GEC Modasa Placement Cell</h1>
+                <p>Connecting students with leading industries. Explore our placement programs, records, and opportunities.</p>
+                <div class="mt-4 d-flex gap-3 justify-content-center flex-wrap">
+                    <a href="placement_statistics.php?view=placement" class="btn btn-light fw-bold px-4 py-2 rounded-pill">
+                        <i class="fa-solid fa-chart-bar me-2"></i>View Placement Records
+                    </a>
+                    <a href="student-module/login.php" class="btn btn-outline-light fw-bold px-4 py-2 rounded-pill">
+                        <i class="fa-solid fa-user-graduate me-2"></i>Student Login
+                    </a>
+                </div>
+            </div>
+        </div>
 
+        <!-- Quick Info Cards -->
+        <div class="container card-grid no-print">
+            <div class="row g-4 justify-content-center">
+                <div class="col-lg-3 col-md-6">
+                    <div class="department-card" style="cursor:default;">
+                        <div class="department-icon" style="background: linear-gradient(135deg,rgba(27,54,93,0.12),rgba(230,90,75,0.12));">
+                            <i class="fa-solid fa-trophy" style="color:var(--accent-coral);"></i>
+                        </div>
+                        <h3><?= $totalOverall ?></h3>
+                        <p class="text-muted small mb-0">Total Students Placed</p>
+                    </div>
+                </div>
+                <div class="col-lg-3 col-md-6">
+                    <div class="department-card" style="cursor:default;">
+                        <div class="department-icon">
+                            <i class="fa-solid fa-building"></i>
+                        </div>
+                        <h3><?= count($branchStats) ?></h3>
+                        <p class="text-muted small mb-0">Departments with Placements</p>
+                    </div>
+                </div>
+                <div class="col-lg-3 col-md-6">
+                    <a href="placement_statistics.php?view=placement" class="department-card">
+                        <div class="department-icon">
+                            <i class="fa-solid fa-chart-line"></i>
+                        </div>
+                        <h3>Records</h3>
+                        <p class="text-muted small mb-0 mt-2">View department-wise reports</p>
+                    </a>
+                </div>
+                <div class="col-lg-3 col-md-6">
+                    <a href="student-module/login.php" class="department-card">
+                        <div class="department-icon">
+                            <i class="fa-solid fa-user-graduate"></i>
+                        </div>
+                        <h3>Student Portal</h3>
+                        <p class="text-muted small mb-0 mt-2">Login to apply for drives</p>
+                    </a>
+                </div>
+            </div>
+        </div>
+
+    <?php elseif (empty($filterBranch) && $showPlacement): ?>
+        <!-- ==========================================
+             VIEW 1: Department / Branch Cards
+             ========================================== -->
         <div class="hero-section no-print">
             <div class="container">
                 <h1>Campus Placement Records</h1>
@@ -546,50 +606,41 @@ if (empty($filterBranch)) {
                 <div class="mt-4">
                     <div class="total-badge m-0">
                         <i class="fa-solid fa-trophy text-warning me-2"></i>
-                        Total Placed Students: <strong><?= isset($totalOverall) ? $totalOverall : 0 ?></strong>
+                        Total Placed Students: <strong><?= $totalOverall ?></strong>
                     </div>
                 </div>
             </div>
         </div>
 
         <div class="container card-grid no-print">
-            <!-- Branch Cards -->
-            <div>
-                <?php if (empty($branchStats)): ?>
-                    <div class="text-center py-5">
-                        <i class="fa-solid fa-folder-open display-1 text-muted mb-3 opacity-25"></i>
-                        <h3 class="text-muted fw-bold">No placement records found.</h3>
-                    </div>
-                <?php else: ?>
-                    <div class="row g-4 justify-content-center">
-                        <?php foreach ($branchStats as $stat):
-                            $iconClass = 'fa-laptop-code';
-                            $branchNameLower = strtolower($stat['branch']);
-                            if (strpos($branchNameLower, 'civil') !== false)
-                                $iconClass = 'fa-hard-hat';
-                            if (strpos($branchNameLower, 'mechanical') !== false || strpos($branchNameLower, 'auto') !== false)
-                                $iconClass = 'fa-cogs';
-                            if (strpos($branchNameLower, 'electrical') !== false)
-                                $iconClass = 'fa-bolt';
-                            if (strpos($branchNameLower, 'ec') !== false)
-                                $iconClass = 'fa-microchip';
-                            if (strpos($branchNameLower, 'it') !== false)
-                                $iconClass = 'fa-network-wired';
-                            ?>
-                            <div class="col-xl-3 col-lg-4 col-md-6">
-                                <!-- Click goes to View 2 (Select Year) -->
-                                <a href="?branch=<?= urlencode($stat['branch']) ?>" class="department-card">
-                                    <div class="department-icon">
-                                        <i class="fa-solid <?= $iconClass ?>"></i>
-                                    </div>
-                                    <h3><?= htmlspecialchars($stat['branch']) ?></h3>
-                                    <p class="text-muted small mb-0 mt-2">Click to view detailed report</p>
-                                </a>
-                            </div>
-                        <?php endforeach; ?>
-                    </div>
-                <?php endif; ?>
-            </div>
+            <?php if (empty($branchStats)): ?>
+                <div class="text-center py-5">
+                    <i class="fa-solid fa-folder-open display-1 text-muted mb-3 opacity-25"></i>
+                    <h3 class="text-muted fw-bold">No placement records found.</h3>
+                </div>
+            <?php else: ?>
+                <div class="row g-4 justify-content-center">
+                    <?php foreach ($branchStats as $stat):
+                        $iconClass = 'fa-laptop-code';
+                        $branchNameLower = strtolower($stat['branch']);
+                        if (strpos($branchNameLower, 'civil') !== false) $iconClass = 'fa-hard-hat';
+                        if (strpos($branchNameLower, 'mechanical') !== false || strpos($branchNameLower, 'auto') !== false) $iconClass = 'fa-cogs';
+                        if (strpos($branchNameLower, 'electrical') !== false) $iconClass = 'fa-bolt';
+                        if (strpos($branchNameLower, 'ec') !== false) $iconClass = 'fa-microchip';
+                        if (strpos($branchNameLower, 'it') !== false) $iconClass = 'fa-network-wired';
+                    ?>
+                        <div class="col-xl-3 col-lg-4 col-md-6">
+                            <a href="?view=placement&branch=<?= urlencode($stat['branch']) ?>" class="department-card">
+                                <div class="department-icon">
+                                    <i class="fa-solid <?= $iconClass ?>"></i>
+                                </div>
+                                <h3><?= htmlspecialchars($stat['branch']) ?></h3>
+                                <p class="text-muted small mb-0 mt-2">Click to view detailed report</p>
+                            </a>
+                        </div>
+                    <?php endforeach; ?>
+                </div>
+            <?php endif; ?>
 
             <!-- MOBILE VIEW: Student Login Button -->
             <div class="row g-4 justify-content-center">
@@ -615,7 +666,7 @@ if (empty($filterBranch)) {
         </div>
 
         <div class="container card-grid no-print position-relative">
-            <a href="training_and_placement.php" class="back-btn mb-3 d-inline-block position-static">
+            <a href="placement_statistics.php?view=placement" class="back-btn mb-3 d-inline-block position-static">
                 <i class="fa-solid fa-arrow-left me-2"></i>Back to Departments
             </a>
 
@@ -651,7 +702,7 @@ if (empty($filterBranch)) {
         <div class="container pb-5">
             <div class="record-container">
 
-                <a href="training_and_placement.php?branch=<?= urlencode($filterBranch) ?>" class="back-btn no-print">
+                <a href="placement_statistics.php?view=placement&branch=<?= urlencode($filterBranch) ?>" class="back-btn no-print">
                     <i class="fa-solid fa-arrow-left me-2"></i>Back to Years
                 </a>
 
