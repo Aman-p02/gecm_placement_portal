@@ -442,13 +442,9 @@ if (empty($filterBranch)) {
                     <a href="#">Placement Team</a>
                 </div>
 
-                <!-- Right Action Buttons -->
                 <div class="nav-pill-actions">
                     <a href="student-module/login.php" class="btn-nav-filled">
                         <i class="fa-solid fa-user-graduate"></i> Student Login
-                    </a>
-                    <a href="admin-module/login.php" class="btn-nav-outline d-none d-md-inline-flex">
-                        <i class="fa-solid fa-shield-halved"></i> Admin
                     </a>
                 </div>
 
