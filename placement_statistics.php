@@ -122,6 +122,11 @@ if (empty($filterBranch)) {
             gap: 4px;
             flex: 1;
             justify-content: center;
+            overflow-x: auto;
+            scrollbar-width: none;
+        }
+        .nav-pill-links::-webkit-scrollbar {
+            display: none;
         }
         .nav-pill-links a {
             color: #444;
