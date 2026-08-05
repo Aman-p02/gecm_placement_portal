@@ -311,131 +311,139 @@
     <!-- ═══════════ MAIN CONTENT (Matching Bootstrap container width) ═══════════ -->
     <div class="container py-4 pb-5">
 
-        <!-- 1. Dress Code -->
-        <div class="sec-title">
-            <div class="ico" style="background:#eef2ff;color:var(--primary-navy);"><i class="fa-solid fa-shirt"></i></div>
-            <h2 style="color:var(--primary-navy);">Dress Code</h2>
-        </div>
-        <div class="card-white">
-            <div class="dress-grid">
-                <div class="dress-col">
-                    <h6 style="color:var(--primary-navy);"><i class="fa-solid fa-person"></i> Boys</h6>
-                    <ul>
-                        <li>Shirt</li>
-                        <li>Trouser <span>(Jeans not allowed)</span></li>
-                        <li>Leather shoes</li>
-                    </ul>
+        <div class="row gx-4">
+            <!-- LEFT COLUMN -->
+            <div class="col-lg-6">
+                <!-- 1. Dress Code -->
+                <div class="sec-title mt-0">
+                    <div class="ico" style="background:#eef2ff;color:var(--primary-navy);"><i class="fa-solid fa-shirt"></i></div>
+                    <h2 style="color:var(--primary-navy);">Dress Code</h2>
                 </div>
-                <div class="dress-col">
-                    <h6 style="color:var(--accent-coral);"><i class="fa-solid fa-person-dress"></i> Girls</h6>
-                    <ul>
-                        <li>Punjabi dress</li>
-                        <li><em>or</em> Shirt and trouser <span>(Jeans not allowed)</span></li>
-                    </ul>
+                <div class="card-white">
+                    <div class="dress-grid">
+                        <div class="dress-col">
+                            <h6 style="color:var(--primary-navy);"><i class="fa-solid fa-person"></i> Boys</h6>
+                            <ul>
+                                <li>Shirt</li>
+                                <li>Trouser <span>(Jeans not allowed)</span></li>
+                                <li>Leather shoes</li>
+                            </ul>
+                        </div>
+                        <div class="dress-col">
+                            <h6 style="color:var(--accent-coral);"><i class="fa-solid fa-person-dress"></i> Girls</h6>
+                            <ul>
+                                <li>Punjabi dress</li>
+                                <li><em>or</em> Shirt and trouser <span>(Jeans not allowed)</span></li>
+                            </ul>
+                        </div>
+                    </div>
                 </div>
-            </div>
-        </div>
 
-        <!-- 2. Documents -->
-        <div class="sec-title" style="margin-top:36px;">
-            <div class="ico" style="background:#dcfce7;color:#16a34a;"><i class="fa-solid fa-file-lines"></i></div>
-            <h2 style="color:#15803d;">Documents to Carry</h2>
-        </div>
-        <div class="card-white">
-            <div class="doc-wrap">
-                <span class="doc-chip"><i class="fa-solid fa-file-alt"></i> Latest Resume</span>
-                <span class="doc-chip"><i class="fa-solid fa-certificate"></i> All Original Certificates</span>
-                <span class="doc-chip"><i class="fa-solid fa-copy"></i> One Attested Copy of Each Certificate</span>
-                <span class="doc-chip"><i class="fa-regular fa-image"></i> Two Passport-Size Photographs</span>
-                <span class="doc-chip"><i class="fa-solid fa-envelope"></i> Envelopes &amp; Stationery</span>
-            </div>
-        </div>
+                <!-- 2. Documents -->
+                <div class="sec-title" style="margin-top:36px;">
+                    <div class="ico" style="background:#dcfce7;color:#16a34a;"><i class="fa-solid fa-file-lines"></i></div>
+                    <h2 style="color:#15803d;">Documents to Carry</h2>
+                </div>
+                <div class="card-white">
+                    <div class="doc-wrap">
+                        <span class="doc-chip"><i class="fa-solid fa-file-alt"></i> Latest Resume</span>
+                        <span class="doc-chip"><i class="fa-solid fa-certificate"></i> All Original Certificates</span>
+                        <span class="doc-chip"><i class="fa-solid fa-copy"></i> One Attested Copy of Each Certificate</span>
+                        <span class="doc-chip"><i class="fa-regular fa-image"></i> Two Passport-Size Photographs</span>
+                        <span class="doc-chip"><i class="fa-solid fa-envelope"></i> Envelopes &amp; Stationery</span>
+                    </div>
+                </div>
 
-        <!-- 3. Rules -->
-        <div class="sec-title" style="margin-top:36px;">
-            <div class="ico" style="background:#eef2ff;color:var(--primary-navy);"><i class="fa-solid fa-list-check"></i></div>
-            <h2 style="color:var(--primary-navy);">Rules &amp; Regulations</h2>
-        </div>
-        <div class="card-white">
-            <div class="rule-item">
-                <div class="rule-num">1</div>
-                <div class="rule-body">It is mandatory for students to provide their correct details to the departmental placement representative. <strong>False entry in data will lead to disqualification</strong> in the placement drive, even if the student has paid the fees.</div>
-            </div>
-            <div class="rule-item">
-                <div class="rule-num">2</div>
-                <div class="rule-body">The departmental coordinator will <strong>verify entries within one week</strong> of the declaration of results and approve them. Only approved students will qualify for placement.</div>
-            </div>
-            <div class="rule-item">
-                <div class="rule-num">3</div>
-                <div class="rule-body">Students should regularly check the <strong>notice board</strong> in their respective department and the <strong>placement website</strong> for any T&amp;P information.</div>
-            </div>
-            <div class="rule-item">
-                <div class="rule-num">4</div>
-                <div class="rule-body">Students must <strong>report 30 minutes before</strong> the start of any placement activity.</div>
-            </div>
-            <div class="rule-item">
-                <div class="rule-num">5</div>
-                <div class="rule-body">Students should regularly check their <strong>email accounts, SMS, and WhatsApp</strong> for any T&amp;P updates.</div>
-            </div>
-            <div class="rule-item">
-                <div class="rule-num">6</div>
-                <div class="rule-body">Students should be in <strong>regular contact</strong> with their T&amp;P representative.</div>
-            </div>
-            <div class="rule-item">
-                <div class="rule-num">7</div>
-                <div class="rule-body">Students must <strong>maintain discipline</strong> during campus placement. Misconduct may result in <strong style="color:var(--accent-coral);">debarment from further opportunities</strong>.</div>
-            </div>
-            <div class="rule-item">
-                <div class="rule-num">8</div>
-                <div class="rule-body">Students should enter their latest correct data on the placement website at the <strong>beginning of each semester</strong> and keep it updated within <strong>two days</strong> of any change or result declaration. If data is not updated in time, the TPO is not responsible for sending the student's name for placement.</div>
-            </div>
-        </div>
+                <!-- 4. Company Grades -->
+                <div class="sec-title" style="margin-top:36px;">
+                    <div class="ico" style="background:#fef3c7;color:#d97706;"><i class="fa-solid fa-layer-group"></i></div>
+                    <h2 style="color:#92400e;">Company Grade Classification</h2>
+                </div>
+                <div class="card-white">
+                    <div class="grade-wrap">
+                        <table class="grade-tbl">
+                            <thead>
+                                <tr>
+                                    <th>Grade</th>
+                                    <th>Salary Package</th>
+                                </tr>
+                            </thead>
+                            <tbody>
+                                <tr>
+                                    <td><span class="g-badge" style="background:#fef9c3;color:#854d0e;">A</span></td>
+                                    <td>Salary up to <strong>1.5 LPA</strong></td>
+                                </tr>
+                                <tr>
+                                    <td><span class="g-badge" style="background:#dbeafe;color:#1e40af;">B</span></td>
+                                    <td>Salary in range from <strong>1.5 LPA</strong> to <strong>3.0 LPA</strong></td>
+                                </tr>
+                                <tr>
+                                    <td><span class="g-badge" style="background:#dcfce7;color:#166534;">C</span></td>
+                                    <td>Salary greater than <strong>3.0 LPA</strong></td>
+                                </tr>
+                            </tbody>
+                        </table>
+                        <div class="grade-rule">
+                            <strong><i class="fa-solid fa-circle-info me-2"></i>Eligibility Rule:</strong>
+                            A student already selected in a particular grade will <strong>not be allowed</strong> to attend the campus placement for a company of the same or lower grade. However, a student selected in a lower grade company <strong>will be allowed</strong> to attend campus placement for a higher grade company.
+                        </div>
+                    </div>
+                </div>
 
-        <!-- 4. Company Grades -->
-        <div class="sec-title" style="margin-top:36px;">
-            <div class="ico" style="background:#fef3c7;color:#d97706;"><i class="fa-solid fa-layer-group"></i></div>
-            <h2 style="color:#92400e;">Company Grade Classification</h2>
-        </div>
-        <div class="card-white">
-            <div class="grade-wrap">
-                <table class="grade-tbl">
-                    <thead>
-                        <tr>
-                            <th>Grade</th>
-                            <th>Salary Package</th>
-                        </tr>
-                    </thead>
-                    <tbody>
-                        <tr>
-                            <td><span class="g-badge" style="background:#fef9c3;color:#854d0e;">A</span></td>
-                            <td>Salary up to <strong>1.5 LPA</strong></td>
-                        </tr>
-                        <tr>
-                            <td><span class="g-badge" style="background:#dbeafe;color:#1e40af;">B</span></td>
-                            <td>Salary in range from <strong>1.5 LPA</strong> to <strong>3.0 LPA</strong></td>
-                        </tr>
-                        <tr>
-                            <td><span class="g-badge" style="background:#dcfce7;color:#166534;">C</span></td>
-                            <td>Salary greater than <strong>3.0 LPA</strong></td>
-                        </tr>
-                    </tbody>
-                </table>
-                <div class="grade-rule">
-                    <strong><i class="fa-solid fa-circle-info me-2"></i>Eligibility Rule:</strong>
-                    A student already selected in a particular grade will <strong>not be allowed</strong> to attend the campus placement for a company of the same or lower grade. However, a student selected in a lower grade company <strong>will be allowed</strong> to attend campus placement for a higher grade company.
+                <!-- 5. Penalty -->
+                <div class="sec-title" style="margin-top:36px;">
+                    <div class="ico" style="background:#fee2e2;color:#dc2626;"><i class="fa-solid fa-triangle-exclamation"></i></div>
+                    <h2 style="color:#b91c1c;">Penalty Rules</h2>
+                </div>
+                <div class="penalty-wrap mb-4 mb-lg-0">
+                    <div class="penalty-ico"><i class="fa-solid fa-gavel"></i></div>
+                    <div class="penalty-body">
+                        A student who has expressed willingness to appear for campus placement through a visit created, if <strong>quits the procedure in between</strong> or <strong>does not accept the offer after selection</strong>, will be <span class="debarred">permanently debarred</span> from further placements and will not be given any opportunity under any circumstances.
+                    </div>
                 </div>
             </div>
-        </div>
 
-        <!-- 5. Penalty -->
-        <div class="sec-title" style="margin-top:36px;">
-            <div class="ico" style="background:#fee2e2;color:#dc2626;"><i class="fa-solid fa-triangle-exclamation"></i></div>
-            <h2 style="color:#b91c1c;">Penalty Rules</h2>
-        </div>
-        <div class="penalty-wrap">
-            <div class="penalty-ico"><i class="fa-solid fa-gavel"></i></div>
-            <div class="penalty-body">
-                A student who has expressed willingness to appear for campus placement through a visit created, if <strong>quits the procedure in between</strong> or <strong>does not accept the offer after selection</strong>, will be <span class="debarred">permanently debarred</span> from further placements and will not be given any opportunity under any circumstances.
+            <!-- RIGHT COLUMN -->
+            <div class="col-lg-6 d-flex flex-column">
+                <!-- 3. Rules -->
+                <div class="sec-title mt-0">
+                    <div class="ico" style="background:#eef2ff;color:var(--primary-navy);"><i class="fa-solid fa-list-check"></i></div>
+                    <h2 style="color:var(--primary-navy);">Rules &amp; Regulations</h2>
+                </div>
+                <div class="card-white flex-grow-1">
+                    <div class="rule-item">
+                        <div class="rule-num">1</div>
+                        <div class="rule-body">It is mandatory for students to provide their correct details to the departmental placement representative. <strong>False entry in data will lead to disqualification</strong> in the placement drive, even if the student has paid the fees.</div>
+                    </div>
+                    <div class="rule-item">
+                        <div class="rule-num">2</div>
+                        <div class="rule-body">The departmental coordinator will <strong>verify entries within one week</strong> of the declaration of results and approve them. Only approved students will qualify for placement.</div>
+                    </div>
+                    <div class="rule-item">
+                        <div class="rule-num">3</div>
+                        <div class="rule-body">Students should regularly check the <strong>notice board</strong> in their respective department and the <strong>placement website</strong> for any T&amp;P information.</div>
+                    </div>
+                    <div class="rule-item">
+                        <div class="rule-num">4</div>
+                        <div class="rule-body">Students must <strong>report 30 minutes before</strong> the start of any placement activity.</div>
+                    </div>
+                    <div class="rule-item">
+                        <div class="rule-num">5</div>
+                        <div class="rule-body">Students should regularly check their <strong>email accounts, SMS, and WhatsApp</strong> for any T&amp;P updates.</div>
+                    </div>
+                    <div class="rule-item">
+                        <div class="rule-num">6</div>
+                        <div class="rule-body">Students should be in <strong>regular contact</strong> with their T&amp;P representative.</div>
+                    </div>
+                    <div class="rule-item">
+                        <div class="rule-num">7</div>
+                        <div class="rule-body">Students must <strong>maintain discipline</strong> during campus placement. Misconduct may result in <strong style="color:var(--accent-coral);">debarment from further opportunities</strong>.</div>
+                    </div>
+                    <div class="rule-item">
+                        <div class="rule-num">8</div>
+                        <div class="rule-body">Students should enter their latest correct data on the placement website at the <strong>beginning of each semester</strong> and keep it updated within <strong>two days</strong> of any change or result declaration. If data is not updated in time, the TPO is not responsible for sending the student's name for placement.</div>
+                    </div>
+                </div>
             </div>
         </div>
 
