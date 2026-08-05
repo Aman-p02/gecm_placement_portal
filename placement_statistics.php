@@ -77,13 +77,18 @@ if (empty($filterBranch)) {
         content="View the placement statistics, records, and successfully placed students of Government Engineering College, Modasa.">
 
     <link href="assets/bootstrap/css/bootstrap.min.css" rel="stylesheet">
-    <link rel="stylesheet" href="assets/fontawesome/css/all.min.css">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.0/css/all.min.css">
 
     <style>
         :root {
             --primary-navy: #1B365D;
             --accent-coral: #E65A4B;
             --light-bg: #e9eef6;
+        }
+
+        html {
+            overflow-y: scroll;
+            scrollbar-gutter: stable;
         }
 
         body {
@@ -133,21 +138,28 @@ if (empty($filterBranch)) {
         }
 
         .nav-pill-links a.nav-link {
-            color: #444;
+            color: #555;
             text-decoration: none;
-            font-size: 0.85rem;
+            font-size: 0.82rem;
             font-weight: 700;
-            letter-spacing: 0.07em;
+            letter-spacing: 0.05em;
             text-transform: uppercase;
-            padding: 8px 14px;
-            border-radius: 100px;
+            padding: 7px 15px;
+            border-radius: 6px;
             white-space: nowrap;
-            transition: background 0.18s ease, color 0.18s ease;
+            transition: all 0.2s ease;
         }
 
-        .nav-pill-links a:hover {
-            background: rgba(27, 54, 93, 0.07);
+        .nav-pill-links a.nav-link:hover {
+            background: #eef2ff;
             color: var(--primary-navy);
+        }
+
+        .nav-pill-links a.nav-link.active {
+            background: var(--primary-navy);
+            color: #ffffff !important;
+            font-weight: 700 !important;
+            box-shadow: 0 2px 8px rgba(27, 54, 93, 0.18);
         }
 
         /* Right Buttons */
@@ -177,6 +189,26 @@ if (empty($filterBranch)) {
             background-color: #0f2340;
             color: white;
             transform: translateY(-1px);
+        }
+
+        /* Mobile Navbar Responsive Alignment */
+        @media (max-width: 991.98px) {
+            .navbar-pill .container-fluid {
+                display: flex;
+                flex-wrap: wrap;
+                align-items: center;
+                justify-content: space-between;
+            }
+            .brand-text {
+                font-size: 1.1rem;
+            }
+            .navbar-toggler {
+                padding: 4px 8px;
+            }
+            .navbar-collapse {
+                width: 100%;
+                flex-basis: 100%;
+            }
         }
 
         .btn-nav-outline {
@@ -451,11 +483,6 @@ if (empty($filterBranch)) {
         }
 
         @media (max-width: 576px) {
-            .brand-text {
-                font-size: 1.25rem;
-                display: block;
-            }
-
             .top-navbar .container {
                 flex-direction: column;
                 justify-content: center !important;
@@ -515,11 +542,16 @@ if (empty($filterBranch)) {
                     <!-- Center Nav Links -->
                     <ul
                         class="navbar-nav flex-column flex-lg-row mx-auto mt-3 mt-lg-0 text-center text-lg-start nav-pill-links w-100 justify-content-center">
-                        <li class="nav-item"><a class="nav-link <?= $showPlacement && empty($filterBranch) ? 'active fw-bold' : '' ?>" href="placement_statistics.php?view=placement">Training &amp; Placement</a></li>
-                        <li class="nav-item"><a class="nav-link" href="#">Rules &amp; Guidelines</a></li>
-                        <li class="nav-item"><a class="nav-link" href="#">Major Recruiters</a></li>
-                        <li class="nav-item"><a class="nav-link" href="#">Placement Activities</a></li>
-                        <li class="nav-item"><a class="nav-link" href="#">Placement Team</a></li>
+                        <li class="nav-item"><a class="nav-link <?= $showPlacement || !empty($filterBranch) ? 'active' : '' ?>" href="placement_statistics.php?view=placement">Training &amp; Placement</a></li>
+                        <li class="nav-item"><a class="nav-link" href="rules_and_guidelines.php">Rules &amp; Guidelines</a></li>
+                        <li class="nav-item"><a class="nav-link" href="major_recruiters.php">Major Recruiters</a></li>
+                        <li class="nav-item"><a class="nav-link" href="placement_activities.php">Placement Activities</a></li>
+                        <li class="nav-item"><a class="nav-link" href="placement_team.php">Placement Team</a></li>
+                        <li class="nav-item d-lg-none mt-2">
+                            <a class="btn-nav-filled w-100 text-center justify-content-center" href="student-module/login.php">
+                                <i class="fa-solid fa-user-graduate"></i> Student Login
+                            </a>
+                        </li>
                     </ul>
 
                     <!-- Right Action Buttons -->
