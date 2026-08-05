@@ -354,6 +354,24 @@ if (empty($team_members)) {
             font-size: 0.93rem;
             font-weight: 600;
         }
+
+        /* Animation classes */
+        .animate-row:nth-child(odd) td {
+            opacity: 0;
+            transform: translateX(-50px);
+            transition: opacity 0.6s ease-out, transform 0.6s ease-out;
+        }
+
+        .animate-row:nth-child(even) td {
+            opacity: 0;
+            transform: translateX(50px);
+            transition: opacity 0.6s ease-out, transform 0.6s ease-out;
+        }
+
+        .animate-row.visible td {
+            opacity: 1;
+            transform: translateX(0);
+        }
     </style>
 </head>
 <body>
@@ -430,7 +448,7 @@ if (empty($team_members)) {
                         <tbody>
 
                             <?php foreach ($team_members as $m): ?>
-                                <tr>
+                                <tr class="animate-row">
                                     <td class="photo-cell">
                                         <img src="<?= htmlspecialchars($m['photo']) ?>" alt="<?= htmlspecialchars($m['name']) ?>" class="faculty-photo" onerror="this.onerror=null; this.src='https://ui-avatars.com/api/?name=<?= urlencode($m['name']) ?>&background=003B71&color=fff';">
                                     </td>
@@ -453,6 +471,29 @@ if (empty($team_members)) {
         </div>
     </div>
 
+    <script>
+        document.addEventListener('DOMContentLoaded', function() {
+            const observer = new IntersectionObserver((entries) => {
+                let delay = 0;
+                entries.forEach(entry => {
+                    if (entry.isIntersecting) {
+                        setTimeout(() => {
+                            entry.target.classList.add('visible');
+                        }, delay);
+                        delay += 200; // 200ms delay for staggered "one-by-one" effect
+                        observer.unobserve(entry.target);
+                    }
+                });
+            }, {
+                threshold: 0.1,
+                rootMargin: "0px 0px -20px 0px"
+            });
+
+            document.querySelectorAll('.animate-row').forEach((row) => {
+                observer.observe(row);
+            });
+        });
+    </script>
     <script src="assets/bootstrap/js/bootstrap.bundle.min.js"></script>
 </body>
 </html>
