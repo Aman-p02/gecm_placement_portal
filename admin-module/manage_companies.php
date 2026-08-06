@@ -82,9 +82,12 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST' && isset($_POST['action']) && $_POST['
             }
             
             $jobDescriptionText = sanitize_input($_POST['job_description_text'] ?? '');
+            
+            $driveType = sanitize_input($_POST['drive_type'] ?? 'On Campus');
+            if (!in_array($driveType, ['On Campus', 'Off Campus'])) $driveType = 'On Campus';
 
-            $stmt = $pdo->prepare("INSERT INTO tbl_companies (company_name, batch_year, logo_path, document_path, job_description_text, last_date_to_apply, added_by) VALUES (?, ?, ?, ?, ?, ?, ?)");
-            $stmt->execute([$companyName, $batchYear, $logoPath, $docPath, $jobDescriptionText, $lastDate, $adminId]);
+            $stmt = $pdo->prepare("INSERT INTO tbl_companies (company_name, batch_year, logo_path, document_path, job_description_text, last_date_to_apply, drive_type, added_by) VALUES (?, ?, ?, ?, ?, ?, ?, ?)");
+            $stmt->execute([$companyName, $batchYear, $logoPath, $docPath, $jobDescriptionText, $lastDate, $driveType, $adminId]);
             $companyId = $pdo->lastInsertId();
             
             $stmtBranch = $pdo->prepare("INSERT INTO tbl_company_branches (company_id, branch_name) VALUES (?, ?)");
@@ -156,8 +159,12 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST' && isset($_POST['action']) && $_POST['
 
         // Update company record
         $jobDescriptionText = sanitize_input($_POST['job_description_text'] ?? '');
-        $stmtUpdate = $pdo->prepare("UPDATE tbl_companies SET company_name=?, batch_year=?, last_date_to_apply=?, logo_path=?, document_path=?, job_description_text=? WHERE company_id=?");
-        $stmtUpdate->execute([$companyName, $batchYear, $lastDate, $logoPath, $docPath, $jobDescriptionText, $companyId]);
+        
+        $driveType = sanitize_input($_POST['drive_type'] ?? 'On Campus');
+        if (!in_array($driveType, ['On Campus', 'Off Campus'])) $driveType = 'On Campus';
+
+        $stmtUpdate = $pdo->prepare("UPDATE tbl_companies SET company_name=?, batch_year=?, last_date_to_apply=?, logo_path=?, document_path=?, job_description_text=?, drive_type=? WHERE company_id=?");
+        $stmtUpdate->execute([$companyName, $batchYear, $lastDate, $logoPath, $docPath, $jobDescriptionText, $driveType, $companyId]);
 
         // Refresh branches: delete old, insert new
         $pdo->prepare("DELETE FROM tbl_company_branches WHERE company_id = ?")->execute([$companyId]);
@@ -296,6 +303,14 @@ $csrfToken = generate_csrf_token();
                                     <label class="form-label small">Last Date to Apply</label>
                                     <input type="date" class="form-control" name="last_date" required>
                                 </div>
+                                
+                                <div class="mb-3">
+                                    <label class="form-label small">Drive Type</label>
+                                    <select name="drive_type" class="form-select">
+                                        <option value="On Campus">On Campus</option>
+                                        <option value="Off Campus">Off Campus</option>
+                                    </select>
+                                </div>
 
                                 <div class="mb-3">
                                     <label class="form-label small">Company Logo (Image)</label>
@@ -343,6 +358,7 @@ $csrfToken = generate_csrf_token();
                                             <tr>
                                                 <th>Company</th>
                                                 <th>Batch Year</th>
+                                                <th>Drive Type</th>
                                                 <th>Last Date</th>
                                                 <th>Added By</th>
                                                 <th>Logo</th>
@@ -360,6 +376,9 @@ $csrfToken = generate_csrf_token();
                                                     </td>
                                                     <td>
                                                         <span class="badge bg-primary text-white"><?= htmlspecialchars($c['batch_year'] ?? 'N/A') ?></span>
+                                                    </td>
+                                                    <td>
+                                                        <span class="badge <?= $c['drive_type'] === 'Off Campus' ? 'bg-warning text-dark' : 'bg-info text-dark' ?>"><?= htmlspecialchars($c['drive_type'] ?? 'On Campus') ?></span>
                                                     </td>
                                                     <td>
                                                         <span class="<?= (strtotime($c['last_date_to_apply']) < time()) ? 'text-danger' : 'text-success' ?>">
@@ -398,7 +417,8 @@ $csrfToken = generate_csrf_token();
                                                                     <?= (int)$c['batch_year'] ?>,
                                                                     '<?= htmlspecialchars($c['last_date_to_apply']) ?>',
                                                                     <?= htmlspecialchars(json_encode($bList)) ?>,
-                                                                    <?= htmlspecialchars(json_encode($c['job_description_text'] ?? '')) ?>
+                                                                    <?= htmlspecialchars(json_encode($c['job_description_text'] ?? '')) ?>,
+                                                                    '<?= htmlspecialchars($c['drive_type'] ?? 'On Campus') ?>'
                                                                 )">
                                                                 <i class="fa-solid fa-pen-to-square"></i>
                                                             </button>
@@ -447,7 +467,7 @@ $csrfToken = generate_csrf_token();
                         <input type="hidden" name="company_id" id="edit_company_id">
 
                         <div class="row g-3">
-                            <div class="col-md-6">
+                            <div class="col-md-4">
                                 <label class="form-label small fw-semibold">Company Name <span class="text-danger">*</span></label>
                                 <input type="text" class="form-control" name="company_name" id="edit_company_name" required>
                             </div>
@@ -455,8 +475,15 @@ $csrfToken = generate_csrf_token();
                                 <label class="form-label small fw-semibold">Batch Year <span class="text-danger">*</span></label>
                                 <input type="number" class="form-control" name="batch_year" id="edit_batch_year" min="2000" max="2100" required>
                             </div>
+                            <div class="col-md-2">
+                                <label class="form-label small fw-semibold">Drive Type</label>
+                                <select name="drive_type" id="edit_drive_type" class="form-select">
+                                    <option value="On Campus">On Campus</option>
+                                    <option value="Off Campus">Off Campus</option>
+                                </select>
+                            </div>
                             <div class="col-md-3">
-                                <label class="form-label small fw-semibold">Last Date to Apply <span class="text-danger">*</span></label>
+                                <label class="form-label small fw-semibold">Last Date <span class="text-danger">*</span></label>
                                 <input type="date" class="form-control" name="last_date" id="edit_last_date" required>
                             </div>
                             <div class="col-md-6">
@@ -502,13 +529,14 @@ $csrfToken = generate_csrf_token();
 
     <script src="../assets/bootstrap/js/bootstrap.bundle.min.js"></script>
     <script>
-        function openEditModal(id, name, batchYear, lastDate, branches, jobDescText) {
+        function openEditModal(id, name, batchYear, lastDate, branches, jobDescText, driveType) {
             // Populate fields
             document.getElementById('edit_company_id').value   = id;
             document.getElementById('edit_company_name').value = name;
             document.getElementById('edit_batch_year').value   = batchYear;
             document.getElementById('edit_last_date').value    = lastDate;
             document.getElementById('edit_job_description_text').value = jobDescText;
+            document.getElementById('edit_drive_type').value   = driveType;
 
             // Reset all branch checkboxes then check the ones that match
             document.querySelectorAll('.edit-branch-check').forEach(cb => {

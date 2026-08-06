@@ -17,6 +17,7 @@ $adminBranch = $_SESSION['admin_branch'];
 $filterCompany = filter_input(INPUT_GET, 'company', FILTER_SANITIZE_STRING) ?: '';
 $filterBatch = filter_input(INPUT_GET, 'batch_year', FILTER_VALIDATE_INT) ?: '';
 $filterBranch = filter_input(INPUT_GET, 'branch', FILTER_SANITIZE_STRING) ?: '';
+$filterDrive = filter_input(INPUT_GET, 'drive_type', FILTER_SANITIZE_STRING) ?: '';
 
 // For subadmin, force the branch filter to their own branch
 if ($adminRole !== 'superadmin') {
@@ -25,7 +26,7 @@ if ($adminRole !== 'superadmin') {
 
 // Build Query
 $query = "
-    SELECT s.enrollment_no, s.full_name, s.branch, c.company_name, c.batch_year, a.applied_at
+    SELECT s.enrollment_no, s.full_name, s.branch, c.company_name, c.batch_year, a.applied_at, c.drive_type
     FROM tbl_applications a
     JOIN tbl_students s ON a.student_id = s.student_id
     JOIN tbl_companies c ON a.company_id = c.company_id
@@ -45,6 +46,10 @@ if ($filterBranch) {
     $query .= " AND s.branch = ?";
     $params[] = $filterBranch;
 }
+if ($filterDrive) {
+    $query .= " AND c.drive_type = ?";
+    $params[] = $filterDrive;
+}
 
 $query .= " ORDER BY c.batch_year DESC, c.company_name ASC, s.full_name ASC";
 
@@ -59,16 +64,15 @@ if (isset($_GET['export']) && $_GET['export'] === 'csv') {
     $output = fopen('php://output', 'w');
     
     // Output headers
-    fputcsv($output, ['Enrollment No', 'Student Name', 'Branch', 'Company', 'Batch Year', 'Placement Date']);
+    fputcsv($output, ['Enrollment No', 'Student Name', 'Branch', 'Company', 'Drive Type']);
     
     foreach ($reports as $row) {
         fputcsv($output, [
-            $row['enrollment_no'],
+            '="' . $row['enrollment_no'] . '"', // Formula forces Excel to treat as text
             $row['full_name'],
             $row['branch'],
             $row['company_name'],
-            $row['batch_year'] ?: 'N/A',
-            date('d M Y', strtotime($row['applied_at']))
+            $row['drive_type'] ?? 'On Campus'
         ]);
     }
     
@@ -130,7 +134,7 @@ if ($adminRole === 'superadmin') {
             <div class="container-fluid p-4">
                 <div class="d-flex justify-content-between align-items-center mb-4">
                     <h4>Placed Students Report</h4>
-                    <a href="?export=csv&company=<?= urlencode($filterCompany) ?>&batch_year=<?= urlencode($filterBatch) ?>&branch=<?= urlencode($filterBranch) ?>" class="btn btn-success">
+                    <a href="?export=csv&company=<?= urlencode($filterCompany) ?>&batch_year=<?= urlencode($filterBatch) ?>&branch=<?= urlencode($filterBranch) ?>&drive_type=<?= urlencode($filterDrive) ?>" class="btn btn-success">
                         <i class="fa-solid fa-file-excel me-2"></i> Export to Excel
                     </a>
                 </div>
@@ -139,12 +143,19 @@ if ($adminRole === 'superadmin') {
                 <div class="card shadow-sm mb-4 border-0">
                     <div class="card-body">
                         <form method="GET" action="reports.php" class="row g-3">
-                            <div class="col-md-3">
+                            <div class="col-md-2">
                                 <select name="batch_year" class="form-select">
                                     <option value="">All Batches</option>
                                     <?php foreach ($allBatches as $b): ?>
                                         <option value="<?= htmlspecialchars($b) ?>" <?= $filterBatch == $b ? 'selected' : '' ?>><?= htmlspecialchars($b) ?></option>
                                     <?php endforeach; ?>
+                                </select>
+                            </div>
+                            <div class="col-md-2">
+                                <select name="drive_type" class="form-select">
+                                    <option value="">All Drives</option>
+                                    <option value="On Campus" <?= $filterDrive === 'On Campus' ? 'selected' : '' ?>>On Campus</option>
+                                    <option value="Off Campus" <?= $filterDrive === 'Off Campus' ? 'selected' : '' ?>>Off Campus</option>
                                 </select>
                             </div>
                             <div class="col-md-3">
@@ -165,7 +176,7 @@ if ($adminRole === 'superadmin') {
                                 </select>
                             </div>
                             <?php endif; ?>
-                            <div class="col-md-3 d-flex gap-2">
+                            <div class="col-md-2 d-flex gap-2">
                                 <button type="submit" class="btn btn-primary w-100">Filter</button>
                                 <a href="reports.php" class="btn btn-outline-secondary w-100">Reset</a>
                             </div>
@@ -184,6 +195,7 @@ if ($adminRole === 'superadmin') {
                                         <th>Student Name</th>
                                         <th>Branch</th>
                                         <th>Company</th>
+                                        <th>Drive Type</th>
                                         <th>Batch Year</th>
                                         <th>Status</th>
                                     </tr>
@@ -195,6 +207,11 @@ if ($adminRole === 'superadmin') {
                                             <td class="fw-medium"><?= htmlspecialchars($row['full_name']) ?></td>
                                             <td><?= htmlspecialchars($row['branch']) ?></td>
                                             <td><?= htmlspecialchars($row['company_name']) ?></td>
+                                            <td>
+                                                <span class="badge <?= ($row['drive_type'] ?? 'On Campus') === 'Off Campus' ? 'bg-warning text-dark' : 'bg-info text-dark' ?>">
+                                                    <?= htmlspecialchars($row['drive_type'] ?? 'On Campus') ?>
+                                                </span>
+                                            </td>
                                             <td><?= htmlspecialchars($row['batch_year'] ?: 'N/A') ?></td>
                                             <td><span class="badge bg-success">Placed</span></td>
                                         </tr>
