@@ -378,7 +378,7 @@ $csrfToken = generate_csrf_token();
                                                         <span class="badge bg-primary text-white"><?= htmlspecialchars($c['batch_year'] ?? 'N/A') ?></span>
                                                     </td>
                                                     <td>
-                                                        <span class="badge <?= $c['drive_type'] === 'Off Campus' ? 'bg-warning text-dark' : 'bg-info text-dark' ?>"><?= htmlspecialchars($c['drive_type'] ?? 'On Campus') ?></span>
+                                                        <span class="badge <?= ($c['drive_type'] ?? '') === 'Off Campus' ? 'bg-warning text-dark' : 'bg-info text-dark' ?>"><?= htmlspecialchars($c['drive_type'] ?? 'On Campus') ?></span>
                                                     </td>
                                                     <td>
                                                         <span class="<?= (strtotime($c['last_date_to_apply']) < time()) ? 'text-danger' : 'text-success' ?>">
@@ -414,7 +414,7 @@ $csrfToken = generate_csrf_token();
                                                                 onclick="openEditModal(
                                                                     <?= $c['company_id'] ?>,
                                                                     <?= htmlspecialchars(json_encode($c['company_name'])) ?>,
-                                                                    <?= (int)$c['batch_year'] ?>,
+                                                                    <?= (int)($c['batch_year'] ?? 0) ?>,
                                                                     '<?= htmlspecialchars($c['last_date_to_apply']) ?>',
                                                                     <?= htmlspecialchars(json_encode($bList)) ?>,
                                                                     <?= htmlspecialchars(json_encode($c['job_description_text'] ?? '')) ?>,

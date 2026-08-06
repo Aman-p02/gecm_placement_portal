@@ -68,3 +68,22 @@ CREATE TABLE IF NOT EXISTS tbl_applications (
 
 -- Added on 2026-08-06
 ALTER TABLE tbl_placement_team ADD COLUMN email VARCHAR(255) DEFAULT 'faculty.name@gecmodasa.ac.in' AFTER role;
+
+-- Add verification columns to tbl_students
+ALTER TABLE tbl_students ADD COLUMN is_verified TINYINT(1) DEFAULT 0 AFTER is_blocked;
+ALTER TABLE tbl_students ADD COLUMN verification_token VARCHAR(64) DEFAULT NULL AFTER is_verified;
+
+-- Add missing columns to tbl_applications
+ALTER TABLE tbl_applications 
+ADD COLUMN attendance VARCHAR(10) DEFAULT NULL AFTER applied_at,
+ADD COLUMN round_1 VARCHAR(10) DEFAULT NULL AFTER attendance,
+ADD COLUMN round_2 VARCHAR(10) DEFAULT NULL AFTER round_1,
+ADD COLUMN round_3 VARCHAR(10) DEFAULT NULL AFTER round_2,
+ADD COLUMN round_4 VARCHAR(10) DEFAULT NULL AFTER round_3,
+ADD COLUMN round_5 VARCHAR(10) DEFAULT NULL AFTER round_4;
+
+-- Add missing columns to tbl_companies
+ALTER TABLE tbl_companies
+ADD COLUMN batch_year INT AFTER company_name,
+ADD COLUMN drive_type ENUM('On Campus', 'Off Campus') DEFAULT 'On Campus' AFTER batch_year,
+ADD COLUMN job_description_text TEXT AFTER document_path;
