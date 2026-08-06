@@ -73,6 +73,7 @@ if (empty($team_members)) {
             background-color: var(--light-bg);
             font-family: 'Inter', sans-serif;
             color: #333;
+            overflow-x: hidden;
         }
 
         /* ── Floating Pill Navbar ─────────────────── */
@@ -361,21 +362,15 @@ if (empty($team_members)) {
         }
 
         /* Animation classes */
-        .animate-row:nth-child(odd) td {
+        .animate-row td {
             opacity: 0;
-            transform: translateX(-50px);
-            transition: opacity 0.6s ease-out, transform 0.6s ease-out;
-        }
-
-        .animate-row:nth-child(even) td {
-            opacity: 0;
-            transform: translateX(50px);
-            transition: opacity 0.6s ease-out, transform 0.6s ease-out;
+            transform: translateY(30px);
+            transition: opacity 0.5s ease-out, transform 0.5s ease-out;
         }
 
         .animate-row.visible td {
             opacity: 1;
-            transform: translateX(0);
+            transform: translateY(0);
         }
     </style>
 </head>
