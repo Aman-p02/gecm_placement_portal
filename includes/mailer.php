@@ -19,13 +19,13 @@ function sendResetEmail($toEmail, $resetLink)
 
     try {
         // --- 1. ENTER YOUR GMAIL CREDENTIALS HERE ---
-        $yourEmail = 'haritap40@gmail.com';
+        $yourEmail = 'dantanivanit8@gmail.com';
         // Instructions for App Password:
         // 1. Go to Google Account Settings -> Security
         // 2. Enable 2-Step Verification
         // 3. Search for "App Passwords"
         // 4. Generate a new App Password for "Mail" and paste the 16-letter code below:
-        $yourAppPassword = 'xkeq amgh eesp xkra';
+        $yourAppPassword = 'gmtl vnlp ecan hsgu';
 
         // --- Server settings ---
         $mail->isSMTP();
@@ -73,8 +73,8 @@ function sendRegistrationEmail($toEmail, $userName, $role)
     $mail = new PHPMailer(true);
 
     try {
-        $yourEmail = 'haritap40@gmail.com';
-        $yourAppPassword = 'xkeq amgh eesp xkra';
+        $yourEmail = 'dantanivanit8@gmail.com';
+        $yourAppPassword = 'gmtl vnlp ecan hsgu';
 
         $mail->isSMTP();
         $mail->Host = 'smtp.gmail.com';
@@ -118,8 +118,8 @@ function sendRegistrationEmail($toEmail, $userName, $role)
 function sendStatusUpdateEmail($toEmail, $userName, $companyName, $status) {
     $mail = new PHPMailer(true);
     try {
-        $yourEmail = 'haritap40@gmail.com';
-        $yourAppPassword = 'xkeq amgh eesp xkra';
+        $yourEmail = 'dantanivanit8@gmail.com';
+        $yourAppPassword = 'gmtl vnlp ecan hsgu';
 
         $mail->isSMTP();
         $mail->Host = 'smtp.gmail.com';
@@ -169,8 +169,8 @@ function sendStatusUpdateEmail($toEmail, $userName, $companyName, $status) {
 function sendBlockStatusEmail($toEmail, $userName, $isBlocked) {
     $mail = new PHPMailer(true);
     try {
-        $yourEmail = 'haritap40@gmail.com';
-        $yourAppPassword = 'xkeq amgh eesp xkra';
+        $yourEmail = 'dantanivanit8@gmail.com';
+        $yourAppPassword = 'gmtl vnlp ecan hsgu';
 
         $mail->isSMTP();
         $mail->Host = 'smtp.gmail.com';
@@ -220,8 +220,8 @@ function sendVerificationEmail($toEmail, $userName, $verificationLink)
     $mail = new PHPMailer(true);
 
     try {
-        $yourEmail = 'haritap40@gmail.com';
-        $yourAppPassword = 'xkeq amgh eesp xkra';
+        $yourEmail = 'dantanivanit8@gmail.com';
+        $yourAppPassword = 'gmtl vnlp ecan hsgu';
 
         $mail->isSMTP();
         $mail->Host = 'smtp.gmail.com';
@@ -243,7 +243,7 @@ function sendVerificationEmail($toEmail, $userName, $verificationLink)
                 <p>Hello <strong>{$userName}</strong>,</p>
                 <p>Thank you for registering at the GEC Placement Portal. Please click the button below to activate your account:</p>
                 <div style='text-align: center; margin: 30px 0;'>
-                    <a href='{$verificationLink}' style='background-color: #28a745; color: white; padding: 12px 25px; text-decoration: none; border-radius: 5px; font-weight: bold;'>Click here to activate your account</a>
+                    <a href='{$verificationLink}' style='display: inline-block; background-color: #28a745; color: white; padding: 12px 25px; text-decoration: none; border-radius: 5px; font-weight: bold;'>Click here to activate your account</a>
                 </div>
                 <p>If you did not create this account, you can safely ignore this email.</p>
                 <p>Best regards,<br><strong>GEC Modasa Placement Cell</strong></p>

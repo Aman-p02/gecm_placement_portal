@@ -492,8 +492,11 @@ if (empty($team_members)) {
                                         <div class="member-name"><?= htmlspecialchars($m['name']) ?></div>
                                         <div class="member-dept"><?= htmlspecialchars($m['designation']) ?></div>
                                         <div class="member-dept"><?= htmlspecialchars($m['department']) ?></div>
-                                        <div class="member-email mt-1" style="font-size: 0.85rem; color: #475569;">
-                                            <i class="fa-solid fa-envelope me-1" style="color: var(--accent-coral);"></i> <?= htmlspecialchars($m['email']) ?>
+                                        <div class="member-email mt-1" style="font-size: 0.85rem;">
+                                            <i class="fa-solid fa-envelope me-1" style="color: var(--accent-coral);"></i> 
+                                            <a href="mailto:<?= htmlspecialchars($m['email']) ?>" style="color: #475569; text-decoration: none;" onmouseover="this.style.textDecoration='underline'" onmouseout="this.style.textDecoration='none'">
+                                                <?= htmlspecialchars($m['email']) ?>
+                                            </a>
                                         </div>
                                     </td>
                                     <td class="role-cell">

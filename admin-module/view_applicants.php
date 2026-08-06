@@ -292,7 +292,7 @@ $csrfToken = generate_csrf_token();
                                 <form action="" method="GET" class="row g-2">
                                     <?php if ($adminRole === 'superadmin'): ?>
                                     <div class="col-auto">
-                                        <select name="branch" class="form-select form-select-sm" onchange="this.form.submit()">
+                                        <select name="branch" class="form-select form-select-sm" onchange="this.form.submit()" style="min-width: 125px;">
                                             <option value="">All Branches</option>
                                             <?php foreach($distinctBranches as $db): ?>
                                                 <option value="<?= htmlspecialchars($db) ?>" <?= $filterBranch === $db ? 'selected' : '' ?>><?= htmlspecialchars($db) ?></option>
@@ -302,7 +302,7 @@ $csrfToken = generate_csrf_token();
                                     <?php endif; ?>
 
                                     <div class="col-auto">
-                                        <select name="company" class="form-select form-select-sm" onchange="this.form.submit()">
+                                        <select name="company" class="form-select form-select-sm" onchange="this.form.submit()" style="min-width: 135px;">
                                             <option value="">All Companies</option>
                                             <?php foreach($distinctCompanies as $dc): ?>
                                                 <option value="<?= htmlspecialchars($dc) ?>" <?= $filterCompany === $dc ? 'selected' : '' ?>><?= htmlspecialchars($dc) ?></option>
@@ -311,7 +311,7 @@ $csrfToken = generate_csrf_token();
                                     </div>
                                     
                                     <div class="col-auto">
-                                        <select name="batch_year" class="form-select form-select-sm" onchange="this.form.submit()">
+                                        <select name="batch_year" class="form-select form-select-sm" onchange="this.form.submit()" style="min-width: 120px;">
                                             <option value="">All Batches</option>
                                             <?php foreach($distinctBatches as $dbatch): ?>
                                                 <?php if($dbatch): ?>
@@ -322,7 +322,7 @@ $csrfToken = generate_csrf_token();
                                     </div>
 
                                     <div class="col-auto">
-                                        <select name="status" class="form-select form-select-sm" onchange="this.form.submit()">
+                                        <select name="status" class="form-select form-select-sm" onchange="this.form.submit()" style="min-width: 125px;">
                                             <option value="">All Statuses</option>
                                             <option value="Applied" <?= $filterStatus === 'Applied' ? 'selected' : '' ?>>Applied</option>
                                             <option value="In Progress" <?= $filterStatus === 'In Progress' ? 'selected' : '' ?>>In Progress</option>

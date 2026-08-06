@@ -29,6 +29,24 @@ $stmtAgg = $pdo->query($aggQuery);
 $branchStats = $stmtAgg->fetchAll();
 $totalOverall = array_sum(array_column($branchStats, 'total_placed'));
 
+// Fetch latest companies for the Noticeboard
+$noticeboardQuery = "SELECT company_name, logo_path, last_date_to_apply, drive_type, batch_year, created_at FROM tbl_companies ORDER BY created_at DESC LIMIT 6";
+$noticeboardStmt = $pdo->query($noticeboardQuery);
+$noticeboardCompanies = $noticeboardStmt->fetchAll();
+
+// Additional Stats for Tiles
+$statsQuery = "
+    SELECT 
+        (SELECT COUNT(DISTINCT student_id) FROM tbl_applications WHERE status = 'Selected') as total_students_placed,
+        (SELECT COUNT(*) FROM tbl_applications WHERE status = 'Selected') as total_offers,
+        (SELECT COUNT(*) FROM tbl_companies) as total_companies_visited
+";
+$stmtStats = $pdo->query($statsQuery);
+$dashboardStats = $stmtStats->fetch();
+$statStudents = $dashboardStats['total_students_placed'] ?? 0;
+$statOffers = $dashboardStats['total_offers'] ?? 0;
+$statCompanies = $dashboardStats['total_companies_visited'] ?? 0;
+
 // ---------------------------------------------------------
 // DATA FETCHING BASED ON VIEW STATE
 // ---------------------------------------------------------
@@ -585,44 +603,141 @@ if (empty($filterBranch)) {
             </div>
         </div>
 
-        <!-- Quick Info Cards -->
-        <div class="container card-grid no-print">
+        <!-- Quick Info Cards (Replaced with Noticeboard) -->
+        <div class="container no-print mb-5">
+            <div class="row">
+                <div class="col-lg-10">
+                    <div class="d-flex align-items-center mb-4">
+                        <h2 class="fw-bold m-0" style="color: var(--primary-navy);"><i class="fa-solid fa-bullhorn me-2 text-danger"></i> Placement Noticeboard</h2>
+                    </div>
+                    
+                    <style>
+                        .noticeboard-container {
+                            background: white;
+                            border-radius: 16px;
+                            box-shadow: 0 10px 40px rgba(0,0,0,0.05);
+                            border: 1px solid rgba(0,0,0,0.03);
+                            height: 400px;
+                            overflow: hidden;
+                            position: relative;
+                        }
+                        .notice-item {
+                            display: flex;
+                            align-items: center;
+                            padding: 15px 25px;
+                            border-bottom: 1px dashed #eee;
+                            transition: background 0.2s;
+                            text-decoration: none;
+                            color: inherit;
+                        }
+                        .notice-item:hover {
+                            background: #f8f9fa;
+                        }
+                        .notice-item:last-child {
+                            border-bottom: none;
+                        }
+                        .notice-logo {
+                            width: 55px;
+                            height: 55px;
+                            object-fit: contain;
+                            border-radius: 50%;
+                            border: 1px solid #eee;
+                            background: white;
+                            padding: 5px;
+                            margin-right: 20px;
+                            flex-shrink: 0;
+                            box-shadow: 0 2px 10px rgba(0,0,0,0.05);
+                        }
+                        .notice-details {
+                            flex: 1;
+                        }
+                        .notice-details h5 {
+                            margin: 0 0 5px 0;
+                            font-weight: 700;
+                            color: var(--primary-navy);
+                            font-size: 1.15rem;
+                        }
+                        .notice-meta {
+                            font-size: 0.85rem;
+                            color: #666;
+                        }
+                        .notice-meta span {
+                            margin-right: 15px;
+                        }
+                    </style>
+                    
+                    <div class="noticeboard-container">
+                        <?php if(empty($noticeboardCompanies)): ?>
+                            <div class="d-flex flex-column justify-content-center align-items-center h-100 text-muted">
+                                <i class="fa-solid fa-folder-open display-4 mb-3 opacity-25"></i>
+                                <p class="mb-0 fs-5">No active placement drives currently.</p>
+                            </div>
+                        <?php else: ?>
+                            <marquee direction="up" scrollamount="3" onmouseover="this.stop()" onmouseout="this.start()" height="400">
+                                <?php foreach($noticeboardCompanies as $company): ?>
+                                    <?php 
+                                        $isExpired = strtotime($company['last_date_to_apply'] . ' 23:59:59') < time();
+                                        $statusClass = $isExpired ? 'bg-secondary' : 'bg-success';
+                                        $statusText = $isExpired ? 'Closed' : 'Active';
+                                    ?>
+                                    <a href="student-module/login.php" class="notice-item">
+                                        <?php if($company['logo_path']): ?>
+                                            <img src="admin-module/<?= htmlspecialchars($company['logo_path']) ?>" alt="Logo" class="notice-logo">
+                                        <?php else: ?>
+                                            <div class="notice-logo d-flex align-items-center justify-content-center text-secondary bg-light">
+                                                <i class="fa-solid fa-building fs-4"></i>
+                                            </div>
+                                        <?php endif; ?>
+                                        
+                                        <div class="notice-details">
+                                            <h5><?= htmlspecialchars($company['company_name']) ?> <span class="badge <?= $statusClass ?> ms-2" style="font-size: 0.7rem; vertical-align: middle;"><?= $statusText ?></span></h5>
+                                            <div class="notice-meta">
+                                                <span><i class="fa-solid fa-graduation-cap me-1"></i> Batch <?= htmlspecialchars($company['batch_year'] ?? 'N/A') ?></span>
+                                                <span><i class="fa-solid fa-map-marker-alt me-1"></i> <?= htmlspecialchars($company['drive_type'] ?? 'On Campus') ?></span>
+                                                <span class="<?= $isExpired ? 'text-danger' : 'text-success fw-bold' ?>"><i class="fa-regular fa-clock me-1"></i> Deadline: <?= date('d M Y', strtotime($company['last_date_to_apply'])) ?></span>
+                                            </div>
+                                        </div>
+                                        <div class="ms-auto">
+                                            <span class="btn btn-sm btn-outline-primary rounded-pill px-4 fw-bold">Apply Now <i class="fa-solid fa-arrow-right ms-1"></i></span>
+                                        </div>
+                                    </a>
+                                <?php endforeach; ?>
+                            </marquee>
+                        <?php endif; ?>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <!-- Statistics Tiles -->
+        <div class="container card-grid no-print mb-5">
             <div class="row g-4 justify-content-center">
-                <div class="col-lg-3 col-md-6">
+                <div class="col-lg-4 col-md-6">
                     <div class="department-card" style="cursor:default;">
                         <div class="department-icon" style="background: linear-gradient(135deg,rgba(27,54,93,0.12),rgba(230,90,75,0.12));">
                             <i class="fa-solid fa-trophy" style="color:var(--accent-coral);"></i>
                         </div>
-                        <h3><?= $totalOverall ?></h3>
+                        <h3><?= $statStudents ?></h3>
                         <p class="text-muted small mb-0">Total Students Placed</p>
                     </div>
                 </div>
-                <div class="col-lg-3 col-md-6">
+                <div class="col-lg-4 col-md-6">
                     <div class="department-card" style="cursor:default;">
-                        <div class="department-icon">
-                            <i class="fa-solid fa-building"></i>
+                        <div class="department-icon" style="background: linear-gradient(135deg,rgba(40,167,69,0.12),rgba(32,201,151,0.12));">
+                            <i class="fa-solid fa-briefcase" style="color:#28a745;"></i>
                         </div>
-                        <h3><?= count($branchStats) ?></h3>
-                        <p class="text-muted small mb-0">Departments with Placements</p>
+                        <h3><?= $statOffers ?></h3>
+                        <p class="text-muted small mb-0">Total Offers Made</p>
                     </div>
                 </div>
-                <div class="col-lg-3 col-md-6">
-                    <a href="placement_statistics.php?view=placement" class="department-card">
-                        <div class="department-icon">
-                            <i class="fa-solid fa-chart-line"></i>
+                <div class="col-lg-4 col-md-6">
+                    <div class="department-card" style="cursor:default;">
+                        <div class="department-icon" style="background: linear-gradient(135deg,rgba(23,162,184,0.12),rgba(11,94,215,0.12));">
+                            <i class="fa-solid fa-building" style="color:#17a2b8;"></i>
                         </div>
-                        <h3>Records</h3>
-                        <p class="text-muted small mb-0 mt-2">View department-wise reports</p>
-                    </a>
-                </div>
-                <div class="col-lg-3 col-md-6">
-                    <a href="student-module/login.php" class="department-card">
-                        <div class="department-icon">
-                            <i class="fa-solid fa-user-graduate"></i>
-                        </div>
-                        <h3>Student Portal</h3>
-                        <p class="text-muted small mb-0 mt-2">Login to apply for drives</p>
-                    </a>
+                        <h3><?= $statCompanies ?></h3>
+                        <p class="text-muted small mb-0">Companies Visited</p>
+                    </div>
                 </div>
             </div>
         </div>

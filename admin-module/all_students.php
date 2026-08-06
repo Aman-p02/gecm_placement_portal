@@ -309,7 +309,7 @@ $csrfToken = generate_csrf_token();
                                 <form action="" method="GET" class="row g-2 align-items-center">
                                     <?php if ($adminRole === 'superadmin'): ?>
                                     <div class="col-auto">
-                                        <select name="branch" class="form-select form-select-sm" onchange="this.form.submit()">
+                                        <select name="branch" class="form-select form-select-sm" onchange="this.form.submit()" style="min-width: 125px;">
                                             <option value="">All Branches</option>
                                             <?php foreach($distinctBranches as $db): ?>
                                                 <option value="<?= htmlspecialchars($db) ?>" <?= $filterBranch === $db ? 'selected' : '' ?>><?= htmlspecialchars($db) ?></option>
@@ -319,7 +319,7 @@ $csrfToken = generate_csrf_token();
                                     <?php endif; ?>
 
                                     <div class="col-auto">
-                                        <select name="status" class="form-select form-select-sm" onchange="this.form.submit()">
+                                        <select name="status" class="form-select form-select-sm" onchange="this.form.submit()" style="min-width: 120px;">
                                             <option value="">All Statuses</option>
                                             <option value="Complete" <?= $filterStatus === 'Complete' ? 'selected' : '' ?>>Complete</option>
                                             <option value="Incomplete" <?= $filterStatus === 'Incomplete' ? 'selected' : '' ?>>Incomplete</option>
