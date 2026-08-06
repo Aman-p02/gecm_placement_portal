@@ -67,7 +67,7 @@ if (isset($_GET['export']) && $_GET['export'] === 'csv') {
             $row['full_name'],
             $row['branch'],
             $row['company_name'],
-            $row['batch_year'],
+            $row['batch_year'] ?: 'N/A',
             date('d M Y', strtotime($row['applied_at']))
         ]);
     }
