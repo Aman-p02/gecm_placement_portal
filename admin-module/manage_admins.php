@@ -23,22 +23,6 @@ if (isset($_SESSION['page_error'])) {
     unset($_SESSION['page_error']);
 }
 
-// Handle Delete Admin
-if ($_SERVER['REQUEST_METHOD'] === 'POST' && isset($_POST['action']) && $_POST['action'] === 'delete_admin') {
-    validate_csrf_token($_POST['csrf_token'] ?? '');
-    $deleteId = filter_input(INPUT_POST, 'delete_id', FILTER_VALIDATE_INT);
-    
-    if ($deleteId) {
-        $stmt = $pdo->prepare("DELETE FROM tbl_admins WHERE admin_id = ? AND role = 'subadmin'");
-        if ($stmt->execute([$deleteId])) {
-            $_SESSION['page_success'] = "Sub-admin removed successfully.";
-        } else {
-            $_SESSION['page_error'] = "Failed to remove sub-admin.";
-        }
-        header("Location: manage_admins.php");
-        exit;
-    }
-}
 
 // Fetch all subadmins
 $stmt = $pdo->query("SELECT * FROM tbl_admins WHERE role = 'subadmin' ORDER BY created_at DESC");
@@ -48,6 +32,7 @@ $csrfToken = generate_csrf_token();
 ?>
 <!DOCTYPE html>
 <html lang="en">
+
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
@@ -56,6 +41,7 @@ $csrfToken = generate_csrf_token();
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.0/css/all.min.css">
     <link rel="stylesheet" href="css/admin_style.css">
 </head>
+
 <body class="<?= ($adminRole === 'superadmin') ? 'theme-superadmin' : '' ?>">
     <div class="d-flex">
         <!-- Sidebar -->
@@ -80,17 +66,20 @@ $csrfToken = generate_csrf_token();
             </div>
 
             <div class="container-fluid p-4">
-                
+
                 <?php if ($error): ?>
-                    <div class="alert alert-danger alert-dismissible fade show"><?= htmlspecialchars($error) ?> <button type="button" class="btn-close" data-bs-dismiss="alert"></button></div>
+                    <div class="alert alert-danger alert-dismissible fade show"><?= htmlspecialchars($error) ?> <button
+                            type="button" class="btn-close" data-bs-dismiss="alert"></button></div>
                 <?php endif; ?>
                 <?php if ($success): ?>
-                    <div class="alert alert-success alert-dismissible fade show"><?= htmlspecialchars($success) ?> <button type="button" class="btn-close" data-bs-dismiss="alert"></button></div>
+                    <div class="alert alert-success alert-dismissible fade show"><?= htmlspecialchars($success) ?> <button
+                            type="button" class="btn-close" data-bs-dismiss="alert"></button></div>
                 <?php endif; ?>
 
                 <div class="custom-card border-top border-4 border-warning">
-                    <h5 class="mb-4" style="color: var(--primary-navy);"><i class="fa-solid fa-user-shield me-2"></i>Registered Sub-Admins</h5>
-                    
+                    <h5 class="mb-4" style="color: var(--primary-navy);"><i
+                            class="fa-solid fa-user-shield me-2"></i>Registered Sub-Admins</h5>
+
                     <?php if (empty($subadmins)): ?>
                         <p class="text-muted">No sub-admins registered yet.</p>
                     <?php else: ?>
@@ -103,24 +92,23 @@ $csrfToken = generate_csrf_token();
                                         <th>Email</th>
                                         <th>Phone</th>
                                         <th>Joined On</th>
-                                        <th>Action</th>
+
                                     </tr>
                                 </thead>
                                 <tbody>
                                     <?php foreach ($subadmins as $admin): ?>
                                         <tr>
                                             <td><strong><?= htmlspecialchars($admin['full_name']) ?></strong></td>
-                                            <td><span class="badge bg-secondary"><?= htmlspecialchars($admin['branch']) ?></span></td>
+                                            <td><span
+                                                    class="badge bg-secondary"><?= htmlspecialchars($admin['branch']) ?></span>
+                                            </td>
                                             <td><small class="text-muted"><?= htmlspecialchars($admin['email']) ?></small></td>
-                                            <td><small class="text-muted"><?= htmlspecialchars($admin['phone_number']) ?></small></td>
+                                            <td><small
+                                                    class="text-muted"><?= htmlspecialchars($admin['phone_number']) ?></small>
+                                            </td>
                                             <td><?= date('d M Y', strtotime($admin['created_at'])) ?></td>
                                             <td>
-                                                <form action="manage_admins.php" method="POST" onsubmit="return confirm('Are you sure you want to remove this admin?');">
-                                                    <input type="hidden" name="csrf_token" value="<?= $csrfToken ?>">
-                                                    <input type="hidden" name="action" value="delete_admin">
-                                                    <input type="hidden" name="delete_id" value="<?= $admin['admin_id'] ?>">
-                                                    <button type="submit" class="btn btn-sm btn-outline-danger"><i class="fa-solid fa-trash me-1"></i> Remove</button>
-                                                </form>
+
                                             </td>
                                         </tr>
                                     <?php endforeach; ?>
@@ -133,9 +121,8 @@ $csrfToken = generate_csrf_token();
             </div>
         </div>
     </div>
-    
+
     <script src="../assets/bootstrap/js/bootstrap.bundle.min.js"></script>
 </body>
+
 </html>
-
-
