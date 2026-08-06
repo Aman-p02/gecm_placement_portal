@@ -440,9 +440,9 @@ if (empty($team_members)) {
                     <table class="team-table">
                         <thead>
                             <tr>
-                                <th style="width: 25%;">Photo</th>
-                                <th style="width: 40%;">Details</th>
-                                <th style="width: 35%;">Role</th>
+                                <th style="width: 20%;">Photo</th>
+                                <th style="width: 55%;">Details</th>
+                                <th style="width: 25%;">Role</th>
                             </tr>
                         </thead>
                         <tbody>
@@ -456,6 +456,9 @@ if (empty($team_members)) {
                                         <div class="member-name"><?= htmlspecialchars($m['name']) ?></div>
                                         <div class="member-dept"><?= htmlspecialchars($m['designation']) ?></div>
                                         <div class="member-dept"><?= htmlspecialchars($m['department']) ?></div>
+                                        <div class="member-email mt-1" style="font-size: 0.85rem; color: #475569;">
+                                            <i class="fa-solid fa-envelope me-1" style="color: var(--accent-coral);"></i> faculty.name@gecmodasa.ac.in
+                                        </div>
                                     </td>
                                     <td class="role-cell">
                                         <?= htmlspecialchars($m['role']) ?>
