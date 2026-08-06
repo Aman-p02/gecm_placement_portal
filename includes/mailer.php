@@ -74,7 +74,7 @@ function sendRegistrationEmail($toEmail, $userName, $role)
 
     try {
         $yourEmail = 'dantanivanit8@gmail.com';
-        $yourAppPassword = 'gmtl vnlp ecan hsgu';
+        $yourAppPassword = 'xkeq amgh eesp xkra';
 
         $mail->isSMTP();
         $mail->Host = 'smtp.gmail.com';
@@ -119,7 +119,7 @@ function sendStatusUpdateEmail($toEmail, $userName, $companyName, $status) {
     $mail = new PHPMailer(true);
     try {
         $yourEmail = 'dantanivanit8@gmail.com';
-        $yourAppPassword = 'gmtl vnlp ecan hsgu';
+        $yourAppPassword = 'xkeq amgh eesp xkra';
 
         $mail->isSMTP();
         $mail->Host = 'smtp.gmail.com';
@@ -170,7 +170,7 @@ function sendBlockStatusEmail($toEmail, $userName, $isBlocked) {
     $mail = new PHPMailer(true);
     try {
         $yourEmail = 'dantanivanit8@gmail.com';
-        $yourAppPassword = 'gmtl vnlp ecan hsgu';
+        $yourAppPassword = 'xkeq amgh eesp xkra';
 
         $mail->isSMTP();
         $mail->Host = 'smtp.gmail.com';
@@ -221,7 +221,7 @@ function sendVerificationEmail($toEmail, $userName, $verificationLink)
 
     try {
         $yourEmail = 'dantanivanit8@gmail.com';
-        $yourAppPassword = 'gmtl vnlp ecan hsgu';
+        $yourAppPassword = 'xkeq amgh eesp xkra';
 
         $mail->isSMTP();
         $mail->Host = 'smtp.gmail.com';

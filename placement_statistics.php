@@ -29,8 +29,16 @@ $stmtAgg = $pdo->query($aggQuery);
 $branchStats = $stmtAgg->fetchAll();
 $totalOverall = array_sum(array_column($branchStats, 'total_placed'));
 
-// Fetch latest companies for the Noticeboard
-$noticeboardQuery = "SELECT company_name, logo_path, last_date_to_apply, drive_type, batch_year, created_at FROM tbl_companies ORDER BY created_at DESC LIMIT 6";
+// Fetch companies for the Noticeboard (Active first, ordered by closest deadline)
+$noticeboardQuery = "
+    SELECT company_name, logo_path, last_date_to_apply, drive_type, batch_year, created_at 
+    FROM tbl_companies 
+    ORDER BY 
+        CASE WHEN last_date_to_apply >= CURDATE() THEN 0 ELSE 1 END ASC,
+        CASE WHEN last_date_to_apply >= CURDATE() THEN last_date_to_apply END ASC,
+        last_date_to_apply DESC
+    LIMIT 15
+";
 $noticeboardStmt = $pdo->query($noticeboardQuery);
 $noticeboardCompanies = $noticeboardStmt->fetchAll();
 
@@ -603,12 +611,15 @@ if (empty($filterBranch)) {
             </div>
         </div>
 
-        <!-- Quick Info Cards (Replaced with Noticeboard) -->
-        <div class="container no-print mb-5">
-            <div class="row">
-                <div class="col-lg-10">
-                    <div class="d-flex align-items-center mb-4">
-                        <h2 class="fw-bold m-0" style="color: var(--primary-navy);"><i class="fa-solid fa-bullhorn me-2 text-danger"></i> Placement Noticeboard</h2>
+        <!-- Dashboard Section: Highlights & Noticeboard -->
+        <div class="container no-print mb-5 mt-4">
+            <div class="row g-5">
+                
+                <!-- Left Side: Noticeboard -->
+                <div class="col-lg-5">
+                    <div class="mb-4 text-center">
+                        <h2 class="fw-bold mb-2" style="color: var(--primary-navy);"><i class="fa-solid fa-bullhorn me-2 text-danger"></i> Noticeboard</h2>
+                        <p class="text-muted">Stay updated with the latest placement drives and deadlines.</p>
                     </div>
                     
                     <style>
@@ -617,12 +628,13 @@ if (empty($filterBranch)) {
                             border-radius: 16px;
                             box-shadow: 0 10px 40px rgba(0,0,0,0.05);
                             border: 1px solid rgba(0,0,0,0.03);
-                            height: 400px;
+                            height: 445px;
                             overflow: hidden;
                             position: relative;
                         }
                         .notice-item {
                             display: flex;
+                            flex-wrap: wrap;
                             align-items: center;
                             padding: 15px 25px;
                             border-bottom: 1px dashed #eee;
@@ -649,7 +661,7 @@ if (empty($filterBranch)) {
                             box-shadow: 0 2px 10px rgba(0,0,0,0.05);
                         }
                         .notice-details {
-                            flex: 1;
+                            flex: 1 1 200px;
                         }
                         .notice-details h5 {
                             margin: 0 0 5px 0;
@@ -663,17 +675,28 @@ if (empty($filterBranch)) {
                         }
                         .notice-meta span {
                             margin-right: 15px;
+                            display: inline-block;
+                            margin-bottom: 3px;
+                        }
+                        .notice-action {
+                            margin-left: auto;
+                            margin-top: 10px;
+                        }
+                        @media (min-width: 768px) {
+                            .notice-action {
+                                margin-top: 0;
+                            }
                         }
                     </style>
                     
-                    <div class="noticeboard-container">
+                    <div class="noticeboard-container" id="noticeboard-content">
                         <?php if(empty($noticeboardCompanies)): ?>
                             <div class="d-flex flex-column justify-content-center align-items-center h-100 text-muted">
                                 <i class="fa-solid fa-folder-open display-4 mb-3 opacity-25"></i>
                                 <p class="mb-0 fs-5">No active placement drives currently.</p>
                             </div>
                         <?php else: ?>
-                            <marquee direction="up" scrollamount="3" onmouseover="this.stop()" onmouseout="this.start()" height="400">
+                            <marquee direction="up" scrollamount="3" onmouseover="this.stop()" onmouseout="this.start()" height="445">
                                 <?php foreach($noticeboardCompanies as $company): ?>
                                     <?php 
                                         $isExpired = strtotime($company['last_date_to_apply'] . ' 23:59:59') < time();
@@ -697,7 +720,7 @@ if (empty($filterBranch)) {
                                                 <span class="<?= $isExpired ? 'text-danger' : 'text-success fw-bold' ?>"><i class="fa-regular fa-clock me-1"></i> Deadline: <?= date('d M Y', strtotime($company['last_date_to_apply'])) ?></span>
                                             </div>
                                         </div>
-                                        <div class="ms-auto">
+                                        <div class="notice-action">
                                             <span class="btn btn-sm btn-outline-primary rounded-pill px-4 fw-bold">Apply Now <i class="fa-solid fa-arrow-right ms-1"></i></span>
                                         </div>
                                     </a>
@@ -705,38 +728,60 @@ if (empty($filterBranch)) {
                             </marquee>
                         <?php endif; ?>
                     </div>
+                    
+                    <script>
+                        document.addEventListener("DOMContentLoaded", function() {
+                            let currentNoticeboardHtml = document.getElementById('noticeboard-content').innerHTML;
+                            setInterval(function() {
+                                fetch('fetch_noticeboard_ajax.php')
+                                    .then(response => response.text())
+                                    .then(html => {
+                                        // Update only if content has changed to prevent marquee reset
+                                        if (html.trim() !== currentNoticeboardHtml.trim()) {
+                                            document.getElementById('noticeboard-content').innerHTML = html;
+                                            currentNoticeboardHtml = html;
+                                        }
+                                    })
+                                    .catch(err => console.error('Error auto-refreshing noticeboard:', err));
+                            }, 5000); // Check every 5 seconds for new companies
+                        });
+                    </script>
                 </div>
-            </div>
-        </div>
 
-        <!-- Statistics Tiles -->
-        <div class="container card-grid no-print mb-5">
-            <div class="row g-4 justify-content-center">
-                <div class="col-lg-4 col-md-6">
-                    <div class="department-card" style="cursor:default;">
-                        <div class="department-icon" style="background: linear-gradient(135deg,rgba(27,54,93,0.12),rgba(230,90,75,0.12));">
-                            <i class="fa-solid fa-trophy" style="color:var(--accent-coral);"></i>
-                        </div>
-                        <h3><?= $statStudents ?></h3>
-                        <p class="text-muted small mb-0">Total Students Placed</p>
+                <!-- Right Side: Statistics Highlights -->
+                <div class="col-lg-7">
+                    <div class="mb-4 text-center">
+                        <h2 class="fw-bold mb-2" style="color: var(--primary-navy);"><i class="fa-solid fa-chart-pie me-2 text-success"></i> Placement Highlights</h2>
+                        <p class="text-muted">A quick glance at our placement records and company visits.</p>
                     </div>
-                </div>
-                <div class="col-lg-4 col-md-6">
-                    <div class="department-card" style="cursor:default;">
-                        <div class="department-icon" style="background: linear-gradient(135deg,rgba(40,167,69,0.12),rgba(32,201,151,0.12));">
-                            <i class="fa-solid fa-briefcase" style="color:#28a745;"></i>
+                    <div class="row g-4">
+                        <div class="col-12">
+                            <div class="department-card h-100 text-center" style="cursor:default; padding: 30px;">
+                                <div class="department-icon mx-auto mb-3" style="background: linear-gradient(135deg,rgba(27,54,93,0.12),rgba(230,90,75,0.12));">
+                                    <i class="fa-solid fa-trophy" style="color:var(--accent-coral);"></i>
+                                </div>
+                                <h3 class="display-5 fw-bold text-dark"><?= $statStudents ?></h3>
+                                <p class="text-muted mb-0" style="font-size: 1.1rem;">Total Students Placed</p>
+                            </div>
                         </div>
-                        <h3><?= $statOffers ?></h3>
-                        <p class="text-muted small mb-0">Total Offers Made</p>
-                    </div>
-                </div>
-                <div class="col-lg-4 col-md-6">
-                    <div class="department-card" style="cursor:default;">
-                        <div class="department-icon" style="background: linear-gradient(135deg,rgba(23,162,184,0.12),rgba(11,94,215,0.12));">
-                            <i class="fa-solid fa-building" style="color:#17a2b8;"></i>
+                        <div class="col-md-6">
+                            <div class="department-card h-100 text-center" style="cursor:default;">
+                                <div class="department-icon mx-auto mb-3" style="background: linear-gradient(135deg,rgba(40,167,69,0.12),rgba(32,201,151,0.12));">
+                                    <i class="fa-solid fa-briefcase" style="color:#28a745;"></i>
+                                </div>
+                                <h3 class="fw-bold text-dark"><?= $statOffers ?></h3>
+                                <p class="text-muted mb-0">Total Offers Made</p>
+                            </div>
                         </div>
-                        <h3><?= $statCompanies ?></h3>
-                        <p class="text-muted small mb-0">Companies Visited</p>
+                        <div class="col-md-6">
+                            <div class="department-card h-100 text-center" style="cursor:default;">
+                                <div class="department-icon mx-auto mb-3" style="background: linear-gradient(135deg,rgba(23,162,184,0.12),rgba(11,94,215,0.12));">
+                                    <i class="fa-solid fa-building" style="color:#17a2b8;"></i>
+                                </div>
+                                <h3 class="fw-bold text-dark"><?= $statCompanies ?></h3>
+                                <p class="text-muted mb-0">Companies Visited</p>
+                            </div>
+                        </div>
                     </div>
                 </div>
             </div>
