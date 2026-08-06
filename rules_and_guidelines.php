@@ -354,6 +354,48 @@
                     </div>
                 </div>
 
+                <!-- 3. Rules (MOBILE ONLY) -->
+                <div class="d-block d-lg-none">
+                    <div class="sec-title" style="margin-top:36px;">
+                        <div class="ico" style="background:#eef2ff;color:var(--primary-navy);"><i class="fa-solid fa-list-check"></i></div>
+                        <h2 style="color:var(--primary-navy);">Rules &amp; Regulations</h2>
+                    </div>
+                    <div class="card-white flex-grow-1">
+                        <div class="rule-item">
+                            <div class="rule-num">1</div>
+                            <div class="rule-body">It is mandatory for students to provide their correct details to the departmental placement representative. <strong>False entry in data will lead to disqualification</strong> in the placement drive, even if the student has paid the fees.</div>
+                        </div>
+                        <div class="rule-item">
+                            <div class="rule-num">2</div>
+                            <div class="rule-body">The departmental coordinator will <strong>verify entries within one week</strong> of the declaration of results and approve them. Only approved students will qualify for placement.</div>
+                        </div>
+                        <div class="rule-item">
+                            <div class="rule-num">3</div>
+                            <div class="rule-body">Students should regularly check the <strong>notice board</strong> in their respective department and the <strong>placement website</strong> for any T&amp;P information.</div>
+                        </div>
+                        <div class="rule-item">
+                            <div class="rule-num">4</div>
+                            <div class="rule-body">Students must <strong>report 30 minutes before</strong> the start of any placement activity.</div>
+                        </div>
+                        <div class="rule-item">
+                            <div class="rule-num">5</div>
+                            <div class="rule-body">Students should regularly check their <strong>email accounts, SMS, and WhatsApp</strong> for any T&amp;P updates.</div>
+                        </div>
+                        <div class="rule-item">
+                            <div class="rule-num">6</div>
+                            <div class="rule-body">Students should be in <strong>regular contact</strong> with their T&amp;P representative.</div>
+                        </div>
+                        <div class="rule-item">
+                            <div class="rule-num">7</div>
+                            <div class="rule-body">Students must <strong>maintain discipline</strong> during campus placement. Misconduct may result in <strong style="color:var(--accent-coral);">debarment from further opportunities</strong>.</div>
+                        </div>
+                        <div class="rule-item">
+                            <div class="rule-num">8</div>
+                            <div class="rule-body">Students should enter their latest correct data on the placement website at the <strong>beginning of each semester</strong> and keep it updated within <strong>two days</strong> of any change or result declaration. If data is not updated in time, the TPO is not responsible for sending the student's name for placement.</div>
+                        </div>
+                    </div>
+                </div>
+
                 <!-- 4. Company Grades -->
                 <div class="sec-title" style="margin-top:36px;">
                     <div class="ico" style="background:#fef3c7;color:#d97706;"><i class="fa-solid fa-layer-group"></i></div>
@@ -404,7 +446,7 @@
             </div>
 
             <!-- RIGHT COLUMN -->
-            <div class="col-lg-6 d-flex flex-column">
+            <div class="col-lg-6 d-none d-lg-flex flex-column">
                 <!-- 3. Rules -->
                 <div class="sec-title mt-0">
                     <div class="ico" style="background:#eef2ff;color:var(--primary-navy);"><i class="fa-solid fa-list-check"></i></div>
