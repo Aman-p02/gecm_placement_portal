@@ -6,11 +6,12 @@ require_once __DIR__ . '/admin-module/includes/db_connect.php';
 
 // Handle URL Parameters
 $filterBranch = filter_input(INPUT_GET, 'branch', FILTER_SANITIZE_STRING) ?: '';
-$filterBatch = filter_input(INPUT_GET, 'batch_year', FILTER_VALIDATE_INT) ?: '';
+// We use string comparison for batch_year because it might be '0000' or empty if not set
+$filterBatch = isset($_GET['batch_year']) ? trim($_GET['batch_year']) : '';
 $showPlacement = isset($_GET['view']) && $_GET['view'] === 'placement';
 
 // Determine dynamic titles
-$displayYear = $filterBatch ? $filterBatch . '-' . substr($filterBatch + 1, -2) : 'All Years';
+$displayYear = ($filterBatch !== '') ? ($filterBatch ?: 'Unknown Year') : 'All Years';
 $displayBranch = $filterBranch ? $filterBranch : 'All Branches';
 
 // ---------------------------------------------------------
@@ -61,7 +62,7 @@ $statCompanies = $dashboardStats['total_companies_visited'] ?? 0;
 
 if (empty($filterBranch)) {
     // Already fetched globally
-} elseif (!empty($filterBranch) && empty($filterBatch)) {
+} elseif (!empty($filterBranch) && !isset($_GET['batch_year'])) {
     // VIEW 2: Fetch available batches for the selected branch
     $batchQuery = "
         SELECT c.batch_year, COUNT(*) as total_placed
@@ -78,16 +79,29 @@ if (empty($filterBranch)) {
 
 } else {
     // VIEW 3: Fetch the actual student details for the table
-    $query = "
-        SELECT s.full_name, s.enrollment_no, s.branch, c.company_name, c.batch_year, a.applied_at
-        FROM tbl_applications a
-        JOIN tbl_students s ON a.student_id = s.student_id
-        JOIN tbl_companies c ON a.company_id = c.company_id
-        WHERE a.status = 'Selected' AND s.branch = ? AND c.batch_year = ?
-        ORDER BY s.full_name ASC
-    ";
-    $stmt = $pdo->prepare($query);
-    $stmt->execute([$filterBranch, $filterBatch]);
+    if ($filterBatch === '') {
+        $query = "
+            SELECT s.full_name, s.enrollment_no, s.branch, c.company_name, c.batch_year, a.applied_at
+            FROM tbl_applications a
+            JOIN tbl_students s ON a.student_id = s.student_id
+            JOIN tbl_companies c ON a.company_id = c.company_id
+            WHERE a.status = 'Selected' AND s.branch = ? AND (c.batch_year IS NULL OR c.batch_year = '')
+            ORDER BY s.full_name ASC
+        ";
+        $stmt = $pdo->prepare($query);
+        $stmt->execute([$filterBranch]);
+    } else {
+        $query = "
+            SELECT s.full_name, s.enrollment_no, s.branch, c.company_name, c.batch_year, a.applied_at
+            FROM tbl_applications a
+            JOIN tbl_students s ON a.student_id = s.student_id
+            JOIN tbl_companies c ON a.company_id = c.company_id
+            WHERE a.status = 'Selected' AND s.branch = ? AND c.batch_year = ?
+            ORDER BY s.full_name ASC
+        ";
+        $stmt = $pdo->prepare($query);
+        $stmt->execute([$filterBranch, $filterBatch]);
+    }
     $placedStudents = $stmt->fetchAll();
 }
 ?>
@@ -871,10 +885,10 @@ if (empty($filterBranch)) {
                     <?php foreach ($availableBatches as $batch): ?>
                         <div class="col-lg-3 col-md-4 col-sm-6">
                             <!-- Click goes to View 3 (Table) -->
-                            <a href="?branch=<?= urlencode($filterBranch) ?>&batch_year=<?= urlencode($batch['batch_year']) ?>"
+                            <a href="?branch=<?= urlencode($filterBranch) ?>&batch_year=<?= urlencode($batch['batch_year'] ?? '') ?>"
                                 class="batch-card">
                                 <span>Placed in</span>
-                                <h2><?= htmlspecialchars($batch['batch_year']) ?></h2>
+                                <h2><?= htmlspecialchars($batch['batch_year'] ?: 'Unknown Year') ?></h2>
                                 <div class="placed-count">
                                     <i class="fa-solid fa-user-graduate me-1"></i>
                                     <?= htmlspecialchars($batch['total_placed']) ?> Students
