@@ -155,3 +155,15 @@ body.auth-page {
     background: radial-gradient(circle, rgba(255,255,255,0.1) 0%, transparent 70%);
     transform: translate(30%, -30%);
 }
+
+/* Mobile Overrides */
+@media (max-width: 768px) {
+    body > .d-flex { display: block !important; }
+    .sidebar { position: fixed; left: -250px; top: 0; bottom: 0; z-index: 1050; transition: left 0.3s ease; height: 100vh; overflow-y: auto; }
+    .sidebar.active { left: 0; }
+    .sidebar-overlay { display: none; position: fixed; top: 0; left: 0; right: 0; bottom: 0; background: rgba(0,0,0,0.5); z-index: 1040; }
+    .sidebar-overlay.active { display: block; }
+    .topbar { padding: 15px; }
+    .flex-grow-1 { width: 100%; overflow-x: hidden; }
+}
+

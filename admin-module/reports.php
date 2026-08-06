@@ -105,7 +105,7 @@ if ($adminRole === 'superadmin') {
 <body class="<?= ($adminRole === 'superadmin') ? 'theme-superadmin' : '' ?>">
     <div class="d-flex">
         <!-- Sidebar -->
-        <div class="sidebar" style="width: 250px;">
+        <div class="sidebar-overlay" id="sidebarOverlay"></div><div class="sidebar" style="width: 250px;">
             <h4 class="text-center mb-4 px-3" style="color: var(--accent-coral);">GEC Admin</h4>
             
             <a href="dashboard.php"><i class="fa-solid fa-gauge me-2"></i> Dashboard</a>
@@ -124,7 +124,7 @@ if ($adminRole === 'superadmin') {
         <!-- Main Content -->
         <div class="flex-grow-1">
             <div class="topbar d-flex justify-content-between align-items-center">
-                <h5 class="m-0 text-muted">Placement Reports</h5>
+                <div class="d-flex align-items-center"><button class="btn btn-sm btn-outline-secondary d-md-none me-3" id="sidebarToggle"><i class="fa-solid fa-bars"></i></button><h5 class="m-0 text-muted">Placement Reports</h5></div>
                 <div>
                     <span class="fw-medium me-3 text-dark">Hi, <?= htmlspecialchars($adminName) ?></span>
                     <span class="badge bg-secondary"><?= ucfirst(htmlspecialchars($adminRole)) ?> <?= $adminBranch ? '- ' . htmlspecialchars($adminBranch) : '' ?></span>
@@ -232,5 +232,23 @@ if ($adminRole === 'superadmin') {
     </div>
     
     <script src="../assets/bootstrap/js/bootstrap.bundle.min.js"></script>
+    <script>
+        document.addEventListener('DOMContentLoaded', function() {
+            const sidebar = document.querySelector('.sidebar');
+            const overlay = document.getElementById('sidebarOverlay');
+            const toggleBtn = document.getElementById('sidebarToggle');
+            if(toggleBtn && sidebar && overlay) {
+                toggleBtn.addEventListener('click', () => {
+                    sidebar.classList.add('active');
+                    overlay.classList.add('active');
+                });
+                overlay.addEventListener('click', () => {
+                    sidebar.classList.remove('active');
+                    overlay.classList.remove('active');
+                });
+            }
+        });
+    </script>
 </body>
 </html>
+
