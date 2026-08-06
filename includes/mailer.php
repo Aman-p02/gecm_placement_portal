@@ -214,4 +214,48 @@ function sendBlockStatusEmail($toEmail, $userName, $isBlocked) {
         return false;
     }
 }
+
+function sendVerificationEmail($toEmail, $userName, $verificationLink)
+{
+    $mail = new PHPMailer(true);
+
+    try {
+        $yourEmail = 'haritap40@gmail.com';
+        $yourAppPassword = 'xkeq amgh eesp xkra';
+
+        $mail->isSMTP();
+        $mail->Host = 'smtp.gmail.com';
+        $mail->SMTPAuth = true;
+        $mail->Username = $yourEmail;
+        $mail->Password = $yourAppPassword;
+        $mail->SMTPSecure = PHPMailer::ENCRYPTION_STARTTLS;
+        $mail->Port = 587;
+
+        $mail->setFrom($yourEmail, 'GEC Placement Portal');
+        $mail->addAddress($toEmail);
+
+        $mail->isHTML(true);
+        $mail->Subject = 'Verify Your Email Address - GEC Placement Portal';
+
+        $emailBody = "
+            <div style='font-family: Arial, sans-serif; max-width: 600px; margin: 0 auto; padding: 20px; border: 1px solid #ddd; border-radius: 10px;'>
+                <h2 style='color: #1B365D;'>Verify Your Email Address</h2>
+                <p>Hello <strong>{$userName}</strong>,</p>
+                <p>Thank you for registering at the GEC Placement Portal. Please click the button below to activate your account:</p>
+                <div style='text-align: center; margin: 30px 0;'>
+                    <a href='{$verificationLink}' style='background-color: #28a745; color: white; padding: 12px 25px; text-decoration: none; border-radius: 5px; font-weight: bold;'>Click here to activate your account</a>
+                </div>
+                <p>If you did not create this account, you can safely ignore this email.</p>
+                <p>Best regards,<br><strong>GEC Modasa Placement Cell</strong></p>
+            </div>
+        ";
+
+        $mail->Body = $emailBody;
+        $mail->send();
+        return true;
+    } catch (Exception $e) {
+        error_log("Verification Email could not be sent. Mailer Error: {$mail->ErrorInfo}");
+        return false;
+    }
+}
 ?>

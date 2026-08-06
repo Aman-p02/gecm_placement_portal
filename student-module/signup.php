@@ -44,13 +44,21 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
         } else {
             // Insert new student
             $hashedPassword = password_hash($password, PASSWORD_BCRYPT);
-            $stmt = $pdo->prepare("INSERT INTO tbl_students (enrollment_no, full_name, branch, email, phone_number, password) VALUES (?, ?, ?, ?, ?, ?)");
-            if ($stmt->execute([$enrollmentNo, $fullName, $branch, $email, $phone, $hashedPassword])) {
+            $verificationToken = bin2hex(random_bytes(32));
+            
+            $stmt = $pdo->prepare("INSERT INTO tbl_students (enrollment_no, full_name, branch, email, phone_number, password, is_verified, verification_token) VALUES (?, ?, ?, ?, ?, ?, 0, ?)");
+            if ($stmt->execute([$enrollmentNo, $fullName, $branch, $email, $phone, $hashedPassword, $verificationToken])) {
                 
-                // Send registration email
-                sendRegistrationEmail($email, $fullName, 'student');
+                // Construct verification link
+                $protocol = isset($_SERVER['HTTPS']) && $_SERVER['HTTPS'] === 'on' ? 'https' : 'http';
+                $domain = $_SERVER['HTTP_HOST'];
+                $base_dir = dirname($_SERVER['PHP_SELF']);
+                $verificationLink = $protocol . '://' . $domain . $base_dir . '/verify.php?token=' . $verificationToken;
+
+                // Send verification email
+                sendVerificationEmail($email, $fullName, $verificationLink);
                 
-                $_SESSION['signup_success'] = "Registration successful! You can now login.";
+                $_SESSION['signup_success'] = "Registration successful! Please check your email to activate your account.";
                 header("Location: login.php");
                 exit;
             } else {

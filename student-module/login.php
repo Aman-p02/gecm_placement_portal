@@ -28,13 +28,15 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
     if (empty($enrollmentNo) || empty($password)) {
         $error = "Please enter both Enrollment Number and Password.";
     } else {
-        $stmt = $pdo->prepare("SELECT student_id, enrollment_no, password, is_blocked FROM tbl_students WHERE enrollment_no = ?");
+        $stmt = $pdo->prepare("SELECT student_id, enrollment_no, password, is_blocked, is_verified FROM tbl_students WHERE enrollment_no = ?");
         $stmt->execute([$enrollmentNo]);
         $user = $stmt->fetch();
 
         if ($user && password_verify($password, $user['password'])) {
             if ($user['is_blocked']) {
                 $error = "Your account has been blocked by an administrator. Please contact your department.";
+            } elseif ($user['is_verified'] == 0) {
+                $error = "Please check your email and verify your account before logging in.";
             } else {
                 // Login success: Prevent session fixation
                 session_regenerate_id(true);
