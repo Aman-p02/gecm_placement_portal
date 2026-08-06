@@ -156,8 +156,25 @@ $csrfToken = generate_csrf_token();
                                 </div>
                                 <span class="text-muted small"><i class="fa-regular fa-clock me-1"></i><?= date('M d, Y', strtotime($c['created_at'])) ?></span>
                             </div>
-                            
-                            <p class="text-muted mb-3 flex-grow-1">Last Date to Apply: <strong class="<?= (strtotime($c['last_date_to_apply']) < time()) ? 'text-danger' : 'text-success' ?>"><?= date('d M Y', strtotime($c['last_date_to_apply'])) ?></strong></p>
+                            <?php
+                                $deadlineTimestamp = strtotime($c['last_date_to_apply'] . ' 23:59:59');
+                                $isExpired = $deadlineTimestamp < time();
+                                
+                                $diff = $deadlineTimestamp - time();
+                                $daysLeft = ceil($diff / (60 * 60 * 24));
+                                
+                                $daysText = '';
+                                if (!$isExpired) {
+                                    if ($daysLeft > 1) {
+                                        $daysText = "<span class='badge bg-warning text-dark ms-2'>$daysLeft days left</span>";
+                                    } elseif ($daysLeft == 1) {
+                                        $daysText = "<span class='badge bg-warning text-dark ms-2'>1 day left</span>";
+                                    } elseif ($daysLeft == 0) {
+                                        $daysText = "<span class='badge bg-danger ms-2'>Ends today</span>";
+                                    }
+                                }
+                            ?>
+                            <p class="text-muted mb-3 flex-grow-1">Last Date to Apply: <strong class="<?= $isExpired ? 'text-danger' : 'text-success' ?>"><?= date('d M Y', strtotime($c['last_date_to_apply'])) ?></strong> <?= $daysText ?></p>
                             
                             <?php if (!empty($c['job_description_text'])): ?>
                             <div class="mb-3 text-dark small" style="white-space: pre-line; background-color: #f9f9f9; padding: 10px; border-radius: 5px; border-left: 3px solid var(--accent-coral);">
@@ -176,7 +193,7 @@ $csrfToken = generate_csrf_token();
                             
                             <?php if ($c['has_applied'] > 0): ?>
                                 <button class="btn btn-secondary w-100 fw-bold" disabled><i class="fa-solid fa-check me-2"></i>Applied</button>
-                            <?php elseif (strtotime($c['last_date_to_apply']) < time()): ?>
+                            <?php elseif ($isExpired): ?>
                                 <button class="btn btn-danger w-100 fw-bold" disabled>Deadline Passed</button>
                             <?php else: ?>
                                 <form action="placement_drives.php" method="POST" class="mt-auto">
