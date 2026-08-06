@@ -260,7 +260,7 @@
     <!-- CONTENT CARD WITH EXACT SINGLE RECRUITERS GRID IMAGE -->
     <div class="container">
         <div class="content-card text-center" style="padding: 40px 20px;">
-            <h2 class="page-header-title text-start mb-4" style="margin-left: 20px; font-size: 1.6rem; font-weight: 800; color: #1B365D;">Our Industry Partners</h2>
+            <h2 class="page-header-title text-center mb-4" style="font-size: 1.6rem; font-weight: 800; color: #1B365D;">Our Industry Partners</h2>
             <img src="assets/images/real_recruiter_grid.png" alt="GEC Modasa Major Recruiters Grid" class="recruiters-grid-img mt-2">
         </div>
     </div>

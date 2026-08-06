@@ -200,6 +200,7 @@
             align-items: center;
             gap: 12px;
             margin: 36px 0 16px;
+            scroll-margin-top: 90px;
         }
         .sec-title .ico {
             width: 44px;
@@ -235,7 +236,7 @@
         .dress-col ul li span { color: var(--accent-coral); font-weight: 600; }
 
         /* Document Chips */
-        .doc-wrap { display: flex; flex-wrap: wrap; gap: 12px; padding: 26px 30px; }
+        .doc-wrap { display: flex; flex-direction: column; gap: 12px; padding: 26px 30px; }
         .doc-chip { background: #eef2ff; color: var(--primary-navy); border: 1px solid #c7d2fe; border-radius: 50px; padding: 10px 20px; font-size: 0.95rem; font-weight: 600; display: flex; align-items: center; gap: 8px; }
 
         /* Rules List */
@@ -246,7 +247,7 @@
 
         /* Grade Table */
         .grade-wrap { padding: 26px 30px; }
-        .grade-tbl { width: 100%; border-collapse: collapse; margin-bottom: 20px; }
+        .grade-tbl { width: 100%; border-collapse: collapse; margin-bottom: 20px; scroll-margin-top: 90px; }
         .grade-tbl thead th { text-align: left; font-size: 0.82rem; font-weight: 800; letter-spacing: 0.07em; text-transform: uppercase; color: #888; padding: 0 16px 12px; border-bottom: 2px solid #e8edf5; }
         .grade-tbl tbody td { padding: 15px 16px; border-bottom: 1px solid #f3f6fb; font-size: 1rem; vertical-align: middle; }
         .grade-tbl tbody tr:last-child td { border-bottom: none; }
@@ -254,9 +255,9 @@
         .grade-rule { background: #fffbeb; border: 1px solid #fcd34d; border-radius: 10px; padding: 16px 20px; font-size: 0.97rem; color: #78350f; line-height: 1.75; }
 
         /* Penalty */
-        .penalty-wrap { padding: 26px 30px; display: flex; gap: 20px; align-items: flex-start; background: #fff5f5; border-radius: 16px; border: 1.5px solid #fca5a5; }
+        .penalty-wrap { padding: 26px 30px; display: flex; gap: 20px; align-items: flex-start; background: #fff; border-radius: 16px; box-shadow: 0 8px 25px rgba(0, 0, 0, 0.05); border: 1px solid rgba(0,0,0,0.03); }
         .penalty-ico { width: 50px; min-width: 50px; height: 50px; background: #fee2e2; border-radius: 12px; display: flex; align-items: center; justify-content: center; font-size: 1.3rem; color: #dc2626; }
-        .penalty-body { font-size: 1rem; line-height: 1.8; color: #7f1d1d; }
+        .penalty-body { font-size: 1rem; line-height: 1.8; color: #333; }
         .penalty-body strong { color: #991b1b; }
         .penalty-body .debarred { color: #dc2626; font-weight: 800; }
 
@@ -327,9 +328,9 @@
     </div>
 
     <!-- ═══════════ MAIN CONTENT (Matching Bootstrap container width) ═══════════ -->
-    <div class="container py-4 pb-5">
+    <div class="container py-4">
 
-        <div class="row gx-4">
+        <div class="row gx-4 align-items-start">
             <!-- LEFT COLUMN -->
             <div class="col-lg-6">
                 <!-- 1. Dress Code -->
@@ -372,13 +373,15 @@
                     </div>
                 </div>
 
+
+
                 <!-- 3. Rules (MOBILE ONLY) -->
                 <div class="d-block d-lg-none">
                     <div class="sec-title animate-on-scroll" style="margin-top:36px;">
                         <div class="ico" style="background:#eef2ff;color:var(--primary-navy);"><i class="fa-solid fa-list-check"></i></div>
                         <h2 style="color:var(--primary-navy);">Rules &amp; Regulations</h2>
                     </div>
-                    <div class="card-white flex-grow-1 animate-on-scroll">
+                    <div class="card-white animate-on-scroll">
                         <div class="rule-item">
                             <div class="rule-num">1</div>
                             <div class="rule-body">It is mandatory for students to provide their correct details to the departmental placement representative. <strong>False entry in data will lead to disqualification</strong> in the placement drive, even if the student has paid the fees.</div>
@@ -410,6 +413,16 @@
                         <div class="rule-item">
                             <div class="rule-num">8</div>
                             <div class="rule-body">Students should enter their latest correct data on the placement website at the <strong>beginning of each semester</strong> and keep it updated within <strong>two days</strong> of any change or result declaration. If data is not updated in time, the TPO is not responsible for sending the student's name for placement.</div>
+                        </div>
+                    </div>
+                    
+                    <div class="sec-title animate-on-scroll" style="margin-top:36px;">
+                        <div class="ico" style="background:#fee2e2;color:#dc2626;"><i class="fa-solid fa-triangle-exclamation"></i></div>
+                        <h2 style="color:#b91c1c;">Penalty Rules</h2>
+                    </div>
+                    <div class="penalty-wrap mb-4 animate-on-scroll">
+                        <div class="penalty-body">
+                            A student who has expressed willingness to appear for campus placement through a visit created, if <strong>quits the procedure in between</strong> or <strong>does not accept the offer after selection</strong>, will be <span class="debarred">permanently debarred</span> from further placements and will not be given any opportunity under any circumstances.
                         </div>
                     </div>
                 </div>
@@ -450,21 +463,9 @@
                     </div>
                 </div>
 
-                <!-- 5. Penalty (MOBILE ONLY) -->
-                <div class="d-block d-lg-none">
-                    <div class="sec-title animate-on-scroll" style="margin-top:36px;">
-                        <div class="ico" style="background:#fee2e2;color:#dc2626;"><i class="fa-solid fa-triangle-exclamation"></i></div>
-                        <h2 style="color:#b91c1c;">Penalty Rules</h2>
-                    </div>
-                    <div class="penalty-wrap mb-4 mb-lg-0 animate-on-scroll">
-                        <div class="penalty-body">
-                            A student who has expressed willingness to appear for campus placement through a visit created, if <strong>quits the procedure in between</strong> or <strong>does not accept the offer after selection</strong>, will be <span class="debarred">permanently debarred</span> from further placements and will not be given any opportunity under any circumstances.
-                        </div>
-                    </div>
-                </div>
             </div>
 
-            <!-- RIGHT COLUMN -->
+            <!-- RIGHT COLUMN (DESKTOP ONLY) -->
             <div class="col-lg-6 d-none d-lg-flex flex-column">
                 <!-- 3. Rules -->
                 <div class="sec-title mt-0 animate-on-scroll">
@@ -519,7 +520,7 @@
             </div>
         </div>
 
-        <div class="footer-note">
+        <div class="footer-note mt-4">
             <i class="fa-solid fa-circle-info me-1"></i>
             For queries, contact your departmental T&amp;P coordinator.
         </div>
