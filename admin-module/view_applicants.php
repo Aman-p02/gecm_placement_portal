@@ -231,7 +231,7 @@ if (isset($_GET['export']) && $_GET['export'] === 'csv') {
 // Get distinct branches for superadmin filter dropdown
 $distinctBranches = [];
 if ($adminRole === 'superadmin') {
-    $stmtB = $pdo->query("SELECT DISTINCT branch FROM tbl_students ORDER BY branch ASC");
+    $stmtB = $pdo->query("SELECT branch_name AS branch FROM tbl_branches ORDER BY branch_name ASC");
     $distinctBranches = $stmtB->fetchAll(PDO::FETCH_COLUMN);
 }
 

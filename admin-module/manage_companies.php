@@ -26,13 +26,9 @@ if (isset($_SESSION['page_error'])) {
     unset($_SESSION['page_error']);
 }
 
-$allBranches = [
-    'Computer Engineering',
-    'Information Technology',
-    'Mechanical Engineering',
-    'Civil Engineering',
-    'Electrical Engineering'
-];
+// Fetch distinct branches from the tbl_branches table
+$branchStmt = $pdo->query("SELECT branch_name AS branch FROM tbl_branches ORDER BY branch_name ASC");
+$allBranches = $branchStmt->fetchAll(PDO::FETCH_COLUMN);
 
 // Handle Add Company
 if ($_SERVER['REQUEST_METHOD'] === 'POST' && isset($_POST['action']) && $_POST['action'] === 'add_company') {
