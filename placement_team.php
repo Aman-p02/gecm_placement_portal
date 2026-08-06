@@ -270,7 +270,8 @@ if (empty($team_members)) {
             border-radius: 8px;
             overflow: hidden;
             border: 1px solid #E2E8F0;
-            margin-top: 30px;
+            margin: 30px auto 0 auto;
+            max-width: 1000px;
         }
 
         .team-table-header {
@@ -292,26 +293,16 @@ if (empty($team_members)) {
             color: #333;
             font-weight: 800;
             font-size: 0.92rem;
-            padding: 14px 20px;
+            padding: 12px 15px;
             text-align: center;
             border-bottom: 2px solid #E2E8F0;
-            border-right: 1px solid #E2E8F0;
-        }
-
-        .team-table th:last-child {
-            border-right: none;
         }
 
         .team-table td {
-            padding: 18px 20px;
+            padding: 12px 15px;
             vertical-align: middle;
             border-bottom: 1px solid #EDF2F7;
-            border-right: 1px solid #EDF2F7;
             font-size: 0.92rem;
-        }
-
-        .team-table td:last-child {
-            border-right: none;
         }
 
         .team-table tr:hover {
@@ -320,19 +311,19 @@ if (empty($team_members)) {
 
         /* Photo Column */
         .photo-cell {
-            width: 160px;
+            width: 190px;
             text-align: center;
         }
 
         .faculty-photo {
-            width: 105px;
-            height: 120px;
+            width: 135px;
+            height: 155px;
             object-fit: cover;
             border-radius: 8px;
             border: 1px solid #CBD5E1;
             box-shadow: 0 2px 8px rgba(0, 0, 0, 0.08);
             background: #FFF;
-            padding: 3px;
+            padding: 4px;
         }
 
         /* Details Column */
@@ -380,6 +371,9 @@ if (empty($team_members)) {
 
         /* Mobile Responsive Table (Stacking) */
         @media (max-width: 768px) {
+            .team-table-card {
+                border: none;
+            }
             .team-table thead {
                 display: none;
             }
@@ -393,6 +387,9 @@ if (empty($team_members)) {
                 border-radius: 12px;
                 padding: 15px;
                 box-shadow: 0 4px 15px rgba(0,0,0,0.03);
+            }
+            .team-table tr:last-child {
+                margin-bottom: 0;
             }
             .team-table td {
                 border: none !important;
