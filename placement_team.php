@@ -7,16 +7,21 @@ if (file_exists(__DIR__ . '/admin-module/includes/db_connect.php')) {
 $team_members = [];
 
 // Try fetching from MySQL table if connection exists
-if (isset($conn) && $conn) {
-    $sql = "SELECT * FROM `tbl_placement_team` ORDER BY `sort_order` ASC, `id` ASC";
-    $result = @$conn->query($sql);
-    if (!$result) {
-        $sql = "SELECT * FROM `placement_team` ORDER BY `sort_order` ASC, `id` ASC";
-        $result = @$conn->query($sql);
-    }
-    if ($result && $result->num_rows > 0) {
-        while ($row = $result->fetch_assoc()) {
-            $team_members[] = $row;
+if (isset($pdo) && $pdo) {
+    try {
+        $stmt = $pdo->query("SELECT * FROM `tbl_placement_team` ORDER BY `sort_order` ASC, `id` ASC");
+        if ($stmt) {
+            $team_members = $stmt->fetchAll(PDO::FETCH_ASSOC);
+        }
+    } catch (\PDOException $e) {
+        // Fallback to older table name if tbl_placement_team doesn't exist
+        try {
+            $stmt = $pdo->query("SELECT * FROM `placement_team` ORDER BY `sort_order` ASC, `id` ASC");
+            if ($stmt) {
+                $team_members = $stmt->fetchAll(PDO::FETCH_ASSOC);
+            }
+        } catch (\PDOException $e2) {
+            // Do nothing, fallback array will be used
         }
     }
 }
@@ -27,20 +32,20 @@ $image_base_dir = 'assets/images/team/';
 // Default Fallback Array with User's Exact File Names
 if (empty($team_members)) {
     $team_members = [
-        ['name' => 'Dr. M M Goyani', 'designation' => 'Associate Professor', 'department' => 'CE Department', 'role' => 'Placement Coordinator - Institute', 'photo' => $image_base_dir . 'MMG.jpg'],
-        ['name' => 'Prof. P M Mistri', 'designation' => 'Assistant Professor', 'department' => 'ME Department', 'role' => 'Placement Co-Coordinator - Institute', 'photo' => $image_base_dir . 'mech_PMM.jpg'],
-        ['name' => 'Prof. A. J Patel', 'designation' => 'Assistant Professor', 'department' => 'Civil Department', 'role' => 'Departmental Placement Coordinator', 'photo' => $image_base_dir . 'app_AJP.jpg'],
-        ['name' => 'Prof. M. G. Patel', 'designation' => 'Asst. Prof.', 'department' => 'ME Department', 'role' => 'Departmental Placement coordinator', 'photo' => $image_base_dir . 'mech_MGP.jpg'],
-        ['name' => 'Prof. J. C. Gamit', 'designation' => 'Asst. Prof.', 'department' => 'ME Department', 'role' => 'Departmental Placement coordinator', 'photo' => $image_base_dir . 'mech_JCG.jpg'],
-        ['name' => 'Prof. S. L. Ghanchi', 'designation' => 'Asst. Prof.', 'department' => 'ME Department', 'role' => 'Departmental Placement coordinator', 'photo' => $image_base_dir . 'mech_SLG.jpg'],
-        ['name' => 'Prof. H. K. Sharma', 'designation' => 'Asst. Prof.', 'department' => 'Civil Department', 'role' => 'Departmental Placement coordinator', 'photo' => $image_base_dir . 'civil_HKS.jpg'],
-        ['name' => 'Prof. A. D. Chaudhari', 'designation' => 'Asst. Prof.', 'department' => 'IT Department', 'role' => 'Departmental Placement coordinator', 'photo' => $image_base_dir . 'it_ac.jpg'],
-        ['name' => 'Prof. S. R. Patel', 'designation' => 'Asst. Prof.', 'department' => 'CE Department', 'role' => 'Departmental Placement coordinator', 'photo' => $image_base_dir . 'ce_srp.jpg'],
-        ['name' => 'Prof. N. V. Nagekar', 'designation' => 'Asst. Prof.', 'department' => 'CE Department', 'role' => 'Departmental Placement coordinator', 'photo' => $image_base_dir . 'ce_nvn.jpg'],
-        ['name' => 'Prof. M. V. Chauhan', 'designation' => 'Asst. Prof.', 'department' => 'IT Department', 'role' => 'Departmental Placement coordinator', 'photo' => $image_base_dir . 'CE_MC.jpg'],
-        ['name' => 'Prof. P. V. Patel', 'designation' => 'Asst. Prof.', 'department' => 'EC Department', 'role' => 'Departmental Placement coordinator', 'photo' => $image_base_dir . 'ec_PVP.jpg'],
-        ['name' => 'Prof. B. A. Brahmbhatt', 'designation' => 'Asst. Prof.', 'department' => 'EC Department', 'role' => 'Departmental Placement coordinator', 'photo' => $image_base_dir . 'ec_BAB.jpg'],
-        ['name' => 'Prof. D. U. Thakkar', 'designation' => 'Asst. Prof.', 'department' => 'EE Department', 'role' => 'Departmental Placement coordinator', 'photo' => $image_base_dir . 'ee_darshan.png']
+        ['name' => 'Dr. M M Goyani', 'designation' => 'Associate Professor', 'department' => 'CE Department', 'role' => 'Placement Coordinator - Institute', 'email' => 'faculty.name@gecmodasa.ac.in', 'photo' => $image_base_dir . 'MMG.jpg'],
+        ['name' => 'Prof. P M Mistri', 'designation' => 'Assistant Professor', 'department' => 'ME Department', 'role' => 'Placement Co-Coordinator - Institute', 'email' => 'faculty.name@gecmodasa.ac.in', 'photo' => $image_base_dir . 'mech_PMM.jpg'],
+        ['name' => 'Prof. A. J Patel', 'designation' => 'Assistant Professor', 'department' => 'Civil Department', 'role' => 'Departmental Placement Coordinator', 'email' => 'faculty.name@gecmodasa.ac.in', 'photo' => $image_base_dir . 'app_AJP.jpg'],
+        ['name' => 'Prof. M. G. Patel', 'designation' => 'Asst. Prof.', 'department' => 'ME Department', 'role' => 'Departmental Placement coordinator', 'email' => 'faculty.name@gecmodasa.ac.in', 'photo' => $image_base_dir . 'mech_MGP.jpg'],
+        ['name' => 'Prof. J. C. Gamit', 'designation' => 'Asst. Prof.', 'department' => 'ME Department', 'role' => 'Departmental Placement coordinator', 'email' => 'faculty.name@gecmodasa.ac.in', 'photo' => $image_base_dir . 'mech_JCG.jpg'],
+        ['name' => 'Prof. S. L. Ghanchi', 'designation' => 'Asst. Prof.', 'department' => 'ME Department', 'role' => 'Departmental Placement coordinator', 'email' => 'faculty.name@gecmodasa.ac.in', 'photo' => $image_base_dir . 'mech_SLG.jpg'],
+        ['name' => 'Prof. H. K. Sharma', 'designation' => 'Asst. Prof.', 'department' => 'Civil Department', 'role' => 'Departmental Placement coordinator', 'email' => 'faculty.name@gecmodasa.ac.in', 'photo' => $image_base_dir . 'civil_HKS.jpg'],
+        ['name' => 'Prof. A. D. Chaudhari', 'designation' => 'Asst. Prof.', 'department' => 'IT Department', 'role' => 'Departmental Placement coordinator', 'email' => 'faculty.name@gecmodasa.ac.in', 'photo' => $image_base_dir . 'it_ac.jpg'],
+        ['name' => 'Prof. S. R. Patel', 'designation' => 'Asst. Prof.', 'department' => 'CE Department', 'role' => 'Departmental Placement coordinator', 'email' => 'faculty.name@gecmodasa.ac.in', 'photo' => $image_base_dir . 'ce_srp.jpg'],
+        ['name' => 'Prof. N. V. Nagekar', 'designation' => 'Asst. Prof.', 'department' => 'CE Department', 'role' => 'Departmental Placement coordinator', 'email' => 'faculty.name@gecmodasa.ac.in', 'photo' => $image_base_dir . 'ce_nvn.jpg'],
+        ['name' => 'Prof. M. V. Chauhan', 'designation' => 'Asst. Prof.', 'department' => 'IT Department', 'role' => 'Departmental Placement coordinator', 'email' => 'faculty.name@gecmodasa.ac.in', 'photo' => $image_base_dir . 'CE_MC.jpg'],
+        ['name' => 'Prof. B. A. Brahmbhatt', 'designation' => 'Asst. Prof.', 'department' => 'EC Department', 'role' => 'Departmental Placement coordinator', 'email' => 'faculty.name@gecmodasa.ac.in', 'photo' => $image_base_dir . 'ec_BAB.jpg'],
+        ['name' => 'Prof. P. V. Patel', 'designation' => 'Asst. Prof.', 'department' => 'EC Department', 'role' => 'Departmental Placement coordinator', 'email' => 'faculty.name@gecmodasa.ac.in', 'photo' => $image_base_dir . 'ec_PVP.jpg'],
+        ['name' => 'Prof. D. U. Thakkar', 'designation' => 'Asst. Prof.', 'department' => 'EE Department', 'role' => 'Departmental Placement coordinator', 'email' => 'faculty.name@gecmodasa.ac.in', 'photo' => $image_base_dir . 'ee_darshan.png']
     ];
 }
 ?>
@@ -68,6 +73,7 @@ if (empty($team_members)) {
             background-color: var(--light-bg);
             font-family: 'Inter', sans-serif;
             color: #333;
+            overflow-x: hidden;
         }
 
         /* ── Floating Pill Navbar ─────────────────── */
@@ -356,21 +362,51 @@ if (empty($team_members)) {
         }
 
         /* Animation classes */
-        .animate-row:nth-child(odd) td {
+        .animate-row td {
             opacity: 0;
-            transform: translateX(-50px);
-            transition: opacity 0.6s ease-out, transform 0.6s ease-out;
-        }
-
-        .animate-row:nth-child(even) td {
-            opacity: 0;
-            transform: translateX(50px);
-            transition: opacity 0.6s ease-out, transform 0.6s ease-out;
+            transform: translateY(30px);
+            transition: opacity 0.5s ease-out, transform 0.5s ease-out;
         }
 
         .animate-row.visible td {
             opacity: 1;
-            transform: translateX(0);
+            transform: translateY(0);
+        }
+
+        /* Prevent vertical scrollbar on table container during animation */
+        .table-responsive {
+            overflow-y: hidden;
+        }
+
+        /* Mobile Responsive Table (Stacking) */
+        @media (max-width: 768px) {
+            .team-table thead {
+                display: none;
+            }
+            .team-table, .team-table tbody, .team-table tr, .team-table td {
+                display: block;
+                width: 100%;
+            }
+            .team-table tr {
+                margin-bottom: 20px;
+                border: 1px solid #e2e8f0;
+                border-radius: 12px;
+                padding: 15px;
+                box-shadow: 0 4px 15px rgba(0,0,0,0.03);
+            }
+            .team-table td {
+                border: none !important;
+                padding: 8px 0 !important;
+                text-align: center;
+            }
+            .faculty-photo {
+                margin: 0 auto;
+            }
+            .role-cell {
+                margin-top: 10px;
+                padding-top: 12px !important;
+                border-top: 1px dashed #e2e8f0 !important;
+            }
         }
     </style>
 </head>
@@ -457,7 +493,7 @@ if (empty($team_members)) {
                                         <div class="member-dept"><?= htmlspecialchars($m['designation']) ?></div>
                                         <div class="member-dept"><?= htmlspecialchars($m['department']) ?></div>
                                         <div class="member-email mt-1" style="font-size: 0.85rem; color: #475569;">
-                                            <i class="fa-solid fa-envelope me-1" style="color: var(--accent-coral);"></i> faculty.name@gecmodasa.ac.in
+                                            <i class="fa-solid fa-envelope me-1" style="color: var(--accent-coral);"></i> <?= htmlspecialchars($m['email']) ?>
                                         </div>
                                     </td>
                                     <td class="role-cell">

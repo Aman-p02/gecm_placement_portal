@@ -81,8 +81,10 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST' && isset($_POST['action']) && $_POST['
                 }
             }
             
-            $stmt = $pdo->prepare("INSERT INTO tbl_companies (company_name, batch_year, logo_path, document_path, last_date_to_apply, added_by) VALUES (?, ?, ?, ?, ?, ?)");
-            $stmt->execute([$companyName, $batchYear, $logoPath, $docPath, $lastDate, $adminId]);
+            $jobDescriptionText = sanitize_input($_POST['job_description_text'] ?? '');
+
+            $stmt = $pdo->prepare("INSERT INTO tbl_companies (company_name, batch_year, logo_path, document_path, job_description_text, last_date_to_apply, added_by) VALUES (?, ?, ?, ?, ?, ?, ?)");
+            $stmt->execute([$companyName, $batchYear, $logoPath, $docPath, $jobDescriptionText, $lastDate, $adminId]);
             $companyId = $pdo->lastInsertId();
             
             $stmtBranch = $pdo->prepare("INSERT INTO tbl_company_branches (company_id, branch_name) VALUES (?, ?)");
@@ -153,8 +155,9 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST' && isset($_POST['action']) && $_POST['
         }
 
         // Update company record
-        $stmtUpdate = $pdo->prepare("UPDATE tbl_companies SET company_name=?, batch_year=?, last_date_to_apply=?, logo_path=?, document_path=? WHERE company_id=?");
-        $stmtUpdate->execute([$companyName, $batchYear, $lastDate, $logoPath, $docPath, $companyId]);
+        $jobDescriptionText = sanitize_input($_POST['job_description_text'] ?? '');
+        $stmtUpdate = $pdo->prepare("UPDATE tbl_companies SET company_name=?, batch_year=?, last_date_to_apply=?, logo_path=?, document_path=?, job_description_text=? WHERE company_id=?");
+        $stmtUpdate->execute([$companyName, $batchYear, $lastDate, $logoPath, $docPath, $jobDescriptionText, $companyId]);
 
         // Refresh branches: delete old, insert new
         $pdo->prepare("DELETE FROM tbl_company_branches WHERE company_id = ?")->execute([$companyId]);
@@ -303,6 +306,11 @@ $csrfToken = generate_csrf_token();
                                     <input type="file" class="form-control" name="document" accept="application/pdf">
                                 </div>
 
+                                <div class="mb-3">
+                                    <label class="form-label small">Job Description (Text)</label>
+                                    <textarea class="form-control" name="job_description_text" rows="4" placeholder="Enter job description here..."></textarea>
+                                </div>
+
                                 <div class="mb-4">
                                     <label class="form-label small">Eligible Branches</label>
                                     <div class="p-2 border rounded bg-light">
@@ -388,7 +396,8 @@ $csrfToken = generate_csrf_token();
                                                                     <?= htmlspecialchars(json_encode($c['company_name'])) ?>,
                                                                     <?= (int)$c['batch_year'] ?>,
                                                                     '<?= htmlspecialchars($c['last_date_to_apply']) ?>',
-                                                                    <?= htmlspecialchars(json_encode($bList)) ?>
+                                                                    <?= htmlspecialchars(json_encode($bList)) ?>,
+                                                                    <?= htmlspecialchars(json_encode($c['job_description_text'] ?? '')) ?>
                                                                 )">
                                                                 <i class="fa-solid fa-pen-to-square"></i>
                                                             </button>
@@ -460,6 +469,10 @@ $csrfToken = generate_csrf_token();
                                 <div class="form-text">Leave blank to keep existing document.</div>
                             </div>
                             <div class="col-12">
+                                <label class="form-label small fw-semibold">Job Description (Text)</label>
+                                <textarea class="form-control" name="job_description_text" id="edit_job_description_text" rows="4" placeholder="Enter job description here..."></textarea>
+                            </div>
+                            <div class="col-12">
                                 <label class="form-label small fw-semibold">Eligible Branches <span class="text-danger">*</span></label>
                                 <div class="p-3 border rounded bg-light d-flex flex-wrap gap-3" id="edit_branches_container">
                                     <?php foreach ($allBranches as $b): ?>
@@ -488,12 +501,13 @@ $csrfToken = generate_csrf_token();
 
     <script src="../assets/bootstrap/js/bootstrap.bundle.min.js"></script>
     <script>
-        function openEditModal(id, name, batchYear, lastDate, branches) {
+        function openEditModal(id, name, batchYear, lastDate, branches, jobDescText) {
             // Populate fields
             document.getElementById('edit_company_id').value   = id;
             document.getElementById('edit_company_name').value = name;
             document.getElementById('edit_batch_year').value   = batchYear;
             document.getElementById('edit_last_date').value    = lastDate;
+            document.getElementById('edit_job_description_text').value = jobDescText;
 
             // Reset all branch checkboxes then check the ones that match
             document.querySelectorAll('.edit-branch-check').forEach(cb => {

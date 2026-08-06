@@ -159,6 +159,12 @@ $csrfToken = generate_csrf_token();
                             
                             <p class="text-muted mb-3 flex-grow-1">Last Date to Apply: <strong class="<?= (strtotime($c['last_date_to_apply']) < time()) ? 'text-danger' : 'text-success' ?>"><?= date('d M Y', strtotime($c['last_date_to_apply'])) ?></strong></p>
                             
+                            <?php if (!empty($c['job_description_text'])): ?>
+                            <div class="mb-3 text-dark small" style="white-space: pre-line; background-color: #f9f9f9; padding: 10px; border-radius: 5px; border-left: 3px solid var(--accent-coral);">
+                                <?= htmlspecialchars($c['job_description_text']) ?>
+                            </div>
+                            <?php endif; ?>
+                            
                             <?php if ($c['document_path']): ?>
                             <div class="p-3 bg-light border rounded mb-4">
                                 <h6 class="mb-2 text-dark"><i class="fa-solid fa-paperclip text-muted me-2"></i>Company Document</h6>

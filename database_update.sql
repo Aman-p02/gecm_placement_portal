@@ -65,3 +65,6 @@ CREATE TABLE IF NOT EXISTS tbl_applications (
     FOREIGN KEY (company_id) REFERENCES tbl_companies(company_id) ON DELETE CASCADE,
     UNIQUE KEY unique_application (student_id, company_id)
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci;
+
+-- Added on 2026-08-06
+ALTER TABLE tbl_placement_team ADD COLUMN email VARCHAR(255) DEFAULT 'faculty.name@gecmodasa.ac.in' AFTER role;
