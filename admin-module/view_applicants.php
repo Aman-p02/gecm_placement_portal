@@ -26,42 +26,94 @@ if (isset($_SESSION['page_error'])) {
     unset($_SESSION['page_error']);
 }
 
-// Handle Status Update
-if ($_SERVER['REQUEST_METHOD'] === 'POST' && isset($_POST['action']) && $_POST['action'] === 'update_status') {
+// Handle CSV Import
+if ($_SERVER['REQUEST_METHOD'] === 'POST' && isset($_POST['action']) && $_POST['action'] === 'import_status') {
     validate_csrf_token($_POST['csrf_token'] ?? '');
     
-    $applicationId = filter_input(INPUT_POST, 'application_id', FILTER_VALIDATE_INT);
-    $status = sanitize_input($_POST['status'] ?? '');
-    $roundDetails = sanitize_input($_POST['round_details'] ?? '');
-    
-    $validStatuses = ['Applied', 'In Progress', 'Selected', 'Rejected'];
-    
-    if ($applicationId && in_array($status, $validStatuses)) {
-        try {
-            $stmt = $pdo->prepare("UPDATE tbl_applications SET status = ?, round_details = ? WHERE application_id = ?");
-            $stmt->execute([$status, $roundDetails, $applicationId]);
+    if (isset($_FILES['status_csv']) && $_FILES['status_csv']['error'] === UPLOAD_ERR_OK) {
+        $ext = strtolower(pathinfo($_FILES['status_csv']['name'], PATHINFO_EXTENSION));
+        if ($ext === 'csv') {
+            $file = fopen($_FILES['status_csv']['tmp_name'], 'r');
+            $headers = fgetcsv($file); // Read headers
             
-            // Fetch info for email
-            $infoStmt = $pdo->prepare("
-                SELECT s.email, s.full_name, c.company_name 
-                FROM tbl_applications a
-                JOIN tbl_students s ON a.student_id = s.student_id
-                JOIN tbl_companies c ON a.company_id = c.company_id
-                WHERE a.application_id = ?
-            ");
-            $infoStmt->execute([$applicationId]);
-            $info = $infoStmt->fetch();
-            
-            if ($info) {
-                sendStatusUpdateEmail($info['email'], $info['full_name'], $info['company_name'], $status);
+            if ($headers) {
+                // Strip BOM from the first header if present
+                $headers[0] = preg_replace('/^[\xef\xbb\xbf]+/', '', $headers[0]);
+                
+                // Find column indices
+                $appIdIdx = array_search('Application ID', $headers);
+                $statusIdx = array_search('Status', $headers);
+                $attIdx = array_search('Attendance (P/A)', $headers);
+                $r1Idx = array_search('Round 1 (Y/N)', $headers);
+                $r2Idx = array_search('Round 2 (Y/N)', $headers);
+                $r3Idx = array_search('Round 3 (Y/N)', $headers);
+                $r4Idx = array_search('Round 4 (Y/N)', $headers);
+                $r5Idx = array_search('Round 5 (Y/N)', $headers);
+                $remarksIdx = array_search('Remarks', $headers);
+                
+                // Fallback for older export formats if they use 'Round Details'
+                if ($remarksIdx === false) $remarksIdx = array_search('Round Details', $headers);
+                
+                if ($appIdIdx !== false && $statusIdx !== false) {
+                    try {
+                        $pdo->beginTransaction();
+                        $stmt = $pdo->prepare("UPDATE tbl_applications SET status = ?, attendance = ?, round_1 = ?, round_2 = ?, round_3 = ?, round_4 = ?, round_5 = ?, round_details = ? WHERE application_id = ?");
+                        
+                        $validStatuses = ['applied' => 'Applied', 'in progress' => 'In Progress', 'selected' => 'Selected', 'hired' => 'Selected', 'rejected' => 'Rejected'];
+                        $updateCount = 0;
+                        $skippedCount = 0;
+                        
+                        while (($row = fgetcsv($file)) !== false) {
+                            $appId = (int)($row[$appIdIdx] ?? 0);
+                            $rawStatus = trim($row[$statusIdx] ?? '');
+                            $lowerStatus = strtolower($rawStatus);
+                            $status = $validStatuses[$lowerStatus] ?? ''; // Map to proper ENUM value
+                            
+                            $att = $attIdx !== false ? strtoupper(trim($row[$attIdx] ?? '')) : '';
+                            $r1 = $r1Idx !== false ? strtoupper(trim($row[$r1Idx] ?? '')) : '';
+                            $r2 = $r2Idx !== false ? strtoupper(trim($row[$r2Idx] ?? '')) : '';
+                            $r3 = $r3Idx !== false ? strtoupper(trim($row[$r3Idx] ?? '')) : '';
+                            $r4 = $r4Idx !== false ? strtoupper(trim($row[$r4Idx] ?? '')) : '';
+                            $r5 = $r5Idx !== false ? strtoupper(trim($row[$r5Idx] ?? '')) : '';
+                            $remarks = $remarksIdx !== false ? trim($row[$remarksIdx] ?? '') : '';
+                            
+                            // Validate enums
+                            $att = in_array($att, ['P', 'A']) ? $att : null;
+                            $r1 = in_array($r1, ['Y', 'N']) ? $r1 : null;
+                            $r2 = in_array($r2, ['Y', 'N']) ? $r2 : null;
+                            $r3 = in_array($r3, ['Y', 'N']) ? $r3 : null;
+                            $r4 = in_array($r4, ['Y', 'N']) ? $r4 : null;
+                            $r5 = in_array($r5, ['Y', 'N']) ? $r5 : null;
+                            
+                            if ($appId > 0 && $status !== '') {
+                                $stmt->execute([$status, $att, $r1, $r2, $r3, $r4, $r5, $remarks, $appId]);
+                                $updateCount++;
+                            } else {
+                                $skippedCount++;
+                            }
+                        }
+                        
+                        $pdo->commit();
+                        $_SESSION['page_success'] = "Successfully updated $updateCount application(s).";
+                        if ($skippedCount > 0) {
+                            $_SESSION['page_error'] = "Note: $skippedCount row(s) were skipped due to invalid Status or missing Application ID.";
+                        }
+                    } catch (Exception $e) {
+                        $pdo->rollBack();
+                        $_SESSION['page_error'] = "Error updating statuses.";
+                    }
+                } else {
+                    $_SESSION['page_error'] = "Invalid CSV format. Please export first and keep 'Application ID' and 'Status' columns.";
+                }
+            } else {
+                $_SESSION['page_error'] = "The CSV file is empty.";
             }
-            
-            $_SESSION['page_success'] = "Application status updated successfully.";
-        } catch (Exception $e) {
-            $_SESSION['page_error'] = "Error updating status.";
+            fclose($file);
+        } else {
+            $_SESSION['page_error'] = "Please upload a valid CSV file.";
         }
     } else {
-        $_SESSION['page_error'] = "Invalid status update.";
+        $_SESSION['page_error'] = "Error uploading file.";
     }
     header("Location: view_applicants.php");
     exit;
@@ -75,6 +127,7 @@ if ($adminRole === 'superadmin') {
     if ($filterBranch) {
         $stmt = $pdo->prepare("
             SELECT a.application_id, a.status, a.round_details, a.applied_at,
+                   a.attendance, a.round_1, a.round_2, a.round_3, a.round_4, a.round_5,
                    s.full_name as student_name, s.enrollment_no, s.branch as student_branch,
                    p.resume_path, p.profile_pic,
                    c.company_name, c.batch_year
@@ -89,6 +142,7 @@ if ($adminRole === 'superadmin') {
     } else {
         $stmt = $pdo->prepare("
             SELECT a.application_id, a.status, a.round_details, a.applied_at,
+                   a.attendance, a.round_1, a.round_2, a.round_3, a.round_4, a.round_5,
                    s.full_name as student_name, s.enrollment_no, s.branch as student_branch,
                    p.resume_path, p.profile_pic,
                    c.company_name, c.batch_year
@@ -105,6 +159,7 @@ if ($adminRole === 'superadmin') {
     // (Meaning: they only manage students from their own department)
     $stmt = $pdo->prepare("
         SELECT a.application_id, a.status, a.round_details, a.applied_at,
+               a.attendance, a.round_1, a.round_2, a.round_3, a.round_4, a.round_5,
                s.full_name as student_name, s.enrollment_no, s.branch as student_branch,
                p.resume_path, p.profile_pic,
                c.company_name, c.batch_year
@@ -148,18 +203,25 @@ if (isset($_GET['export']) && $_GET['export'] === 'csv') {
     $output = fopen('php://output', 'w');
     
     // Output headers
-    fputcsv($output, ['Applicant Name', 'Enrollment No', 'Branch', 'Company', 'Batch Year', 'Status', 'Applied At', 'Round Details']);
+    fputcsv($output, ['Application ID', 'Applicant Name', 'Enrollment No', 'Branch', 'Company', 'Batch Year', 'Status', 'Attendance (P/A)', 'Round 1 (Y/N)', 'Round 2 (Y/N)', 'Round 3 (Y/N)', 'Round 4 (Y/N)', 'Round 5 (Y/N)', 'Applied At', 'Remarks']);
     
     foreach ($applications as $app) {
         fputcsv($output, [
+            $app['application_id'],
             $app['student_name'],
             $app['enrollment_no'],
             $app['student_branch'],
             $app['company_name'],
             $app['batch_year'],
             $app['status'],
+            $app['attendance'] ?: '',
+            $app['round_1'] ?: '',
+            $app['round_2'] ?: '',
+            $app['round_3'] ?: '',
+            $app['round_4'] ?: '',
+            $app['round_5'] ?: '',
             date('d M Y, h:i A', strtotime($app['applied_at'])),
-            $app['round_details'] ?: 'N/A'
+            $app['round_details'] ?: ''
         ]);
     }
     
@@ -280,6 +342,9 @@ $csrfToken = generate_csrf_token();
                                 <a href="<?= htmlspecialchars($exportUrl) ?>" class="btn btn-sm btn-success shadow-sm w-100 mb-2">
                                     <i class="fa-solid fa-file-excel me-1"></i> Export to Excel
                                 </a>
+                                <button type="button" class="btn btn-sm btn-warning shadow-sm w-100 mb-2" data-bs-toggle="modal" data-bs-target="#importModal">
+                                    <i class="fa-solid fa-file-import me-1"></i> Import Results
+                                </button>
                                 <span class="badge bg-white text-dark border w-100 py-1">Total: <?= count($applications) ?></span>
                             </div>
                         </div>
@@ -300,7 +365,6 @@ $csrfToken = generate_csrf_token();
                                         <th>Company</th>
                                         <th>Resume</th>
                                         <th>Status</th>
-                                        <th>Action</th>
                                     </tr>
                                 </thead>
                                 <tbody>
@@ -342,54 +406,6 @@ $csrfToken = generate_csrf_token();
                                             <td>
                                                 <span class="badge <?= $badgeClass ?>"><?= htmlspecialchars($app['status']) ?></span>
                                             </td>
-                                            <td>
-                                                <button type="button" class="btn btn-sm btn-outline-dark" data-bs-toggle="modal" data-bs-target="#updateModal<?= $app['application_id'] ?>">
-                                                    Update
-                                                </button>
-                                                
-                                                <!-- Update Modal -->
-                                                <div class="modal fade" id="updateModal<?= $app['application_id'] ?>" tabindex="-1">
-                                                    <div class="modal-dialog">
-                                                        <div class="modal-content">
-                                                            <div class="modal-header">
-                                                                <h5 class="modal-title">Update Application Status</h5>
-                                                                <button type="button" class="btn-close" data-bs-dismiss="modal"></button>
-                                                            </div>
-                                                            <form action="view_applicants.php" method="POST">
-                                                                <div class="modal-body">
-                                                                    <input type="hidden" name="csrf_token" value="<?= $csrfToken ?>">
-                                                                    <input type="hidden" name="action" value="update_status">
-                                                                    <input type="hidden" name="application_id" value="<?= $app['application_id'] ?>">
-                                                                    
-                                                                    <div class="mb-3">
-                                                                        <label class="form-label">Student</label>
-                                                                        <input type="text" class="form-control" value="<?= htmlspecialchars($app['student_name']) ?>" readonly>
-                                                                    </div>
-                                                                    
-                                                                    <div class="mb-3">
-                                                                        <label class="form-label">Update Status</label>
-                                                                        <select name="status" class="form-select">
-                                                                            <option value="Applied" <?= $app['status'] == 'Applied' ? 'selected' : '' ?>>Applied</option>
-                                                                            <option value="In Progress" <?= $app['status'] == 'In Progress' ? 'selected' : '' ?>>In Progress</option>
-                                                                            <option value="Selected" <?= $app['status'] == 'Selected' ? 'selected' : '' ?>>Selected</option>
-                                                                            <option value="Rejected" <?= $app['status'] == 'Rejected' ? 'selected' : '' ?>>Rejected</option>
-                                                                        </select>
-                                                                    </div>
-                                                                    
-                                                                    <div class="mb-3">
-                                                                        <label class="form-label">Round Details / Feedback</label>
-                                                                        <textarea name="round_details" class="form-control" rows="3"><?= htmlspecialchars($app['round_details']) ?></textarea>
-                                                                        <small class="text-muted">e.g. Cleared Aptitude test. Pending HR Round.</small>
-                                                                    </div>
-                                                                </div>
-                                                                <div class="modal-footer">
-                                                                    <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Close</button>
-                                                                    <button type="submit" class="btn btn-accent">Save changes</button>
-                                                                </div>
-                                                            </form>
-                                                        </div>
-                                                    </div>
-                                                </div>
                                             </td>
                                         </tr>
                                     <?php endforeach; ?>
@@ -399,6 +415,42 @@ $csrfToken = generate_csrf_token();
                     <?php endif; ?>
                 </div>
 
+            </div>
+        </div>
+    </div>
+    
+    <!-- Import Status Modal -->
+    <div class="modal fade" id="importModal" tabindex="-1" aria-labelledby="importModalLabel" aria-hidden="true">
+        <div class="modal-dialog">
+            <div class="modal-content">
+                <div class="modal-header">
+                    <h5 class="modal-title" id="importModalLabel"><i class="fa-solid fa-file-import me-2"></i>Import Status (CSV)</h5>
+                    <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+                </div>
+                <form action="view_applicants.php" method="POST" enctype="multipart/form-data">
+                    <div class="modal-body">
+                        <input type="hidden" name="csrf_token" value="<?= $csrfToken ?>">
+                        <input type="hidden" name="action" value="import_status">
+                        
+                        <div class="alert alert-info small">
+                            <i class="fa-solid fa-circle-info me-1"></i> 
+                            Please export the list first, update the <strong>Status</strong> and <strong>Round Details</strong> columns, and then import the same CSV file here. Do not remove the <strong>Application ID</strong> column.
+                        </div>
+                        
+                        <div class="mb-3">
+                            <label for="status_csv" class="form-label">Upload CSV File</label>
+                            <input class="form-control" type="file" id="status_csv" name="status_csv" accept=".csv" required>
+                        </div>
+                        
+                        <div class="form-text">
+                            <strong>Valid Statuses:</strong> Applied, In Progress, Selected, Rejected
+                        </div>
+                    </div>
+                    <div class="modal-footer">
+                        <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Cancel</button>
+                        <button type="submit" class="btn btn-primary"><i class="fa-solid fa-upload me-1"></i> Import</button>
+                    </div>
+                </form>
             </div>
         </div>
     </div>

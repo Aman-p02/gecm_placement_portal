@@ -92,7 +92,6 @@ $csrfToken = generate_csrf_token();
                                         <th>Email</th>
                                         <th>Phone</th>
                                         <th>Joined On</th>
-
                                     </tr>
                                 </thead>
                                 <tbody>

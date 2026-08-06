@@ -18,7 +18,7 @@ $student = $stmt->fetch();
 
 // Fetch applications
 $stmt = $pdo->prepare("
-    SELECT a.status, a.round_details, a.applied_at, c.company_name, c.logo_path
+    SELECT a.status, a.round_details, a.applied_at, a.attendance, a.round_1, a.round_2, a.round_3, a.round_4, a.round_5, c.company_name, c.logo_path
     FROM tbl_applications a
     JOIN tbl_companies c ON a.company_id = c.company_id
     WHERE a.student_id = ?
@@ -100,25 +100,49 @@ $applications = $stmt->fetchAll();
                         <div class="d-flex gap-3 align-items-center">
                             <?php if ($app['logo_path']): ?>
                                 <img src="../admin-module/<?= htmlspecialchars($app['logo_path']) ?>" alt="Logo"
-                                    style="width: 40px; height: 40px; object-fit: contain; border-radius: 6px;">
+                                    style="width: 50px; height: 50px; object-fit: contain; border-radius: 6px;">
                             <?php else: ?>
                                 <div class="bg-light rounded d-flex align-items-center justify-content-center"
-                                    style="width: 40px; height: 40px;">
-                                    <i class="fa-solid fa-building text-muted fs-5"></i>
+                                    style="width: 50px; height: 50px;">
+                                    <i class="fa-solid fa-building text-muted fs-4"></i>
                                 </div>
                             <?php endif; ?>
                             <div>
                                 <h5 class="mb-1"><?= htmlspecialchars($app['company_name']) ?></h5>
-                                <p class="text-muted mb-0 small">Applied on:
+                                <p class="text-muted mb-2 small">Applied on:
                                     <?= date('d M Y, h:i A', strtotime($app['applied_at'])) ?>
                                 </p>
+                                <div class="d-flex flex-wrap gap-2">
+                                    <?php if ($app['attendance'] === 'P'): ?>
+                                        <span class="badge bg-success bg-opacity-10 text-success border border-success-subtle"><i class="fa-solid fa-user-check me-1"></i> Present</span>
+                                    <?php elseif ($app['attendance'] === 'A'): ?>
+                                        <span class="badge bg-danger bg-opacity-10 text-danger border border-danger-subtle"><i class="fa-solid fa-user-xmark me-1"></i> Absent</span>
+                                    <?php endif; ?>
+                                    
+                                    <?php 
+                                    $rounds = [
+                                        1 => $app['round_1'],
+                                        2 => $app['round_2'],
+                                        3 => $app['round_3'],
+                                        4 => $app['round_4'],
+                                        5 => $app['round_5'],
+                                    ];
+                                    foreach ($rounds as $i => $res): 
+                                        if ($res === 'Y'): ?>
+                                            <span class="badge bg-success bg-opacity-10 text-success border border-success-subtle" title="Round <?= $i ?> Cleared">R<?= $i ?> <i class="fa-solid fa-check"></i></span>
+                                        <?php elseif ($res === 'N'): ?>
+                                            <span class="badge bg-danger bg-opacity-10 text-danger border border-danger-subtle" title="Round <?= $i ?> Failed">R<?= $i ?> <i class="fa-solid fa-xmark"></i></span>
+                                        <?php endif; 
+                                    endforeach; ?>
+                                </div>
                             </div>
                         </div>
                         <div class="text-end">
-                            <span class="badge <?= $badgeClass ?> px-3 py-2 mb-1"><?= htmlspecialchars($app['status']) ?></span>
+                            <span class="badge <?= $badgeClass ?> px-3 py-2 mb-1 fs-6"><?= htmlspecialchars($app['status']) ?></span>
                             <?php if (!empty($app['round_details'])): ?>
-                                <div class="small text-muted mt-1" style="max-width: 250px;">
-                                    <?= htmlspecialchars($app['round_details']) ?>
+                                <div class="small text-muted mt-2" style="max-width: 250px;">
+                                    <strong>Remarks:</strong><br>
+                                    <?= nl2br(htmlspecialchars($app['round_details'])) ?>
                                 </div>
                             <?php endif; ?>
                         </div>
