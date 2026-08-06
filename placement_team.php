@@ -372,6 +372,42 @@ if (empty($team_members)) {
             opacity: 1;
             transform: translateY(0);
         }
+
+        /* Prevent vertical scrollbar on table container during animation */
+        .table-responsive {
+            overflow-y: hidden;
+        }
+
+        /* Mobile Responsive Table (Stacking) */
+        @media (max-width: 768px) {
+            .team-table thead {
+                display: none;
+            }
+            .team-table, .team-table tbody, .team-table tr, .team-table td {
+                display: block;
+                width: 100%;
+            }
+            .team-table tr {
+                margin-bottom: 20px;
+                border: 1px solid #e2e8f0;
+                border-radius: 12px;
+                padding: 15px;
+                box-shadow: 0 4px 15px rgba(0,0,0,0.03);
+            }
+            .team-table td {
+                border: none !important;
+                padding: 8px 0 !important;
+                text-align: center;
+            }
+            .faculty-photo {
+                margin: 0 auto;
+            }
+            .role-cell {
+                margin-top: 10px;
+                padding-top: 12px !important;
+                border-top: 1px dashed #e2e8f0 !important;
+            }
+        }
     </style>
 </head>
 <body>
