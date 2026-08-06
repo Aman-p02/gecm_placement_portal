@@ -157,6 +157,24 @@
             margin-bottom: 15px;
         }
 
+        .footer-note {
+            text-align: center;
+            color: #64748b;
+            margin-top: 50px;
+            font-size: 0.95rem;
+        }
+
+        /* Animation Classes */
+        .animate-on-scroll {
+            opacity: 0;
+            transform: translateY(30px);
+            transition: opacity 0.6s ease-out, transform 0.6s ease-out;
+        }
+        .animate-on-scroll.visible {
+            opacity: 1;
+            transform: translateY(0);
+        }
+
         .hero-section p {
             font-size: 1.1rem;
             opacity: 0.9;
@@ -315,11 +333,11 @@
             <!-- LEFT COLUMN -->
             <div class="col-lg-6">
                 <!-- 1. Dress Code -->
-                <div class="sec-title mt-0">
+                <div class="sec-title mt-0 animate-on-scroll">
                     <div class="ico" style="background:#eef2ff;color:var(--primary-navy);"><i class="fa-solid fa-shirt"></i></div>
                     <h2 style="color:var(--primary-navy);">Dress Code</h2>
                 </div>
-                <div class="card-white">
+                <div class="card-white animate-on-scroll">
                     <div class="dress-grid">
                         <div class="dress-col">
                             <h6 style="color:var(--primary-navy);"><i class="fa-solid fa-person"></i> Boys</h6>
@@ -340,11 +358,11 @@
                 </div>
 
                 <!-- 2. Documents -->
-                <div class="sec-title" style="margin-top:36px;">
+                <div class="sec-title animate-on-scroll" style="margin-top:36px;">
                     <div class="ico" style="background:#dcfce7;color:#16a34a;"><i class="fa-solid fa-file-lines"></i></div>
                     <h2 style="color:#15803d;">Documents to Carry</h2>
                 </div>
-                <div class="card-white">
+                <div class="card-white animate-on-scroll">
                     <div class="doc-wrap">
                         <span class="doc-chip"><i class="fa-solid fa-file-alt"></i> Latest Resume</span>
                         <span class="doc-chip"><i class="fa-solid fa-certificate"></i> All Original Certificates</span>
@@ -356,11 +374,11 @@
 
                 <!-- 3. Rules (MOBILE ONLY) -->
                 <div class="d-block d-lg-none">
-                    <div class="sec-title" style="margin-top:36px;">
+                    <div class="sec-title animate-on-scroll" style="margin-top:36px;">
                         <div class="ico" style="background:#eef2ff;color:var(--primary-navy);"><i class="fa-solid fa-list-check"></i></div>
                         <h2 style="color:var(--primary-navy);">Rules &amp; Regulations</h2>
                     </div>
-                    <div class="card-white flex-grow-1">
+                    <div class="card-white flex-grow-1 animate-on-scroll">
                         <div class="rule-item">
                             <div class="rule-num">1</div>
                             <div class="rule-body">It is mandatory for students to provide their correct details to the departmental placement representative. <strong>False entry in data will lead to disqualification</strong> in the placement drive, even if the student has paid the fees.</div>
@@ -397,11 +415,11 @@
                 </div>
 
                 <!-- 4. Company Grades -->
-                <div class="sec-title" style="margin-top:36px;">
+                <div class="sec-title animate-on-scroll" style="margin-top:36px;">
                     <div class="ico" style="background:#fef3c7;color:#d97706;"><i class="fa-solid fa-layer-group"></i></div>
                     <h2 style="color:#92400e;">Company Grade Classification</h2>
                 </div>
-                <div class="card-white">
+                <div class="card-white animate-on-scroll">
                     <div class="grade-wrap">
                         <table class="grade-tbl">
                             <thead>
@@ -433,11 +451,11 @@
                 </div>
 
                 <!-- 5. Penalty -->
-                <div class="sec-title" style="margin-top:36px;">
+                <div class="sec-title animate-on-scroll" style="margin-top:36px;">
                     <div class="ico" style="background:#fee2e2;color:#dc2626;"><i class="fa-solid fa-triangle-exclamation"></i></div>
                     <h2 style="color:#b91c1c;">Penalty Rules</h2>
                 </div>
-                <div class="penalty-wrap mb-4 mb-lg-0">
+                <div class="penalty-wrap mb-4 mb-lg-0 animate-on-scroll">
                     <div class="penalty-ico"><i class="fa-solid fa-gavel"></i></div>
                     <div class="penalty-body">
                         A student who has expressed willingness to appear for campus placement through a visit created, if <strong>quits the procedure in between</strong> or <strong>does not accept the offer after selection</strong>, will be <span class="debarred">permanently debarred</span> from further placements and will not be given any opportunity under any circumstances.
@@ -448,11 +466,11 @@
             <!-- RIGHT COLUMN -->
             <div class="col-lg-6 d-none d-lg-flex flex-column">
                 <!-- 3. Rules -->
-                <div class="sec-title mt-0">
+                <div class="sec-title mt-0 animate-on-scroll">
                     <div class="ico" style="background:#eef2ff;color:var(--primary-navy);"><i class="fa-solid fa-list-check"></i></div>
                     <h2 style="color:var(--primary-navy);">Rules &amp; Regulations</h2>
                 </div>
-                <div class="card-white flex-grow-1">
+                <div class="card-white flex-grow-1 animate-on-scroll">
                     <div class="rule-item">
                         <div class="rule-num">1</div>
                         <div class="rule-body">It is mandatory for students to provide their correct details to the departmental placement representative. <strong>False entry in data will lead to disqualification</strong> in the placement drive, even if the student has paid the fees.</div>
@@ -497,5 +515,28 @@
     </div>
 
     <script src="assets/bootstrap/js/bootstrap.bundle.min.js"></script>
+    <script>
+        document.addEventListener('DOMContentLoaded', function() {
+            const observer = new IntersectionObserver((entries) => {
+                let delay = 0;
+                entries.forEach(entry => {
+                    if (entry.isIntersecting) {
+                        setTimeout(() => {
+                            entry.target.classList.add('visible');
+                        }, delay);
+                        delay += 150; // Stagger effect
+                        observer.unobserve(entry.target);
+                    }
+                });
+            }, {
+                threshold: 0.1,
+                rootMargin: "0px 0px -20px 0px"
+            });
+
+            document.querySelectorAll('.animate-on-scroll').forEach((el) => {
+                observer.observe(el);
+            });
+        });
+    </script>
 </body>
 </html>
