@@ -88,7 +88,7 @@ $batchStmt = $pdo->query("SELECT DISTINCT batch_year FROM tbl_companies WHERE ba
 $allBatches = $batchStmt->fetchAll(PDO::FETCH_COLUMN);
 
 if ($adminRole === 'superadmin') {
-    $branchStmt = $pdo->query("SELECT DISTINCT branch FROM tbl_students WHERE branch IS NOT NULL AND branch != '' ORDER BY branch");
+    $branchStmt = $pdo->query("SELECT branch_name AS branch FROM tbl_branches ORDER BY branch_name ASC");
     $allBranches = $branchStmt->fetchAll(PDO::FETCH_COLUMN);
 }
 ?>
