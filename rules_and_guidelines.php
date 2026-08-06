@@ -450,15 +450,16 @@
                     </div>
                 </div>
 
-                <!-- 5. Penalty -->
-                <div class="sec-title animate-on-scroll" style="margin-top:36px;">
-                    <div class="ico" style="background:#fee2e2;color:#dc2626;"><i class="fa-solid fa-triangle-exclamation"></i></div>
-                    <h2 style="color:#b91c1c;">Penalty Rules</h2>
-                </div>
-                <div class="penalty-wrap mb-4 mb-lg-0 animate-on-scroll">
-                    <div class="penalty-ico"><i class="fa-solid fa-gavel"></i></div>
-                    <div class="penalty-body">
-                        A student who has expressed willingness to appear for campus placement through a visit created, if <strong>quits the procedure in between</strong> or <strong>does not accept the offer after selection</strong>, will be <span class="debarred">permanently debarred</span> from further placements and will not be given any opportunity under any circumstances.
+                <!-- 5. Penalty (MOBILE ONLY) -->
+                <div class="d-block d-lg-none">
+                    <div class="sec-title animate-on-scroll" style="margin-top:36px;">
+                        <div class="ico" style="background:#fee2e2;color:#dc2626;"><i class="fa-solid fa-triangle-exclamation"></i></div>
+                        <h2 style="color:#b91c1c;">Penalty Rules</h2>
+                    </div>
+                    <div class="penalty-wrap mb-4 mb-lg-0 animate-on-scroll">
+                        <div class="penalty-body">
+                            A student who has expressed willingness to appear for campus placement through a visit created, if <strong>quits the procedure in between</strong> or <strong>does not accept the offer after selection</strong>, will be <span class="debarred">permanently debarred</span> from further placements and will not be given any opportunity under any circumstances.
+                        </div>
                     </div>
                 </div>
             </div>
@@ -470,7 +471,7 @@
                     <div class="ico" style="background:#eef2ff;color:var(--primary-navy);"><i class="fa-solid fa-list-check"></i></div>
                     <h2 style="color:var(--primary-navy);">Rules &amp; Regulations</h2>
                 </div>
-                <div class="card-white flex-grow-1 animate-on-scroll">
+                <div class="card-white animate-on-scroll">
                     <div class="rule-item">
                         <div class="rule-num">1</div>
                         <div class="rule-body">It is mandatory for students to provide their correct details to the departmental placement representative. <strong>False entry in data will lead to disqualification</strong> in the placement drive, even if the student has paid the fees.</div>
@@ -502,6 +503,17 @@
                     <div class="rule-item">
                         <div class="rule-num">8</div>
                         <div class="rule-body">Students should enter their latest correct data on the placement website at the <strong>beginning of each semester</strong> and keep it updated within <strong>two days</strong> of any change or result declaration. If data is not updated in time, the TPO is not responsible for sending the student's name for placement.</div>
+                    </div>
+                </div>
+                
+                <!-- Penalty (DESKTOP ONLY) -->
+                <div class="sec-title animate-on-scroll" style="margin-top:36px;">
+                    <div class="ico" style="background:#fee2e2;color:#dc2626;"><i class="fa-solid fa-triangle-exclamation"></i></div>
+                    <h2 style="color:#b91c1c;">Penalty Rules</h2>
+                </div>
+                <div class="penalty-wrap mb-4 animate-on-scroll">
+                    <div class="penalty-body">
+                        A student who has expressed willingness to appear for campus placement through a visit created, if <strong>quits the procedure in between</strong> or <strong>does not accept the offer after selection</strong>, will be <span class="debarred">permanently debarred</span> from further placements and will not be given any opportunity under any circumstances.
                     </div>
                 </div>
             </div>
