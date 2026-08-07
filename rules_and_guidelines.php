@@ -333,7 +333,8 @@
 
         <div class="row gx-4 align-items-start flex-lg-row-reverse">
             <!-- LEFT COLUMN -->
-            <div class="col-lg-6">
+            <div class="col-lg-6 d-flex flex-column">
+                <div style="order: 2">
                 <!-- 1. Dress Code -->
                 <div class="sec-title mt-0 animate-on-scroll">
                     <div class="ico" style="background:#eef2ff;color:var(--primary-navy);"><i class="fa-solid fa-shirt"></i></div>
@@ -358,8 +359,10 @@
                         </div>
                     </div>
                 </div>
-
+                </div>
+                
                 <!-- 2. Documents -->
+                <div style="order: 3">
                 <div class="sec-title animate-on-scroll" style="margin-top:36px;">
                     <div class="ico" style="background:#dcfce7;color:#16a34a;"><i class="fa-solid fa-file-lines"></i></div>
                     <h2 style="color:#15803d;">Documents to Carry</h2>
@@ -372,12 +375,12 @@
                         <span class="doc-chip"><i class="fa-regular fa-image"></i> Two Passport-Size Photographs</span>
                         <span class="doc-chip"><i class="fa-solid fa-envelope"></i> Envelopes &amp; Stationery</span>
                     </div>
-                </div>
+                </div>                </div>
 
 
 
                 <!-- 3. Rules (MOBILE ONLY) -->
-                <div class="d-block d-lg-none">
+                <div class="d-block d-lg-none" style="order: 1">
                     <div class="sec-title animate-on-scroll" style="margin-top:36px;">
                         <div class="ico" style="background:#eef2ff;color:var(--primary-navy);"><i class="fa-solid fa-list-check"></i></div>
                         <h2 style="color:var(--primary-navy);">Rules &amp; Regulations</h2>
@@ -416,7 +419,9 @@
                             <div class="rule-body">Students should enter their latest correct data on the placement website at the <strong>beginning of each semester</strong> and keep it updated within <strong>two days</strong> of any change or result declaration. If data is not updated in time, the TPO is not responsible for sending the student's name for placement.</div>
                         </div>
                     </div>
-                    
+                </div>
+                
+                <div class="d-block d-lg-none" style="order: 5">
                     <div class="sec-title animate-on-scroll" style="margin-top:36px;">
                         <div class="ico" style="background:#fee2e2;color:#dc2626;"><i class="fa-solid fa-triangle-exclamation"></i></div>
                         <h2 style="color:#b91c1c;">Penalty Rules</h2>
@@ -427,8 +432,10 @@
                         </div>
                     </div>
                 </div>
+                </div>
 
                 <!-- 4. Company Grades -->
+                <div style="order: 4">
                 <div class="sec-title animate-on-scroll" style="margin-top:36px;">
                     <div class="ico" style="background:#fef3c7;color:#d97706;"><i class="fa-solid fa-layer-group"></i></div>
                     <h2 style="color:#92400e;">Company Grade Classification</h2>
@@ -464,6 +471,7 @@
                     </div>
                 </div>
 
+                </div>
             </div>
 
             <!-- RIGHT COLUMN (DESKTOP ONLY) -->
