@@ -166,14 +166,13 @@
 
         /* Animation Classes */
         .animate-on-scroll {
-            /* Animation removed so page loads instantly */
-            opacity: 1;
-            transform: none;
-            transition: none;
+            opacity: 0;
+            transform: translateY(30px);
+            transition: opacity 0.6s ease-out, transform 0.6s ease-out;
         }
         .animate-on-scroll.visible {
             opacity: 1;
-            transform: none;
+            transform: translateY(0);
         }
 
         .hero-section p {
@@ -333,59 +332,14 @@
 
         <div class="row gx-4 align-items-start flex-lg-row-reverse">
             <!-- LEFT COLUMN -->
-            <div class="col-lg-6 d-flex flex-column">
-                <div style="order: 2">
-                <!-- 1. Dress Code -->
-                <div class="sec-title mt-0 animate-on-scroll">
-                    <div class="ico" style="background:#eef2ff;color:var(--primary-navy);"><i class="fa-solid fa-shirt"></i></div>
-                    <h2 style="color:var(--primary-navy);">Dress Code</h2>
-                </div>
-                <div class="card-white animate-on-scroll">
-                    <div class="dress-grid">
-                        <div class="dress-col">
-                            <h6 style="color:var(--primary-navy);"><i class="fa-solid fa-person"></i> Boys</h6>
-                            <ul>
-                                <li>Shirt</li>
-                                <li>Trouser <span>(Jeans not allowed)</span></li>
-                                <li>Leather shoes</li>
-                            </ul>
-                        </div>
-                        <div class="dress-col">
-                            <h6 style="color:var(--accent-coral);"><i class="fa-solid fa-person-dress"></i> Girls</h6>
-                            <ul>
-                                <li>Punjabi dress</li>
-                                <li><em>or</em> Shirt and trouser <span>(Jeans not allowed)</span></li>
-                            </ul>
-                        </div>
-                    </div>
-                </div>
-                </div>
-                
-                <!-- 2. Documents -->
-                <div style="order: 3">
-                <div class="sec-title animate-on-scroll" style="margin-top:36px;">
-                    <div class="ico" style="background:#dcfce7;color:#16a34a;"><i class="fa-solid fa-file-lines"></i></div>
-                    <h2 style="color:#15803d;">Documents to Carry</h2>
-                </div>
-                <div class="card-white animate-on-scroll">
-                    <div class="doc-wrap">
-                        <span class="doc-chip"><i class="fa-solid fa-file-alt"></i> Latest Resume</span>
-                        <span class="doc-chip"><i class="fa-solid fa-certificate"></i> All Original Certificates</span>
-                        <span class="doc-chip"><i class="fa-solid fa-copy"></i> One Attested Copy of Each Certificate</span>
-                        <span class="doc-chip"><i class="fa-regular fa-image"></i> Two Passport-Size Photographs</span>
-                        <span class="doc-chip"><i class="fa-solid fa-envelope"></i> Envelopes &amp; Stationery</span>
-                    </div>
-                </div>                </div>
-
-
-
-                <!-- 3. Rules (MOBILE ONLY) -->
-                <div class="d-block d-lg-none" style="order: 1">
-                    <div class="sec-title animate-on-scroll" style="margin-top:36px;">
+            <div class="col-lg-6">
+<!-- 3. Rules (MOBILE ONLY) -->
+                <div class="d-block d-lg-none">
+                    <div class="sec-title" style="margin-top:36px;">
                         <div class="ico" style="background:#eef2ff;color:var(--primary-navy);"><i class="fa-solid fa-list-check"></i></div>
                         <h2 style="color:var(--primary-navy);">Rules &amp; Regulations</h2>
                     </div>
-                    <div class="card-white animate-on-scroll">
+                    <div class="card-white">
                         <div class="rule-item">
                             <div class="rule-num">1</div>
                             <div class="rule-body">It is mandatory for students to provide their correct details to the departmental placement representative. <strong>False entry in data will lead to disqualification</strong> in the placement drive, even if the student has paid the fees.</div>
@@ -420,27 +374,55 @@
                         </div>
                     </div>
                 </div>
-                
-                <div class="d-block d-lg-none" style="order: 5">
-                    <div class="sec-title animate-on-scroll" style="margin-top:36px;">
-                        <div class="ico" style="background:#fee2e2;color:#dc2626;"><i class="fa-solid fa-triangle-exclamation"></i></div>
-                        <h2 style="color:#b91c1c;">Penalty Rules</h2>
-                    </div>
-                    <div class="penalty-wrap mb-4 animate-on-scroll">
-                        <div class="penalty-body">
-                            A student who has expressed willingness to appear for campus placement through a visit created, if <strong>quits the procedure in between</strong> or <strong>does not accept the offer after selection</strong>, will be <span class="debarred">permanently debarred</span> from further placements and will not be given any opportunity under any circumstances.
+                    
+                    <!-- 1. Dress Code -->
+                <div class="sec-title mt-0">
+                    <div class="ico" style="background:#eef2ff;color:var(--primary-navy);"><i class="fa-solid fa-shirt"></i></div>
+                    <h2 style="color:var(--primary-navy);">Dress Code</h2>
+                </div>
+                <div class="card-white">
+                    <div class="dress-grid">
+                        <div class="dress-col">
+                            <h6 style="color:var(--primary-navy);"><i class="fa-solid fa-person"></i> Boys</h6>
+                            <ul>
+                                <li>Shirt</li>
+                                <li>Trouser <span>(Jeans not allowed)</span></li>
+                                <li>Leather shoes</li>
+                            </ul>
+                        </div>
+                        <div class="dress-col">
+                            <h6 style="color:var(--accent-coral);"><i class="fa-solid fa-person-dress"></i> Girls</h6>
+                            <ul>
+                                <li>Punjabi dress</li>
+                                <li><em>or</em> Shirt and trouser <span>(Jeans not allowed)</span></li>
+                            </ul>
                         </div>
                     </div>
                 </div>
+
+                <!-- 2. Documents -->
+                <div class="sec-title" style="margin-top:36px;">
+                    <div class="ico" style="background:#dcfce7;color:#16a34a;"><i class="fa-solid fa-file-lines"></i></div>
+                    <h2 style="color:#15803d;">Documents to Carry</h2>
+                </div>
+                <div class="card-white">
+                    <div class="doc-wrap">
+                        <span class="doc-chip"><i class="fa-solid fa-file-alt"></i> Latest Resume</span>
+                        <span class="doc-chip"><i class="fa-solid fa-certificate"></i> All Original Certificates</span>
+                        <span class="doc-chip"><i class="fa-solid fa-copy"></i> One Attested Copy of Each Certificate</span>
+                        <span class="doc-chip"><i class="fa-regular fa-image"></i> Two Passport-Size Photographs</span>
+                        <span class="doc-chip"><i class="fa-solid fa-envelope"></i> Envelopes &amp; Stationery</span>
+                    </div>
                 </div>
 
+
+
                 <!-- 4. Company Grades -->
-                <div style="order: 4">
-                <div class="sec-title animate-on-scroll" style="margin-top:36px;">
+                <div class="sec-title" style="margin-top:36px;">
                     <div class="ico" style="background:#fef3c7;color:#d97706;"><i class="fa-solid fa-layer-group"></i></div>
                     <h2 style="color:#92400e;">Company Grade Classification</h2>
                 </div>
-                <div class="card-white animate-on-scroll">
+                <div class="card-white">
                     <div class="grade-wrap">
                         <table class="grade-tbl">
                             <thead>
@@ -470,18 +452,31 @@
                         </div>
                     </div>
                 </div>
-
+                
+                <div class="d-block d-lg-none">
+                    <div class="sec-title" style="margin-top:36px;">
+                        <div class="ico" style="background:#fee2e2;color:#dc2626;"><i class="fa-solid fa-triangle-exclamation"></i></div>
+                        <h2 style="color:#b91c1c;">Penalty Rules</h2>
+                    </div>
+                    <div class="penalty-wrap mb-4">
+                        <div class="penalty-body">
+                            A student who has expressed willingness to appear for campus placement through a visit created, if <strong>quits the procedure in between</strong> or <strong>does not accept the offer after selection</strong>, will be <span class="debarred">permanently debarred</span> from further placements and will not be given any opportunity under any circumstances.
+                        </div>
+                    </div>
                 </div>
+
+                
+
             </div>
 
             <!-- RIGHT COLUMN (DESKTOP ONLY) -->
             <div class="col-lg-6 d-none d-lg-flex flex-column">
                 <!-- 3. Rules -->
-                <div class="sec-title mt-0 animate-on-scroll">
+                <div class="sec-title mt-0">
                     <div class="ico" style="background:#eef2ff;color:var(--primary-navy);"><i class="fa-solid fa-list-check"></i></div>
                     <h2 style="color:var(--primary-navy);">Rules &amp; Regulations</h2>
                 </div>
-                <div class="card-white animate-on-scroll">
+                <div class="card-white">
                     <div class="rule-item">
                         <div class="rule-num">1</div>
                         <div class="rule-body">It is mandatory for students to provide their correct details to the departmental placement representative. <strong>False entry in data will lead to disqualification</strong> in the placement drive, even if the student has paid the fees.</div>
@@ -517,11 +512,11 @@
                 </div>
                 
                 <!-- Penalty (DESKTOP ONLY) -->
-                <div class="sec-title animate-on-scroll" style="margin-top:36px;">
+                <div class="sec-title" style="margin-top:36px;">
                     <div class="ico" style="background:#fee2e2;color:#dc2626;"><i class="fa-solid fa-triangle-exclamation"></i></div>
                     <h2 style="color:#b91c1c;">Penalty Rules</h2>
                 </div>
-                <div class="penalty-wrap mb-4 animate-on-scroll">
+                <div class="penalty-wrap mb-4">
                     <div class="penalty-body">
                         A student who has expressed willingness to appear for campus placement through a visit created, if <strong>quits the procedure in between</strong> or <strong>does not accept the offer after selection</strong>, will be <span class="debarred">permanently debarred</span> from further placements and will not be given any opportunity under any circumstances.
                     </div>

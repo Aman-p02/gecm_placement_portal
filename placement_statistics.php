@@ -323,7 +323,6 @@ if (empty($filterBranch)) {
             flex-direction: column;
             align-items: center;
             justify-content: center;
-            transition: all 0.4s cubic-bezier(0.175, 0.885, 0.32, 1.275);
             box-shadow: 0 10px 30px rgba(0, 0, 0, 0.08);
             border: 1px solid rgba(0, 0, 0, 0.04);
             position: relative;
@@ -339,17 +338,6 @@ if (empty($filterBranch)) {
             width: 100%;
             height: 4px;
             background: linear-gradient(90deg, var(--primary-navy), var(--accent-coral));
-            opacity: 0;
-            transition: opacity 0.3s ease;
-        }
-
-        .department-card:hover {
-            transform: translateY(-10px);
-            box-shadow: 0 20px 50px rgba(0, 0, 0, 0.08);
-        }
-
-        .department-card:hover::before {
-            opacity: 1;
         }
 
         .department-icon {
@@ -363,15 +351,7 @@ if (empty($filterBranch)) {
             justify-content: center;
             font-size: 2.2rem;
             margin-bottom: 25px;
-            transition: all 0.4s ease;
             box-shadow: inset 0 0 10px rgba(0, 0, 0, 0.02);
-        }
-
-        .department-card:hover .department-icon {
-            transform: scale(1.1) rotate(8deg);
-            background: linear-gradient(135deg, var(--primary-navy) 0%, var(--accent-coral) 100%);
-            color: white;
-            box-shadow: 0 10px 20px rgba(230, 90, 75, 0.3);
         }
 
         .department-card h3 {
@@ -389,7 +369,6 @@ if (empty($filterBranch)) {
             text-align: center;
             text-decoration: none;
             display: block;
-            transition: all 0.3s ease;
             box-shadow: 0 8px 25px rgba(0, 0, 0, 0.05);
             border: 1px solid rgba(0, 0, 0, 0.03);
             position: relative;
@@ -404,19 +383,6 @@ if (empty($filterBranch)) {
             width: 100%;
             height: 3px;
             background: var(--accent-coral);
-            transform: scaleX(0);
-            transform-origin: right;
-            transition: transform 0.4s ease;
-        }
-
-        .batch-card:hover {
-            transform: translateY(-5px);
-            box-shadow: 0 15px 35px rgba(0, 0, 0, 0.08);
-        }
-
-        .batch-card:hover::before {
-            transform: scaleX(1);
-            transform-origin: left;
         }
 
         .batch-card h2 {
