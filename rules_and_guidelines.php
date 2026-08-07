@@ -331,7 +331,7 @@
     <!-- ═══════════ MAIN CONTENT (Matching Bootstrap container width) ═══════════ -->
     <div class="container py-4">
 
-        <div class="row gx-4 align-items-start">
+        <div class="row gx-4 align-items-start flex-lg-row-reverse">
             <!-- LEFT COLUMN -->
             <div class="col-lg-6">
                 <!-- 1. Dress Code -->
