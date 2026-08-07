@@ -226,7 +226,7 @@ $activities = $stmt->fetchAll(PDO::FETCH_ASSOC);
                                     </select>
                                 </div>
                                 <div class="mb-3">
-                                    <label class="form-label fw-medium">Upload Report (PDF - Optional)</label>
+                                    <label class="form-label fw-medium">Upload Report (PDF)</label>
                                     <input type="file" name="report_pdf" class="form-control" accept="application/pdf">
                                 </div>
                                 

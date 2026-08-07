@@ -451,11 +451,15 @@ $images = $stmtImg->fetchAll(PDO::FETCH_COLUMN);
             </div>
             
             <?php if(!empty($act['report_pdf'])): ?>
-            <div class="mt-4 pt-3 border-top">
-                <h5 class="fw-bold text-secondary mb-3">Attachment</h5>
-                <a href="<?= htmlspecialchars($act['report_pdf']) ?>" target="_blank" class="btn btn-outline-danger px-4" style="border-radius: 4px;">
-                    <i class="fa-solid fa-file-pdf me-2"></i>View / Download PDF Report
-                </a>
+            <div class="mt-5 border-top pt-4">
+                <div class="bg-light d-flex justify-content-center align-items-center" style="border: 1px solid #ddd; border-radius: 8px; overflow: hidden; box-shadow: 0 4px 15px rgba(0,0,0,0.05); min-height: 200px;">
+                    <iframe src="<?= htmlspecialchars($act['report_pdf']) ?>#toolbar=0&navpanes=0&scrollbar=0" width="100%" height="800px" style="border: none;">
+                        <div class="p-5 text-center">
+                            <p class="text-muted">Your browser does not support inline PDFs.</p>
+                            <a href="<?= htmlspecialchars($act['report_pdf']) ?>" class="btn btn-primary">Download PDF</a>
+                        </div>
+                    </iframe>
+                </div>
             </div>
             <?php endif; ?>
         </div>

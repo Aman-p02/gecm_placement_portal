@@ -7,9 +7,13 @@ $availableYears = $stmt->fetchAll(PDO::FETCH_COLUMN);
 
 // Determine selected year
 $selectedYear = filter_input(INPUT_GET, 'year', FILTER_VALIDATE_INT);
-if (!$selectedYear && !empty($availableYears)) {
+$isSubmitted = isset($_GET['year']);
+
+if (!$selectedYear && !$isSubmitted && !empty($availableYears)) {
+    // Only default to latest year on first load (no form submitted)
     $selectedYear = $availableYears[0];
 }
+// If $isSubmitted is true but $selectedYear is false (empty value), it stays false and shows all.
 
 // Fetch activities for the selected year
 if ($selectedYear) {
@@ -218,8 +222,8 @@ $activities = $stmt->fetchAll(PDO::FETCH_ASSOC);
         .timeline::after {
             content: '';
             position: absolute;
-            width: 2px;
-            background-color: #e5e7eb;
+            width: 3px;
+            background-color: rgba(52, 152, 219, 0.3);
             top: 0;
             bottom: 0;
             left: 50%;
@@ -251,19 +255,21 @@ $activities = $stmt->fetchAll(PDO::FETCH_ASSOC);
 
         .timeline-node {
             position: absolute;
-            width: 16px;
-            height: 16px;
-            right: -8px;
-            background-color: white;
-            border: 3px solid #d1d5db;
+            width: 20px;
+            height: 20px;
+            right: -10px;
+            background-color: #3498db;
+            border: 4px solid #eef2ff;
             border-radius: 50%;
             top: 50%;
             transform: translateY(-50%);
             z-index: 1;
+            box-shadow: 0 0 0 4px rgba(52, 152, 219, 0.2);
+            transition: all 0.3s ease;
         }
 
         .timeline-item.right .timeline-node {
-            left: -8px;
+            left: -10px;
         }
 
         /* Triangle pointers */
@@ -274,10 +280,10 @@ $activities = $stmt->fetchAll(PDO::FETCH_ASSOC);
             top: 50%;
             width: 0;
             z-index: 1;
-            right: 25px;
+            right: 26px;
             border: medium solid white;
-            border-width: 10px 0 10px 15px;
-            border-color: transparent transparent transparent #e5e7eb;
+            border-width: 12px 0 12px 14px;
+            border-color: transparent transparent transparent #3498db;
             transform: translateY(-50%);
         }
 
@@ -288,17 +294,19 @@ $activities = $stmt->fetchAll(PDO::FETCH_ASSOC);
             top: 50%;
             width: 0;
             z-index: 1;
-            left: 25px;
+            left: 26px;
             border: medium solid white;
-            border-width: 10px 15px 10px 0;
-            border-color: transparent #e5e7eb transparent transparent;
+            border-width: 12px 14px 12px 0;
+            border-color: transparent #3498db transparent transparent;
             transform: translateY(-50%);
         }
 
         .activity-card {
             background: white;
             border: 1px solid #e5e7eb;
-            border-radius: 0;
+            border-radius: 8px;
+            overflow: hidden;
+            box-shadow: 0 2px 4px rgba(0,0,0,0.02);
         }
 
         .activity-card .card-body {
@@ -346,14 +354,14 @@ $activities = $stmt->fetchAll(PDO::FETCH_ASSOC);
             }
             .timeline-item.left .timeline-node,
             .timeline-item.right .timeline-node {
-                left: 12px;
+                left: 10px;
                 top: 50%;
             }
             .timeline-item.left::after,
             .timeline-item.right::after {
-                left: 35px;
-                border-width: 10px 15px 10px 0;
-                border-color: transparent #e5e7eb transparent transparent;
+                left: 36px;
+                border-width: 12px 14px 12px 0;
+                border-color: transparent #3498db transparent transparent;
             }
         }
 
@@ -431,7 +439,7 @@ $activities = $stmt->fetchAll(PDO::FETCH_ASSOC);
             <div class="col-md-6 d-flex justify-content-center">
                 <form method="GET" action="placement_activities.php" class="d-flex w-100 justify-content-center">
                     <select name="year" class="form-select me-2" style="border-radius: 0; box-shadow: none; border-color: #ced4da; max-width: 450px;">
-                        <option value="">Select Year</option>
+                        <option value="">All Years</option>
                         <?php foreach($availableYears as $yr): ?>
                             <option value="<?= htmlspecialchars($yr) ?>" <?= ($selectedYear == $yr) ? 'selected' : '' ?>><?= htmlspecialchars($yr) ?></option>
                         <?php endforeach; ?>
@@ -490,7 +498,9 @@ $activities = $stmt->fetchAll(PDO::FETCH_ASSOC);
                             <p class="text-muted" style="font-size: 0.9rem; display: -webkit-box; -webkit-line-clamp: 3; -webkit-box-orient: vertical; overflow: hidden; margin-bottom: 15px;">
                                 <?= nl2br(htmlspecialchars($act['description'])) ?>
                             </p>
-                            <a href="activity_details.php?id=<?= $act['id'] ?>" class="btn btn-sm text-white px-4" style="background-color: #3498db; border-radius: 2px;">View More</a>
+                            <div class="d-flex gap-2 mt-3">
+                                <a href="activity_details.php?id=<?= $act['id'] ?>" class="btn btn-sm text-white px-4" style="background-color: #3498db; border-radius: 4px;">View More</a>
+                            </div>
                         </div>
                     </div>
                 </div>
