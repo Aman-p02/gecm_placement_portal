@@ -229,7 +229,8 @@ $activity = $stmt->fetch(PDO::FETCH_ASSOC);
                                 
                                 <div class="mb-4">
                                     <label class="form-label fw-medium">Add More Photos (Optional)</label>
-                                    <input type="file" name="images[]" class="form-control" multiple accept="image/*">
+                                    <input type="file" name="images[]" id="imageInput" class="form-control" multiple accept="image/*">
+                                    <div id="fileList" class="mt-2 text-muted" style="font-size: 0.85rem;"></div>
                                     <div class="form-text">You can select multiple new photos to add to this activity.</div>
                                 </div>
                                 
@@ -254,7 +255,7 @@ $activity = $stmt->fetch(PDO::FETCH_ASSOC);
                                         <div class="col-6">
                                             <div class="card border-0 bg-light rounded-3 overflow-hidden position-relative">
                                                 <!-- Image stored as 'admin-module/uploads/...' so from here we need to point to it properly. Since we are in admin-module, we can strip 'admin-module/' -->
-                                                <?php $imgSrc = '../' . str_replace('admin-module/', '', $img['image_path']); ?>
+                                                <?php $imgSrc = str_replace('admin-module/', '', $img['image_path']); ?>
                                                 <img src="<?= htmlspecialchars($imgSrc) ?>" class="card-img-top" alt="Activity Photo" style="height: 120px; object-fit: cover;">
                                                 <div class="position-absolute top-0 end-0 p-1">
                                                     <form action="edit_activity.php?id=<?= $activityId ?>" method="POST" onsubmit="return confirm('Delete this photo?');">
@@ -288,6 +289,38 @@ $activity = $stmt->fetch(PDO::FETCH_ASSOC);
                 overlay.addEventListener('click', () => {
                     sidebar.classList.remove('active');
                     overlay.classList.remove('active');
+                });
+            }
+        });
+    </script>
+    <script>
+        document.addEventListener("DOMContentLoaded", () => {
+            const imageInput = document.getElementById('imageInput');
+            const fileList = document.getElementById('fileList');
+            
+            // We use DataTransfer to accumulate files across multiple clicks
+            const dataTransfer = new DataTransfer();
+            
+            if(imageInput && fileList) {
+                imageInput.addEventListener('change', function() {
+                    // Add newly selected files to our DataTransfer object
+                    for (let i = 0; i < this.files.length; i++) {
+                        dataTransfer.items.add(this.files[i]);
+                    }
+                    
+                    // Update the input's files with our accumulated list
+                    this.files = dataTransfer.files;
+                    
+                    fileList.innerHTML = ''; // clear old list
+                    const files = this.files;
+                    if(files.length > 0) {
+                        let html = '<strong>Selected Files:</strong><ul class="mb-0 ps-3">';
+                        for(let i=0; i<files.length; i++) {
+                            html += '<li>' + files[i].name + '</li>';
+                        }
+                        html += '</ul>';
+                        fileList.innerHTML = html;
+                    }
                 });
             }
         });

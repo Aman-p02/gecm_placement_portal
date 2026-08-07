@@ -1,27 +1,25 @@
 <?php
 require_once __DIR__ . '/admin-module/includes/db_connect.php';
 
-// Fetch distinct years for the dropdown
-$stmt = $pdo->query("SELECT DISTINCT activity_year FROM placement_activities ORDER BY activity_year DESC");
-$availableYears = $stmt->fetchAll(PDO::FETCH_COLUMN);
-
-// Determine selected year
-$selectedYear = filter_input(INPUT_GET, 'year', FILTER_VALIDATE_INT);
-if (!$selectedYear && !empty($availableYears)) {
-    $selectedYear = $availableYears[0];
+$id = filter_input(INPUT_GET, 'id', FILTER_VALIDATE_INT);
+if (!$id) {
+    header("Location: placement_activities.php");
+    exit;
 }
 
-// Fetch activities for the selected year
-if ($selectedYear) {
-    $stmt = $pdo->prepare("SELECT * FROM placement_activities WHERE activity_year = ? ORDER BY created_at DESC");
-    $stmt->execute([$selectedYear]);
-} else {
-    $stmt = $pdo->prepare("SELECT * FROM placement_activities ORDER BY created_at DESC");
-    $stmt->execute();
+$stmt = $pdo->prepare("SELECT * FROM placement_activities WHERE id = ?");
+$stmt->execute([$id]);
+$act = $stmt->fetch(PDO::FETCH_ASSOC);
+
+if (!$act) {
+    header("Location: placement_activities.php");
+    exit;
 }
-$activities = $stmt->fetchAll(PDO::FETCH_ASSOC);
+
+$stmtImg = $pdo->prepare("SELECT image_path FROM activity_images WHERE activity_id = ?");
+$stmtImg->execute([$id]);
+$images = $stmtImg->fetchAll(PDO::FETCH_COLUMN);
 ?>
-<?php // Placement Activities - Dummy Public Page ?>
 <!DOCTYPE html>
 <html lang="en">
 <head>
@@ -422,76 +420,32 @@ $activities = $stmt->fetchAll(PDO::FETCH_ASSOC);
     </div>
 
     
-    <!-- CONTENT -->
-    <div class="container py-4">
-        <div class="content-card">
-        <p class="text-muted mb-4 text-center" style="font-size: 0.95rem;">Placement Activity carried out by Training and Placement Cell, GEC Modasa.</p>
-        
-        <div class="row mb-5 justify-content-center">
-            <div class="col-md-6 d-flex justify-content-center">
-                <form method="GET" action="placement_activities.php" class="d-flex w-100 justify-content-center">
-                    <select name="year" class="form-select me-2" style="border-radius: 0; box-shadow: none; border-color: #ced4da; max-width: 450px;">
-                        <option value="">Select Year</option>
-                        <?php foreach($availableYears as $yr): ?>
-                            <option value="<?= htmlspecialchars($yr) ?>" <?= ($selectedYear == $yr) ? 'selected' : '' ?>><?= htmlspecialchars($yr) ?></option>
-                        <?php endforeach; ?>
-                    </select>
-                    <button type="submit" class="btn text-white" style="background-color: #3498db; border-radius: 0; padding: 6px 20px;">Submit</button>
-                </form>
-            </div>
+        <!-- CONTENT -->
+    <div class="container py-5">
+        <div class="mb-4 d-flex justify-content-between align-items-center">
+            <a href="placement_activities.php" class="btn btn-outline-secondary btn-sm px-3" style="border-radius: 4px;"><i class="fa-solid fa-arrow-left me-2"></i>Back to Activities</a>
+            <span class="badge bg-primary fs-6 px-3 py-2" style="border-radius: 4px;"><?= $act['activity_year'] ?></span>
         </div>
 
-        <div class="timeline">
-            <?php if(empty($activities)): ?>
-                <p class="text-center text-muted my-5">No placement activities found for the selected year.</p>
-            <?php else: ?>
-                <?php 
-                $count = 0; 
-                foreach($activities as $act): 
-                    $count++;
-                    $alignment = ($count % 2 == 1) ? 'left' : 'right';
-                    
-                    // Fetch images for this activity
-                    $stmtImg = $pdo->prepare("SELECT image_path FROM activity_images WHERE activity_id = ?");
-                    $stmtImg->execute([$act['id']]);
-                    $images = $stmtImg->fetchAll(PDO::FETCH_COLUMN);
-                    
-                    $carouselId = "carousel_act_" . $act['id'];
-                ?>
-                <div class="timeline-item <?= $alignment ?>">
-                    <div class="timeline-node"></div>
-                    <div class="activity-card">
-                        <?php if(!empty($images)): ?>
-                        <div id="<?= $carouselId ?>" class="carousel slide" data-bs-ride="carousel" data-bs-interval="3000">
-                            <div class="carousel-inner">
-                                <?php foreach($images as $index => $img): ?>
-                                <div class="carousel-item <?= $index === 0 ? 'active' : '' ?>">
-                                    <img src="<?= htmlspecialchars($img) ?>" class="d-block w-100" alt="Activity Image">
-                                </div>
-                                <?php endforeach; ?>
-                            </div>
-                            <?php if(count($images) > 1): ?>
-                            <button class="carousel-control-prev" type="button" data-bs-target="#<?= $carouselId ?>" data-bs-slide="prev">
-                                <span class="carousel-control-prev-icon bg-dark p-3" aria-hidden="true" style="border-radius: 50%;"></span>
-                            </button>
-                            <button class="carousel-control-next" type="button" data-bs-target="#<?= $carouselId ?>" data-bs-slide="next">
-                                <span class="carousel-control-next-icon bg-dark p-3" aria-hidden="true" style="border-radius: 50%;"></span>
-                            </button>
-                            <?php endif; ?>
+        <div class="content-card" style="padding: 40px;">
+            <h2 class="fw-bold text-dark mb-4"><?= htmlspecialchars($act['title']) ?></h2>
+            
+            <?php if(!empty($images)): ?>
+                <div class="row g-4 mb-5">
+                    <?php foreach($images as $img): ?>
+                        <div class="col-md-6 col-lg-6">
+                            <img src="<?= htmlspecialchars($img) ?>" class="img-fluid rounded shadow-sm" alt="Activity Image" style="width: 100%; height: 350px; object-fit: cover; border: 1px solid #eee;">
                         </div>
-                        <?php endif; ?>
-                        
-                        <div class="card-body">
-                            <h5><?= htmlspecialchars($act['title']) ?></h5>
-                            <p class="text-muted" style="font-size: 0.9rem; display: -webkit-box; -webkit-line-clamp: 3; -webkit-box-orient: vertical; overflow: hidden; margin-bottom: 15px;">
-                                <?= nl2br(htmlspecialchars($act['description'])) ?>
-                            </p>
-                            <a href="activity_details.php?id=<?= $act['id'] ?>" class="btn btn-sm text-white px-4" style="background-color: #3498db; border-radius: 2px;">View More</a>
-                        </div>
-                    </div>
+                    <?php endforeach; ?>
                 </div>
-                <?php endforeach; ?>
             <?php endif; ?>
+            
+            <div class="p-0">
+                <h5 class="fw-bold text-secondary mb-3 pb-2 border-bottom">Description</h5>
+                <p class="text-dark" style="font-size: 1.05rem; line-height: 1.8;">
+                    <?= nl2br(htmlspecialchars($act['description'])) ?>
+                </p>
+            </div>
         </div>
     </div>
 

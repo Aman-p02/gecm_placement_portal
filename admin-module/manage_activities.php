@@ -207,7 +207,8 @@ $activities = $stmt->fetchAll(PDO::FETCH_ASSOC);
                                 
                                 <div class="mb-4">
                                     <label class="form-label fw-medium">Photos (Multiple)</label>
-                                    <input type="file" name="images[]" class="form-control" multiple accept="image/*" required>
+                                    <input type="file" name="images[]" id="imageInput" class="form-control" multiple accept="image/*" required>
+                                    <div id="fileList" class="mt-2 text-muted" style="font-size: 0.85rem;"></div>
                                     <div class="form-text">You can select multiple photos. JPG, PNG, WEBP allowed.</div>
                                 </div>
                                 
@@ -272,6 +273,38 @@ $activities = $stmt->fetchAll(PDO::FETCH_ASSOC);
                 overlay.addEventListener('click', () => {
                     sidebar.classList.remove('active');
                     overlay.classList.remove('active');
+                });
+            }
+        });
+    </script>
+    <script>
+        document.addEventListener("DOMContentLoaded", () => {
+            const imageInput = document.getElementById('imageInput');
+            const fileList = document.getElementById('fileList');
+            
+            // We use DataTransfer to accumulate files across multiple clicks
+            const dataTransfer = new DataTransfer();
+            
+            if(imageInput && fileList) {
+                imageInput.addEventListener('change', function() {
+                    // Add newly selected files to our DataTransfer object
+                    for (let i = 0; i < this.files.length; i++) {
+                        dataTransfer.items.add(this.files[i]);
+                    }
+                    
+                    // Update the input's files with our accumulated list
+                    this.files = dataTransfer.files;
+                    
+                    fileList.innerHTML = ''; // clear old list
+                    const files = this.files;
+                    if(files.length > 0) {
+                        let html = '<strong>Selected Files:</strong><ul class="mb-0 ps-3">';
+                        for(let i=0; i<files.length; i++) {
+                            html += '<li>' + files[i].name + '</li>';
+                        }
+                        html += '</ul>';
+                        fileList.innerHTML = html;
+                    }
                 });
             }
         });
