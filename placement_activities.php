@@ -488,62 +488,8 @@ $activities = $stmt->fetchAll(PDO::FETCH_ASSOC);
                 </div>
                 <?php endforeach; ?>
             <?php endif; ?>
-    </div>
-                </div>
-            </div>
-
-            <!-- Right Item 1 -->
-            <div class="timeline-item right">
-                <div class="timeline-node"></div>
-                <div class="activity-card">
-                    <div id="carousel2" class="carousel slide" data-bs-ride="carousel">
-                        <div class="carousel-inner">
-                            <div class="carousel-item active">
-                                <img src="https://images.unsplash.com/photo-1524178232363-1fb2b075b655?w=800&q=80" class="d-block w-100" alt="Event">
-                            </div>
-                        </div>
-                        <button class="carousel-control-prev" type="button" data-bs-target="#carousel2" data-bs-slide="prev">
-                            <span class="carousel-control-prev-icon bg-dark p-3" aria-hidden="true" style="border-radius: 50%;"></span>
-                        </button>
-                        <button class="carousel-control-next" type="button" data-bs-target="#carousel2" data-bs-slide="next">
-                            <span class="carousel-control-next-icon bg-dark p-3" aria-hidden="true" style="border-radius: 50%;"></span>
-                        </button>
-                    </div>
-                    <div class="card-body">
-                        <h5>5 Secrets to Gate Success Why GATE CS Branch in association with IMS GATE ACADEMY</h5>
-                        <p class="text-muted" style="font-size: 0.9rem;">Placement Team CE & IT department have organized the webinar on "5 Secrets To Gate Success" in association with IMS GATE ACADEMY. More than 60 students attended the webinar. Webinar Details: We...</p>
-                        <button class="btn btn-sm text-white" style="background-color: #3498db; border-radius: 2px;">View More</button>
-                    </div>
-                </div>
-            </div>
-
-            <!-- Left Item 2 -->
-            <div class="timeline-item left">
-                <div class="timeline-node"></div>
-                <div class="activity-card">
-                    <div id="carousel3" class="carousel slide" data-bs-ride="carousel">
-                        <div class="carousel-inner">
-                            <div class="carousel-item active">
-                                <img src="https://images.unsplash.com/photo-1552664730-d307ca884978?w=800&q=80" class="d-block w-100" alt="Event">
-                            </div>
-                        </div>
-                        <button class="carousel-control-prev" type="button" data-bs-target="#carousel3" data-bs-slide="prev">
-                            <span class="carousel-control-prev-icon bg-dark p-3" aria-hidden="true" style="border-radius: 50%;"></span>
-                        </button>
-                        <button class="carousel-control-next" type="button" data-bs-target="#carousel3" data-bs-slide="next">
-                            <span class="carousel-control-next-icon bg-dark p-3" aria-hidden="true" style="border-radius: 50%;"></span>
-                        </button>
-                    </div>
-                    <div class="card-body">
-                        <h5>Orientation Program on TechSaksham Program Sponsored by Microsoft and SAP India implemented by Edunet Foundation</h5>
-                        <p class="text-muted" style="font-size: 0.9rem;">On the 12th of July 2022, The training and Placement Cell and Computer and Information Technology Department organized an orientation program on the 'TechSaksham Program'...</p>
-                        <button class="btn btn-sm text-white" style="background-color: #3498db; border-radius: 2px;">View More</button>
-                    </div>
-                </div>
-            </div>
         </div>
     </div>
-
 
     <script src="assets/bootstrap/js/bootstrap.bundle.min.js"></script>
 </body>

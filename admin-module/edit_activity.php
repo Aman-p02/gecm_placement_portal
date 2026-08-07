@@ -7,7 +7,6 @@ require_admin_login();
 $adminId = $_SESSION['admin_id'];
 $adminName = $_SESSION['admin_name'];
 $adminRole = $_SESSION['admin_role'];
-$adminBranch = $_SESSION['admin_branch'];
 
 $error = '';
 $success = '';
@@ -21,31 +20,42 @@ if (isset($_SESSION['page_error'])) {
     unset($_SESSION['page_error']);
 }
 
-// Handle Add Activity
-if ($_SERVER['REQUEST_METHOD'] === 'POST' && isset($_POST['action']) && $_POST['action'] === 'add_activity') {
+$activityId = filter_input(INPUT_GET, 'id', FILTER_VALIDATE_INT);
+if (!$activityId) {
+    header("Location: manage_activities.php");
+    exit;
+}
+
+// Fetch Activity and verify ownership
+$stmt = $pdo->prepare("SELECT * FROM placement_activities WHERE id = ? AND admin_id = ?");
+$stmt->execute([$activityId, $adminId]);
+$activity = $stmt->fetch(PDO::FETCH_ASSOC);
+
+if (!$activity) {
+    $_SESSION['page_error'] = "Activity not found or you don't have permission to edit it.";
+    header("Location: manage_activities.php");
+    exit;
+}
+
+// Handle Update Details
+if ($_SERVER['REQUEST_METHOD'] === 'POST' && isset($_POST['action']) && $_POST['action'] === 'update_activity') {
     $title = trim($_POST['title'] ?? '');
     $description = trim($_POST['description'] ?? '');
-    $activityYear = filter_input(INPUT_POST, 'activity_year', FILTER_VALIDATE_INT) ?: date('Y');
+    $activityYear = filter_input(INPUT_POST, 'activity_year', FILTER_VALIDATE_INT);
     
-    if (empty($title) || empty($description)) {
-        $_SESSION['page_error'] = "Title and Description are required.";
-        header("Location: manage_activities.php");
-        exit;
+    if (empty($title) || empty($description) || empty($activityYear)) {
+        $error = "Title, Description, and Year are required.";
     } else {
         try {
-            $pdo->beginTransaction();
+            $stmt = $pdo->prepare("UPDATE placement_activities SET title = ?, description = ?, activity_year = ? WHERE id = ?");
+            $stmt->execute([$title, $description, $activityYear, $activityId]);
             
-            $stmt = $pdo->prepare("INSERT INTO placement_activities (title, description, activity_year, admin_id) VALUES (?, ?, ?, ?)");
-            $stmt->execute([$title, $description, $activityYear, $adminId]);
-            $activityId = $pdo->lastInsertId();
-            
+            // Upload new photos if any
             $uploadDir = __DIR__ . '/uploads/activities/';
             if (!is_dir($uploadDir)) {
                 mkdir($uploadDir, 0777, true);
             }
-            
-            // Handle multiple images
-            if (isset($_FILES['images']) && is_array($_FILES['images']['name'])) {
+            if (isset($_FILES['images']) && is_array($_FILES['images']['name']) && !empty($_FILES['images']['name'][0])) {
                 $total_files = count($_FILES['images']['name']);
                 for ($i = 0; $i < $total_files; $i++) {
                     if ($_FILES['images']['error'][$i] === UPLOAD_ERR_OK) {
@@ -61,48 +71,52 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST' && isset($_POST['action']) && $_POST['
                     }
                 }
             }
-            
-            $pdo->commit();
-            $_SESSION['page_success'] = "Activity added successfully!";
+            $_SESSION['page_success'] = "Activity updated successfully!";
+            header("Location: edit_activity.php?id=" . $activityId);
+            exit;
         } catch (Exception $e) {
-            $pdo->rollBack();
-            $_SESSION['page_error'] = "Error: " . $e->getMessage();
+            $error = "Error updating: " . $e->getMessage();
         }
-        header("Location: manage_activities.php");
-        exit;
     }
 }
 
-// Handle Delete Activity
-if ($_SERVER['REQUEST_METHOD'] === 'POST' && isset($_POST['action']) && $_POST['action'] === 'delete_activity') {
-    $activityId = filter_input(INPUT_POST, 'activity_id', FILTER_VALIDATE_INT);
-    if ($activityId) {
+// Handle Delete Photo
+if ($_SERVER['REQUEST_METHOD'] === 'POST' && isset($_POST['action']) && $_POST['action'] === 'delete_photo') {
+    $imageId = filter_input(INPUT_POST, 'image_id', FILTER_VALIDATE_INT);
+    if ($imageId) {
         try {
-            $stmt = $pdo->prepare("SELECT image_path FROM activity_images WHERE activity_id = ?");
-            $stmt->execute([$activityId]);
-            $images = $stmt->fetchAll(PDO::FETCH_COLUMN);
-            foreach($images as $img) {
-                $filePath = dirname(__DIR__) . '/' . str_replace('admin-module/', '', $img);
-                if(file_exists($filePath)) {
-                    unlink($filePath);
-                }
-            }
+            $stmt = $pdo->prepare("SELECT image_path FROM activity_images WHERE id = ? AND activity_id = ?");
+            $stmt->execute([$imageId, $activityId]);
+            $imagePath = $stmt->fetchColumn();
             
-            $stmt = $pdo->prepare("DELETE FROM placement_activities WHERE id = ?");
-            $stmt->execute([$activityId]);
-            $_SESSION['page_success'] = "Activity deleted successfully.";
+            if ($imagePath) {
+                // Delete from DB
+                $delStmt = $pdo->prepare("DELETE FROM activity_images WHERE id = ?");
+                $delStmt->execute([$imageId]);
+                // Delete file
+                $fullPath = dirname(__DIR__) . '/' . str_replace('admin-module/', '', $imagePath);
+                if(file_exists($fullPath)) {
+                    unlink($fullPath);
+                }
+                $_SESSION['page_success'] = "Photo deleted successfully!";
+            }
         } catch (Exception $e) {
-            $_SESSION['page_error'] = "Failed to delete: " . $e->getMessage();
+            $_SESSION['page_error'] = "Failed to delete photo.";
         }
     }
-    header("Location: manage_activities.php");
+    header("Location: edit_activity.php?id=" . $activityId);
     exit;
 }
 
-// Fetch all activities
-$stmt = $pdo->prepare("SELECT * FROM placement_activities WHERE admin_id = ? ORDER BY activity_year DESC, created_at DESC");
-$stmt->execute([$adminId]);
-$activities = $stmt->fetchAll(PDO::FETCH_ASSOC);
+// Fetch current images
+$stmt = $pdo->prepare("SELECT * FROM activity_images WHERE activity_id = ?");
+$stmt->execute([$activityId]);
+$images = $stmt->fetchAll(PDO::FETCH_ASSOC);
+
+// Re-fetch updated activity info in case of error
+$stmt = $pdo->prepare("SELECT * FROM placement_activities WHERE id = ?");
+$stmt->execute([$activityId]);
+$activity = $stmt->fetch(PDO::FETCH_ASSOC);
 ?>
 <!DOCTYPE html>
 <html lang="en">
@@ -157,7 +171,7 @@ $activities = $stmt->fetchAll(PDO::FETCH_ASSOC);
         <!-- Main Content -->
         <div class="flex-grow-1">
             <div class="topbar d-flex justify-content-between align-items-center">
-                <div class="d-flex align-items-center"><button class="btn btn-sm btn-outline-secondary me-3" id="sidebarToggle"><i class="fa-solid fa-bars"></i></button><h5 class="m-0 text-muted">Manage Activities</h5></div>
+                <div class="d-flex align-items-center"><button class="btn btn-sm btn-outline-secondary me-3" id="sidebarToggle"><i class="fa-solid fa-bars"></i></button><h5 class="m-0 text-muted">Edit Activity</h5></div>
                 <div>
                     <span class="fw-medium me-3 text-dark">Hi, <?= htmlspecialchars($adminName) ?></span>
                     <span class="badge bg-secondary"><?= ucfirst(htmlspecialchars($adminRole)) ?></span>
@@ -165,7 +179,13 @@ $activities = $stmt->fetchAll(PDO::FETCH_ASSOC);
             </div>
 
             
+        
         <div class="p-4">
+            <div class="d-flex justify-content-between align-items-center mb-4">
+                <h4 class="mb-0 text-dark"><i class="fa-solid fa-pen-to-square text-primary me-2"></i>Edit Activity</h4>
+                <a href="manage_activities.php" class="btn btn-outline-secondary"><i class="fa-solid fa-arrow-left me-2"></i>Back to Activities</a>
+            </div>
+
             <?php if ($error): ?>
                 <div class="alert alert-danger alert-dismissible fade show" role="alert">
                     <?= htmlspecialchars($error) ?>
@@ -180,78 +200,74 @@ $activities = $stmt->fetchAll(PDO::FETCH_ASSOC);
             <?php endif; ?>
 
             <div class="row">
-                <!-- Add Form -->
-                <div class="col-md-4 mb-4">
-                    <div class="card shadow-sm border-0">
+                <!-- Edit Details Form -->
+                <div class="col-md-7 mb-4">
+                    <div class="card shadow-sm border-0 h-100">
                         <div class="card-header bg-white border-bottom-0 pt-4 pb-0">
-                            <h5 class="mb-0 text-primary"><i class="fa-solid fa-plus-circle me-2"></i>Add New Activity</h5>
+                            <h5 class="mb-0">Activity Details</h5>
                         </div>
                         <div class="card-body">
-                            <form action="manage_activities.php" method="POST" enctype="multipart/form-data">
-                                <input type="hidden" name="action" value="add_activity">
+                            <form action="edit_activity.php?id=<?= $activityId ?>" method="POST" enctype="multipart/form-data">
+                                <input type="hidden" name="action" value="update_activity">
                                 
                                 <div class="mb-3">
                                     <label class="form-label fw-medium">Title</label>
-                                    <input type="text" name="title" class="form-control" required placeholder="e.g. IBM Skill Build">
+                                    <input type="text" name="title" class="form-control" required value="<?= htmlspecialchars($activity['title']) ?>">
                                 </div>
                                 
                                 <div class="mb-3">
                                     <label class="form-label fw-medium">Activity Year</label>
-                                    <input type="number" name="activity_year" class="form-control" required value="<?= date('Y') ?>">
+                                    <input type="number" name="activity_year" class="form-control" required value="<?= htmlspecialchars($activity['activity_year']) ?>">
                                 </div>
                                 
                                 <div class="mb-3">
                                     <label class="form-label fw-medium">Description</label>
-                                    <textarea name="description" class="form-control" rows="4" required placeholder="Detailed description..."></textarea>
+                                    <textarea name="description" class="form-control" rows="6" required><?= htmlspecialchars($activity['description']) ?></textarea>
                                 </div>
+                                
+                                <hr>
                                 
                                 <div class="mb-4">
-                                    <label class="form-label fw-medium">Photos (Multiple)</label>
-                                    <input type="file" name="images[]" class="form-control" multiple accept="image/*" required>
-                                    <div class="form-text">You can select multiple photos. JPG, PNG, WEBP allowed.</div>
+                                    <label class="form-label fw-medium">Add More Photos (Optional)</label>
+                                    <input type="file" name="images[]" class="form-control" multiple accept="image/*">
+                                    <div class="form-text">You can select multiple new photos to add to this activity.</div>
                                 </div>
                                 
-                                <button type="submit" class="btn btn-primary w-100"><i class="fa-solid fa-save me-2"></i>Save Activity</button>
+                                <button type="submit" class="btn btn-primary w-100"><i class="fa-solid fa-save me-2"></i>Update Activity</button>
                             </form>
                         </div>
                     </div>
                 </div>
 
-                <!-- List Table -->
-                <div class="col-md-8">
-                    <div class="card shadow-sm border-0">
-                        <div class="card-body p-0">
-                            <div class="table-responsive">
-                                <table class="table table-hover align-middle mb-0">
-                                    <thead class="table-light">
-                                        <tr>
-                                            <th class="ps-4">Title</th>
-                                            <th>Year</th>
-                                            <th>Actions</th>
-                                        </tr>
-                                    </thead>
-                                    <tbody>
-                                        <?php if(empty($activities)): ?>
-                                        <tr><td colspan="3" class="text-center py-4 text-muted">No activities found.</td></tr>
-                                        <?php else: ?>
-                                            <?php foreach($activities as $act): ?>
-                                            <tr>
-                                                <td class="ps-4 fw-medium"><?= htmlspecialchars($act['title']) ?></td>
-                                                <td><span class="badge bg-secondary"><?= htmlspecialchars($act['activity_year']) ?></span></td>
-                                                <td>
-                                                    <a href="edit_activity.php?id=<?= $act['id'] ?>" class="btn btn-sm btn-outline-primary me-1"><i class="fa-solid fa-pen-to-square"></i></a>
-                                                    <form action="manage_activities.php" method="POST" class="d-inline" onsubmit="return confirm('Delete this activity?');">
-                                                        <input type="hidden" name="action" value="delete_activity">
-                                                        <input type="hidden" name="activity_id" value="<?= $act['id'] ?>">
-                                                        <button type="submit" class="btn btn-sm btn-outline-danger"><i class="fa-solid fa-trash"></i></button>
+                <!-- Manage Existing Photos -->
+                <div class="col-md-5 mb-4">
+                    <div class="card shadow-sm border-0 h-100">
+                        <div class="card-header bg-white border-bottom-0 pt-4 pb-0">
+                            <h5 class="mb-0">Manage Photos</h5>
+                        </div>
+                        <div class="card-body">
+                            <?php if(empty($images)): ?>
+                                <p class="text-muted">No photos uploaded for this activity.</p>
+                            <?php else: ?>
+                                <div class="row g-3">
+                                    <?php foreach($images as $img): ?>
+                                        <div class="col-6">
+                                            <div class="card border-0 bg-light rounded-3 overflow-hidden position-relative">
+                                                <!-- Image stored as 'admin-module/uploads/...' so from here we need to point to it properly. Since we are in admin-module, we can strip 'admin-module/' -->
+                                                <?php $imgSrc = '../' . str_replace('admin-module/', '', $img['image_path']); ?>
+                                                <img src="<?= htmlspecialchars($imgSrc) ?>" class="card-img-top" alt="Activity Photo" style="height: 120px; object-fit: cover;">
+                                                <div class="position-absolute top-0 end-0 p-1">
+                                                    <form action="edit_activity.php?id=<?= $activityId ?>" method="POST" onsubmit="return confirm('Delete this photo?');">
+                                                        <input type="hidden" name="action" value="delete_photo">
+                                                        <input type="hidden" name="image_id" value="<?= $img['id'] ?>">
+                                                        <button type="submit" class="btn btn-sm btn-danger rounded-circle shadow-sm" style="width: 28px; height: 28px; padding: 0; display:flex; align-items:center; justify-content:center;"><i class="fa-solid fa-xmark"></i></button>
                                                     </form>
-                                                </td>
-                                            </tr>
-                                            <?php endforeach; ?>
-                                        <?php endif; ?>
-                                    </tbody>
-                                </table>
-                            </div>
+                                                </div>
+                                            </div>
+                                        </div>
+                                    <?php endforeach; ?>
+                                </div>
+                            <?php endif; ?>
                         </div>
                     </div>
                 </div>

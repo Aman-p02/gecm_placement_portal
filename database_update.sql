@@ -107,3 +107,8 @@ CREATE TABLE `activity_images` (
   FOREIGN KEY (`activity_id`) REFERENCES `placement_activities`(`id`) ON DELETE CASCADE
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4;
 
+
+
+-- Add admin_id to placement_activities to restrict view
+ALTER TABLE `placement_activities` ADD `admin_id` INT(11) NULL DEFAULT NULL;
+
