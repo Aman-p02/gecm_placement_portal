@@ -127,7 +127,7 @@ if ($adminRole === 'superadmin') {
         <!-- Main Content -->
         <div class="flex-grow-1">
             <div class="topbar d-flex justify-content-between align-items-center">
-                <div class="d-flex align-items-center"><button class="btn btn-sm btn-outline-secondary d-md-none me-3"
+                <div class="d-flex align-items-center"><button class="btn btn-sm btn-outline-secondary me-3"
                         id="sidebarToggle"><i class="fa-solid fa-bars"></i></button>
                     <h5 class="m-0 text-muted">Placement Reports</h5>
                 </div>

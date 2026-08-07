@@ -60,7 +60,7 @@ $csrfToken = generate_csrf_token();
         <!-- Main Content -->
         <div class="flex-grow-1">
             <div class="topbar d-flex justify-content-between align-items-center">
-                <div class="d-flex align-items-center"><button class="btn btn-sm btn-outline-secondary d-md-none me-3"
+                <div class="d-flex align-items-center"><button class="btn btn-sm btn-outline-secondary me-3"
                         id="sidebarToggle"><i class="fa-solid fa-bars"></i></button>
                     <h5 class="m-0 text-muted">Manage Sub-Admins</h5>
                 </div>

@@ -260,7 +260,7 @@ $csrfToken = generate_csrf_token();
         <!-- Main Content -->
         <div class="flex-grow-1">
             <div class="topbar d-flex justify-content-between align-items-center">
-                <div class="d-flex align-items-center"><button class="btn btn-sm btn-outline-secondary d-md-none me-3" id="sidebarToggle"><i class="fa-solid fa-bars"></i></button><h5 class="m-0 text-muted">Manage Companies</h5></div>
+                <div class="d-flex align-items-center"><button class="btn btn-sm btn-outline-secondary me-3" id="sidebarToggle"><i class="fa-solid fa-bars"></i></button><h5 class="m-0 text-muted">Manage Companies</h5></div>
                 <div>
                     <span class="fw-medium me-3 text-dark">Hi, <?= htmlspecialchars($adminName) ?></span>
                     <span class="badge bg-secondary"><?= ucfirst(htmlspecialchars($adminRole)) ?></span>
