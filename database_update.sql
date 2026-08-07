@@ -87,3 +87,23 @@ ALTER TABLE tbl_companies
 ADD COLUMN batch_year INT AFTER company_name,
 ADD COLUMN drive_type ENUM('On Campus', 'Off Campus') DEFAULT 'On Campus' AFTER batch_year,
 ADD COLUMN job_description_text TEXT AFTER document_path;
+
+
+-- New tables for Placement Activities feature
+CREATE TABLE `placement_activities` (
+  `id` int(11) NOT NULL AUTO_INCREMENT,
+  `title` varchar(255) NOT NULL,
+  `description` text NOT NULL,
+  `activity_year` int(4) NOT NULL,
+  `created_at` timestamp NOT NULL DEFAULT current_timestamp(),
+  PRIMARY KEY (`id`)
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4;
+
+CREATE TABLE `activity_images` (
+  `id` int(11) NOT NULL AUTO_INCREMENT,
+  `activity_id` int(11) NOT NULL,
+  `image_path` varchar(255) NOT NULL,
+  PRIMARY KEY (`id`),
+  FOREIGN KEY (`activity_id`) REFERENCES `placement_activities`(`id`) ON DELETE CASCADE
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4;
+
