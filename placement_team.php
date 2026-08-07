@@ -354,14 +354,15 @@ if (empty($team_members)) {
 
         /* Animation classes */
         .animate-row td {
-            opacity: 0;
-            transform: translateY(30px);
-            transition: opacity 0.5s ease-out, transform 0.5s ease-out;
+            /* Animation removed for instant loading */
+            opacity: 1;
+            transform: none;
+            transition: none;
         }
 
         .animate-row.visible td {
             opacity: 1;
-            transform: translateY(0);
+            transform: none;
         }
 
         /* Prevent vertical scrollbar on table container during animation */
