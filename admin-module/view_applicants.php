@@ -284,8 +284,8 @@ $csrfToken = generate_csrf_token();
 
                 <div class="custom-card border-top border-4 border-warning">
                     <div class="mb-4 bg-light p-3 rounded border">
-                        <div class="row g-3 align-items-center">
-                            <div class="col-md-10">
+                        <div class="row g-3 align-items-center justify-content-between">
+                            <div class="col-md-auto">
                                 <form action="" method="GET" class="row g-2">
                                     <?php if ($adminRole === 'superadmin'): ?>
                                     <div class="col-auto">
@@ -331,19 +331,19 @@ $csrfToken = generate_csrf_token();
                                 </form>
                             </div>
                             
-                            <div class="col-md-2 text-end">
+                            <div class="col-md-auto text-md-end d-flex gap-2 align-items-center flex-wrap justify-content-md-end">
                                 <?php
                                     $exportParams = $_GET;
                                     $exportParams['export'] = 'csv';
                                     $exportUrl = '?' . http_build_query($exportParams);
                                 ?>
-                                <a href="<?= htmlspecialchars($exportUrl) ?>" class="btn btn-sm btn-success shadow-sm w-100 mb-2">
-                                    <i class="fa-solid fa-file-excel me-1"></i> Export to Excel
+                                <a href="<?= htmlspecialchars($exportUrl) ?>" class="btn btn-sm btn-success shadow-sm">
+                                    <i class="fa-solid fa-file-excel me-1"></i> Export
                                 </a>
-                                <button type="button" class="btn btn-sm btn-warning shadow-sm w-100 mb-2" data-bs-toggle="modal" data-bs-target="#importModal">
-                                    <i class="fa-solid fa-file-import me-1"></i> Import Results
+                                <button type="button" class="btn btn-sm btn-warning shadow-sm" data-bs-toggle="modal" data-bs-target="#importModal">
+                                    <i class="fa-solid fa-file-import me-1"></i> Import
                                 </button>
-                                <span class="badge bg-white text-dark border w-100 py-1">Total: <?= count($applications) ?></span>
+                                <span class="badge bg-white text-dark border py-2">Total: <?= count($applications) ?></span>
                             </div>
                         </div>
                     </div>
