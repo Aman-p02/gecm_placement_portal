@@ -219,6 +219,13 @@
             left: 50%;
         }
 
+        /* Make cards interlock/stagger on desktop */
+        @media screen and (min-width: 769px) {
+            .timeline-item:not(:first-child) {
+                margin-top: -220px;
+            }
+        }
+
         .timeline-node {
             position: absolute;
             width: 16px;
@@ -325,6 +332,23 @@
             }
         }
 
+    
+        .content-card {
+            background: white;
+            border-radius: 12px;
+            padding: 35px 40px;
+            box-shadow: 0 4px 20px rgba(0, 0, 0, 0.05);
+            margin-top: 20px;
+            margin-bottom: 40px;
+            border: 1px solid rgba(0, 0, 0, 0.04);
+        }
+        
+        @media screen and (max-width: 768px) {
+            .content-card {
+                padding: 20px 15px;
+            }
+        }
+
     </style>
 </head>
 <body>
@@ -375,11 +399,12 @@
     
     <!-- CONTENT -->
     <div class="container py-4">
-        <p class="text-muted mb-4" style="font-size: 0.95rem;">Placement Activity carried out by Training and Placement Cell, GEC Modasa.</p>
+        <div class="content-card">
+        <p class="text-muted mb-4 text-center" style="font-size: 0.95rem;">Placement Activity carried out by Training and Placement Cell, GEC Modasa.</p>
         
-        <div class="row mb-5">
-            <div class="col-md-5 d-flex">
-                <select class="form-select me-2" style="border-radius: 0; box-shadow: none; border-color: #ced4da;">
+        <div class="row mb-5 justify-content-center">
+            <div class="col-md-6 d-flex justify-content-center">
+                <select class="form-select me-2" style="border-radius: 0; box-shadow: none; border-color: #ced4da; max-width: 450px;">
                     <option>Select Year</option>
                     <option selected>2024</option>
                     <option>2022</option>
