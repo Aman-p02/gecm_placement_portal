@@ -112,3 +112,11 @@ CREATE TABLE `activity_images` (
 -- Add admin_id to placement_activities to restrict view
 ALTER TABLE `placement_activities` ADD `admin_id` INT(11) NULL DEFAULT NULL;
 
+
+
+-- Updating placement_activities table for Event details and PDF
+ALTER TABLE `placement_activities`
+ADD COLUMN `event_date` DATE NOT NULL DEFAULT CURRENT_DATE() AFTER `description`,
+ADD COLUMN `event_type` ENUM('Department Level', 'Institute Level', 'District Level') NOT NULL DEFAULT 'Institute Level' AFTER `event_date`,
+ADD COLUMN `report_pdf` VARCHAR(255) DEFAULT NULL AFTER `event_type`,
+DROP COLUMN `activity_year`;

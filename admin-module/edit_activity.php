@@ -41,14 +41,37 @@ if (!$activity) {
 if ($_SERVER['REQUEST_METHOD'] === 'POST' && isset($_POST['action']) && $_POST['action'] === 'update_activity') {
     $title = trim($_POST['title'] ?? '');
     $description = trim($_POST['description'] ?? '');
-    $activityYear = filter_input(INPUT_POST, 'activity_year', FILTER_VALIDATE_INT);
+    $eventDate = filter_input(INPUT_POST, 'event_date', FILTER_SANITIZE_STRING);
+    $eventType = filter_input(INPUT_POST, 'event_type', FILTER_SANITIZE_STRING);
     
-    if (empty($title) || empty($description) || empty($activityYear)) {
-        $error = "Title, Description, and Year are required.";
+    if (empty($title) || empty($description) || empty($eventDate) || empty($eventType)) {
+        $error = "Title, Description, Date, and Type are required.";
     } else {
         try {
-            $stmt = $pdo->prepare("UPDATE placement_activities SET title = ?, description = ?, activity_year = ? WHERE id = ?");
-            $stmt->execute([$title, $description, $activityYear, $activityId]);
+            $uploadDir = __DIR__ . '/uploads/activities/';
+            if (!is_dir($uploadDir)) {
+                mkdir($uploadDir, 0777, true);
+            }
+
+            // Handle PDF update
+            $pdfPath = $activity['report_pdf'];
+            if (isset($_FILES['report_pdf']) && $_FILES['report_pdf']['error'] === UPLOAD_ERR_OK) {
+                $ext = strtolower(pathinfo($_FILES['report_pdf']['name'], PATHINFO_EXTENSION));
+                if ($ext === 'pdf') {
+                    $pdfName = uniqid('report_') . '.pdf';
+                    if(move_uploaded_file($_FILES['report_pdf']['tmp_name'], $uploadDir . $pdfName)) {
+                        $pdfPath = 'admin-module/uploads/activities/' . $pdfName;
+                        // Delete old PDF
+                        if($activity['report_pdf']) {
+                            $oldPdfPath = dirname(__DIR__) . '/' . str_replace('admin-module/', '', $activity['report_pdf']);
+                            if(file_exists($oldPdfPath)) unlink($oldPdfPath);
+                        }
+                    }
+                }
+            }
+
+            $stmt = $pdo->prepare("UPDATE placement_activities SET title = ?, description = ?, event_date = ?, event_type = ?, report_pdf = ? WHERE id = ?");
+            $stmt->execute([$title, $description, $eventDate, $eventType, $pdfPath, $activityId]);
             
             // Upload new photos if any
             $uploadDir = __DIR__ . '/uploads/activities/';
@@ -216,8 +239,27 @@ $activity = $stmt->fetch(PDO::FETCH_ASSOC);
                                 </div>
                                 
                                 <div class="mb-3">
-                                    <label class="form-label fw-medium">Activity Year</label>
-                                    <input type="number" name="activity_year" class="form-control" required value="<?= htmlspecialchars($activity['activity_year']) ?>">
+                                    <label class="form-label fw-medium">Event Date</label>
+                                    <input type="date" name="event_date" class="form-control" required value="<?= htmlspecialchars($activity['event_date']) ?>">
+                                </div>
+                                
+                                <div class="mb-3">
+                                    <label class="form-label fw-medium">Type of Event</label>
+                                    <select name="event_type" class="form-select" required>
+                                        <option value="Institute Level" <?= $activity['event_type'] == 'Institute Level' ? 'selected' : '' ?>>Institute Level</option>
+                                        <option value="Department Level" <?= $activity['event_type'] == 'Department Level' ? 'selected' : '' ?>>Department Level</option>
+                                        <option value="District Level" <?= $activity['event_type'] == 'District Level' ? 'selected' : '' ?>>District Level</option>
+                                    </select>
+                                </div>
+
+                                <div class="mb-3">
+                                    <label class="form-label fw-medium">Upload New Report (PDF - Optional)</label>
+                                    <input type="file" name="report_pdf" class="form-control" accept="application/pdf">
+                                    <?php if($activity['report_pdf']): ?>
+                                        <div class="mt-2 text-muted" style="font-size: 0.85rem;">
+                                            Current PDF: <a href="../<?= str_replace('admin-module/', '', $activity['report_pdf']) ?>" target="_blank">View PDF</a>
+                                        </div>
+                                    <?php endif; ?>
                                 </div>
                                 
                                 <div class="mb-3">

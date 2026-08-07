@@ -2,7 +2,7 @@
 require_once __DIR__ . '/admin-module/includes/db_connect.php';
 
 // Fetch distinct years for the dropdown
-$stmt = $pdo->query("SELECT DISTINCT activity_year FROM placement_activities ORDER BY activity_year DESC");
+$stmt = $pdo->query("SELECT DISTINCT YEAR(event_date) FROM placement_activities ORDER BY event_date DESC");
 $availableYears = $stmt->fetchAll(PDO::FETCH_COLUMN);
 
 // Determine selected year
@@ -13,10 +13,10 @@ if (!$selectedYear && !empty($availableYears)) {
 
 // Fetch activities for the selected year
 if ($selectedYear) {
-    $stmt = $pdo->prepare("SELECT * FROM placement_activities WHERE activity_year = ? ORDER BY created_at DESC");
+    $stmt = $pdo->prepare("SELECT * FROM placement_activities WHERE YEAR(event_date) = ? ORDER BY event_date DESC");
     $stmt->execute([$selectedYear]);
 } else {
-    $stmt = $pdo->prepare("SELECT * FROM placement_activities ORDER BY created_at DESC");
+    $stmt = $pdo->prepare("SELECT * FROM placement_activities ORDER BY event_date DESC");
     $stmt->execute();
 }
 $activities = $stmt->fetchAll(PDO::FETCH_ASSOC);
@@ -483,6 +483,10 @@ $activities = $stmt->fetchAll(PDO::FETCH_ASSOC);
                         
                         <div class="card-body">
                             <h5><?= htmlspecialchars($act['title']) ?></h5>
+                            <div class="mb-2">
+                                <span class="badge bg-primary me-2"><i class="fa-regular fa-calendar me-1"></i><?= date('d M Y', strtotime($act['event_date'])) ?></span>
+                                <span class="badge bg-secondary"><i class="fa-solid fa-tag me-1"></i><?= htmlspecialchars($act['event_type']) ?></span>
+                            </div>
                             <p class="text-muted" style="font-size: 0.9rem; display: -webkit-box; -webkit-line-clamp: 3; -webkit-box-orient: vertical; overflow: hidden; margin-bottom: 15px;">
                                 <?= nl2br(htmlspecialchars($act['description'])) ?>
                             </p>

@@ -424,11 +424,14 @@ $images = $stmtImg->fetchAll(PDO::FETCH_COLUMN);
     <div class="container py-5">
         <div class="mb-4 d-flex justify-content-between align-items-center">
             <a href="placement_activities.php" class="btn btn-outline-secondary btn-sm px-3" style="border-radius: 4px;"><i class="fa-solid fa-arrow-left me-2"></i>Back to Activities</a>
-            <span class="badge bg-primary fs-6 px-3 py-2" style="border-radius: 4px;"><?= $act['activity_year'] ?></span>
+            <span class="badge bg-primary fs-6 px-3 py-2" style="border-radius: 4px;"><i class="fa-regular fa-calendar me-1"></i> <?= date('d M Y', strtotime($act['event_date'])) ?></span>
         </div>
 
         <div class="content-card" style="padding: 40px;">
-            <h2 class="fw-bold text-dark mb-4"><?= htmlspecialchars($act['title']) ?></h2>
+            <h2 class="fw-bold text-dark mb-2"><?= htmlspecialchars($act['title']) ?></h2>
+            <div class="mb-4">
+                <span class="badge bg-secondary fs-6 px-3 py-2" style="border-radius: 4px;"><i class="fa-solid fa-tag me-1"></i> <?= htmlspecialchars($act['event_type']) ?></span>
+            </div>
             
             <?php if(!empty($images)): ?>
                 <div class="row g-4 mb-5">
@@ -446,6 +449,15 @@ $images = $stmtImg->fetchAll(PDO::FETCH_COLUMN);
                     <?= nl2br(htmlspecialchars($act['description'])) ?>
                 </p>
             </div>
+            
+            <?php if(!empty($act['report_pdf'])): ?>
+            <div class="mt-4 pt-3 border-top">
+                <h5 class="fw-bold text-secondary mb-3">Attachment</h5>
+                <a href="<?= htmlspecialchars($act['report_pdf']) ?>" target="_blank" class="btn btn-outline-danger px-4" style="border-radius: 4px;">
+                    <i class="fa-solid fa-file-pdf me-2"></i>View / Download PDF Report
+                </a>
+            </div>
+            <?php endif; ?>
         </div>
     </div>
 

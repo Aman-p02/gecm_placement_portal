@@ -25,7 +25,8 @@ if (isset($_SESSION['page_error'])) {
 if ($_SERVER['REQUEST_METHOD'] === 'POST' && isset($_POST['action']) && $_POST['action'] === 'add_activity') {
     $title = trim($_POST['title'] ?? '');
     $description = trim($_POST['description'] ?? '');
-    $activityYear = filter_input(INPUT_POST, 'activity_year', FILTER_VALIDATE_INT) ?: date('Y');
+    $eventDate = filter_input(INPUT_POST, 'event_date', FILTER_SANITIZE_STRING) ?: date('Y-m-d');
+    $eventType = filter_input(INPUT_POST, 'event_type', FILTER_SANITIZE_STRING) ?: 'Institute Level';
     
     if (empty($title) || empty($description)) {
         $_SESSION['page_error'] = "Title and Description are required.";
@@ -35,8 +36,25 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST' && isset($_POST['action']) && $_POST['
         try {
             $pdo->beginTransaction();
             
-            $stmt = $pdo->prepare("INSERT INTO placement_activities (title, description, activity_year, admin_id) VALUES (?, ?, ?, ?)");
-            $stmt->execute([$title, $description, $activityYear, $adminId]);
+            $uploadDir = __DIR__ . '/uploads/activities/';
+            if (!is_dir($uploadDir)) {
+                mkdir($uploadDir, 0777, true);
+            }
+
+            // Handle PDF upload
+            $pdfPath = null;
+            if (isset($_FILES['report_pdf']) && $_FILES['report_pdf']['error'] === UPLOAD_ERR_OK) {
+                $ext = strtolower(pathinfo($_FILES['report_pdf']['name'], PATHINFO_EXTENSION));
+                if ($ext === 'pdf') {
+                    $pdfName = uniqid('report_') . '.pdf';
+                    if(move_uploaded_file($_FILES['report_pdf']['tmp_name'], $uploadDir . $pdfName)) {
+                        $pdfPath = 'admin-module/uploads/activities/' . $pdfName;
+                    }
+                }
+            }
+            
+            $stmt = $pdo->prepare("INSERT INTO placement_activities (title, description, event_date, event_type, report_pdf, admin_id) VALUES (?, ?, ?, ?, ?, ?)");
+            $stmt->execute([$title, $description, $eventDate, $eventType, $pdfPath, $adminId]);
             $activityId = $pdo->lastInsertId();
             
             $uploadDir = __DIR__ . '/uploads/activities/';
@@ -100,7 +118,7 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST' && isset($_POST['action']) && $_POST['
 }
 
 // Fetch all activities
-$stmt = $pdo->prepare("SELECT * FROM placement_activities WHERE admin_id = ? ORDER BY activity_year DESC, created_at DESC");
+$stmt = $pdo->prepare("SELECT * FROM placement_activities WHERE admin_id = ? ORDER BY event_date DESC");
 $stmt->execute([$adminId]);
 $activities = $stmt->fetchAll(PDO::FETCH_ASSOC);
 ?>
@@ -196,8 +214,20 @@ $activities = $stmt->fetchAll(PDO::FETCH_ASSOC);
                                 </div>
                                 
                                 <div class="mb-3">
-                                    <label class="form-label fw-medium">Activity Year</label>
-                                    <input type="number" name="activity_year" class="form-control" required value="<?= date('Y') ?>">
+                                    <label class="form-label fw-medium">Event Date</label>
+                                    <input type="date" name="event_date" class="form-control" required value="<?= date('Y-m-d') ?>">
+                                </div>
+                                <div class="mb-3">
+                                    <label class="form-label fw-medium">Type of Event</label>
+                                    <select name="event_type" class="form-select" required>
+                                        <option value="Institute Level">Institute Level</option>
+                                        <option value="Department Level">Department Level</option>
+                                        <option value="District Level">District Level</option>
+                                    </select>
+                                </div>
+                                <div class="mb-3">
+                                    <label class="form-label fw-medium">Upload Report (PDF - Optional)</label>
+                                    <input type="file" name="report_pdf" class="form-control" accept="application/pdf">
                                 </div>
                                 
                                 <div class="mb-3">
@@ -227,7 +257,7 @@ $activities = $stmt->fetchAll(PDO::FETCH_ASSOC);
                                     <thead class="table-light">
                                         <tr>
                                             <th class="ps-4">Title</th>
-                                            <th>Year</th>
+                                            <th>Event Details</th>
                                             <th>Actions</th>
                                         </tr>
                                     </thead>
@@ -238,7 +268,10 @@ $activities = $stmt->fetchAll(PDO::FETCH_ASSOC);
                                             <?php foreach($activities as $act): ?>
                                             <tr>
                                                 <td class="ps-4 fw-medium"><?= htmlspecialchars($act['title']) ?></td>
-                                                <td><span class="badge bg-secondary"><?= htmlspecialchars($act['activity_year']) ?></span></td>
+                                                <td>
+                                                    <span class="badge bg-secondary mb-1"><?= date('d M Y', strtotime($act['event_date'])) ?></span><br>
+                                                    <small class="text-muted"><?= htmlspecialchars($act['event_type']) ?></small>
+                                                </td>
                                                 <td>
                                                     <a href="edit_activity.php?id=<?= $act['id'] ?>" class="btn btn-sm btn-outline-primary me-1"><i class="fa-solid fa-pen-to-square"></i></a>
                                                     <form action="manage_activities.php" method="POST" class="d-inline" onsubmit="return confirm('Delete this activity?');">
