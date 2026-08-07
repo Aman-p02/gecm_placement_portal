@@ -1,3 +1,26 @@
+<?php
+require_once __DIR__ . '/admin-module/includes/db_connect.php';
+
+// Fetch distinct years for the dropdown
+$stmt = $pdo->query("SELECT DISTINCT activity_year FROM placement_activities ORDER BY activity_year DESC");
+$availableYears = $stmt->fetchAll(PDO::FETCH_COLUMN);
+
+// Determine selected year
+$selectedYear = filter_input(INPUT_GET, 'year', FILTER_VALIDATE_INT);
+if (!$selectedYear && !empty($availableYears)) {
+    $selectedYear = $availableYears[0];
+}
+
+// Fetch activities for the selected year
+if ($selectedYear) {
+    $stmt = $pdo->prepare("SELECT * FROM placement_activities WHERE activity_year = ? ORDER BY created_at DESC");
+    $stmt->execute([$selectedYear]);
+} else {
+    $stmt = $pdo->prepare("SELECT * FROM placement_activities ORDER BY created_at DESC");
+    $stmt->execute();
+}
+$activities = $stmt->fetchAll(PDO::FETCH_ASSOC);
+?>
 <?php // Placement Activities - Dummy Public Page ?>
 <!DOCTYPE html>
 <html lang="en">
@@ -418,31 +441,54 @@
         </div>
 
         <div class="timeline">
-            <!-- Left Item 1 -->
-            <div class="timeline-item left">
-                <div class="timeline-node"></div>
-                <div class="activity-card">
-                    <div id="carousel1" class="carousel slide" data-bs-ride="carousel">
-                        <div class="carousel-inner">
-                            <div class="carousel-item active">
-                                <img src="https://images.unsplash.com/photo-1540575467063-178a50c2df87?w=800&q=80" class="d-block w-100" alt="Event">
+            <?php if(empty($activities)): ?>
+                <p class="text-center text-muted my-5">No placement activities found for the selected year.</p>
+            <?php else: ?>
+                <?php 
+                $count = 0; 
+                foreach($activities as $act): 
+                    $count++;
+                    $alignment = ($count % 2 == 1) ? 'left' : 'right';
+                    
+                    // Fetch images for this activity
+                    $stmtImg = $pdo->prepare("SELECT image_path FROM activity_images WHERE activity_id = ?");
+                    $stmtImg->execute([$act['id']]);
+                    $images = $stmtImg->fetchAll(PDO::FETCH_COLUMN);
+                    
+                    $carouselId = "carousel_act_" . $act['id'];
+                ?>
+                <div class="timeline-item <?= $alignment ?>">
+                    <div class="timeline-node"></div>
+                    <div class="activity-card">
+                        <?php if(!empty($images)): ?>
+                        <div id="<?= $carouselId ?>" class="carousel slide" data-bs-ride="carousel">
+                            <div class="carousel-inner">
+                                <?php foreach($images as $index => $img): ?>
+                                <div class="carousel-item <?= $index === 0 ? 'active' : '' ?>">
+                                    <img src="<?= htmlspecialchars($img) ?>" class="d-block w-100" alt="Activity Image">
+                                </div>
+                                <?php endforeach; ?>
                             </div>
-                            <div class="carousel-item">
-                                <img src="https://images.unsplash.com/photo-1515187029135-18ee286d815b?w=800&q=80" class="d-block w-100" alt="Event">
-                            </div>
+                            <?php if(count($images) > 1): ?>
+                            <button class="carousel-control-prev" type="button" data-bs-target="#<?= $carouselId ?>" data-bs-slide="prev">
+                                <span class="carousel-control-prev-icon bg-dark p-3" aria-hidden="true" style="border-radius: 50%;"></span>
+                            </button>
+                            <button class="carousel-control-next" type="button" data-bs-target="#<?= $carouselId ?>" data-bs-slide="next">
+                                <span class="carousel-control-next-icon bg-dark p-3" aria-hidden="true" style="border-radius: 50%;"></span>
+                            </button>
+                            <?php endif; ?>
                         </div>
-                        <button class="carousel-control-prev" type="button" data-bs-target="#carousel1" data-bs-slide="prev">
-                            <span class="carousel-control-prev-icon bg-dark p-3" aria-hidden="true" style="border-radius: 50%;"></span>
-                        </button>
-                        <button class="carousel-control-next" type="button" data-bs-target="#carousel1" data-bs-slide="next">
-                            <span class="carousel-control-next-icon bg-dark p-3" aria-hidden="true" style="border-radius: 50%;"></span>
-                        </button>
+                        <?php endif; ?>
+                        
+                        <div class="card-body">
+                            <h5><?= htmlspecialchars($act['title']) ?></h5>
+                            <p class="text-muted" style="font-size: 0.9rem;"><?= nl2br(htmlspecialchars($act['description'])) ?></p>
+                        </div>
                     </div>
-                    <div class="card-body">
-                        <h5>IBM Skill Build Orientation Session</h5>
-                        <p class="text-muted" style="font-size: 0.9rem;">The IBM Skills Build Academic Internship Program is a CSR initiative by IBM designed to upskill students in Technological & Digital Skills and helps them seamlessly integrate into the workforce. In ad...</p>
-                        <button class="btn btn-sm text-white" style="background-color: #3498db; border-radius: 2px;">View More</button>
-                    </div>
+                </div>
+                <?php endforeach; ?>
+            <?php endif; ?>
+    </div>
                 </div>
             </div>
 

@@ -279,6 +279,7 @@ $csrfToken = generate_csrf_token();
             <a href="manage_companies.php" class="active"><i class="fa-solid fa-building me-2"></i> Manage Companies</a>
             <a href="view_applicants.php"><i class="fa-solid fa-users me-2"></i> View Applicants</a>
             <a href="reports.php"><i class="fa-solid fa-chart-pie me-2"></i> Reports</a>
+            <a href="manage_activities.php"><i class="fa-solid fa-list-check me-2"></i> Manage Activities</a>
             <a href="logout.php" class="text-danger mt-5"><i class="fa-solid fa-right-from-bracket me-2"></i> Logout</a>
         </div>
 
