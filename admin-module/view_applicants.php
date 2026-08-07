@@ -59,15 +59,12 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST' && isset($_POST['action']) && $_POST['
                         $pdo->beginTransaction();
                         $stmt = $pdo->prepare("UPDATE tbl_applications SET status = ?, attendance = ?, round_1 = ?, round_2 = ?, round_3 = ?, round_4 = ?, round_5 = ?, round_details = ? WHERE application_id = ?");
                         
-                        $validStatuses = ['applied' => 'Applied', 'in progress' => 'In Progress', 'selected' => 'Selected', 'hired' => 'Selected', 'rejected' => 'Rejected'];
                         $updateCount = 0;
                         $skippedCount = 0;
                         
                         while (($row = fgetcsv($file)) !== false) {
                             $appId = (int)($row[$appIdIdx] ?? 0);
-                            $rawStatus = trim($row[$statusIdx] ?? '');
-                            $lowerStatus = strtolower($rawStatus);
-                            $status = $validStatuses[$lowerStatus] ?? ''; // Map to proper ENUM value
+                            $status = trim($row[$statusIdx] ?? '');
                             
                             $att = $attIdx !== false ? strtoupper(trim($row[$attIdx] ?? '')) : '';
                             $r1 = $r1Idx !== false ? strtoupper(trim($row[$r1Idx] ?? '')) : '';
@@ -97,6 +94,26 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST' && isset($_POST['action']) && $_POST['
                         $_SESSION['page_success'] = "Successfully updated $updateCount application(s).";
                         if ($skippedCount > 0) {
                             $_SESSION['page_error'] = "Note: $skippedCount row(s) were skipped due to invalid Status or missing Application ID.";
+                        }
+                        
+                        // Auto-block logic for students with 3 or more absences
+                        $stmtCheck = $pdo->query("
+                            SELECT s.student_id, s.email, s.full_name
+                            FROM tbl_students s
+                            WHERE s.is_blocked = 0 
+                              AND (SELECT COUNT(*) FROM tbl_applications a WHERE a.student_id = s.student_id AND a.attendance = 'A') >= 3
+                        ");
+                        $studentsToBlock = $stmtCheck->fetchAll();
+                        
+                        if (count($studentsToBlock) > 0) {
+                            $blockStmt = $pdo->prepare("UPDATE tbl_students SET is_blocked = 1 WHERE student_id = ?");
+                            foreach ($studentsToBlock as $stu) {
+                                $blockStmt->execute([$stu['student_id']]);
+                                if (!empty($stu['email'])) {
+                                    sendBlockStatusEmail($stu['email'], $stu['full_name'], 1, "Disciplinary issue - 3 times not attending drive after registering");
+                                }
+                            }
+                            $_SESSION['page_success'] .= " Auto-blocked " . count($studentsToBlock) . " student(s) for 3 or more absences.";
                         }
                     } catch (Exception $e) {
                         $pdo->rollBack();

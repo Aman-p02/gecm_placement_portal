@@ -166,7 +166,7 @@ function sendStatusUpdateEmail($toEmail, $userName, $companyName, $status) {
     }
 }
 
-function sendBlockStatusEmail($toEmail, $userName, $isBlocked) {
+function sendBlockStatusEmail($toEmail, $userName, $isBlocked, $reason = '') {
     $mail = new PHPMailer(true);
     try {
         $yourEmail = 'dantanivanit8@gmail.com';
@@ -188,6 +188,9 @@ function sendBlockStatusEmail($toEmail, $userName, $isBlocked) {
             $mail->Subject = 'Account Suspended - GEC Placement Portal';
             $msgTitle = "Account Suspended";
             $msgBody = "Your account on the GEC Placement Portal has been <strong>suspended/blocked</strong> by the administration. You will not be able to log in or apply for placements.";
+            if (!empty($reason)) {
+                $msgBody .= "<br><br><strong>Reason:</strong> " . htmlspecialchars($reason);
+            }
             $color = "#dc3545"; // Red
         } else {
             $mail->Subject = 'Account Reactivated - GEC Placement Portal';

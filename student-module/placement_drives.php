@@ -18,6 +18,11 @@ $student = $stmt->fetch();
 
 $studentBranch = $student['branch'];
 
+// Check if student is already placed
+$stmtCheckPlaced = $pdo->prepare("SELECT COUNT(*) FROM tbl_applications WHERE student_id = ? AND status = 'Selected'");
+$stmtCheckPlaced->execute([$studentId]);
+$isPlaced = $stmtCheckPlaced->fetchColumn() > 0;
+
 // Handle application submission
 $success = '';
 $error = '';
@@ -36,6 +41,12 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST' && isset($_POST['action']) && $_POST['
     $companyId = filter_input(INPUT_POST, 'company_id', FILTER_VALIDATE_INT);
     
     if ($companyId) {
+        if ($isPlaced) {
+            $_SESSION['page_error'] = "You cannot apply because you are already placed in a company.";
+            header("Location: placement_drives.php");
+            exit;
+        }
+        
         try {
             $stmt = $pdo->prepare("INSERT INTO tbl_applications (student_id, company_id) VALUES (?, ?)");
             $stmt->execute([$studentId, $companyId]);
@@ -191,6 +202,8 @@ $csrfToken = generate_csrf_token();
                             
                             <?php if ($c['has_applied'] > 0): ?>
                                 <button class="btn btn-secondary w-100 fw-bold" disabled><i class="fa-solid fa-check me-2"></i>Applied</button>
+                            <?php elseif ($isPlaced): ?>
+                                <button class="btn btn-success w-100 fw-bold" disabled><i class="fa-solid fa-briefcase me-2"></i>Already Placed</button>
                             <?php elseif ($isExpired): ?>
                                 <button class="btn btn-danger w-100 fw-bold" disabled>Deadline Passed</button>
                             <?php else: ?>

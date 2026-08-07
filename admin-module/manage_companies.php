@@ -434,12 +434,12 @@ $csrfToken = generate_csrf_token();
                                                                 title="Edit Company"
                                                                 onclick="openEditModal(
                                                                     <?= $c['company_id'] ?>,
-                                                                    <?= htmlspecialchars(json_encode($c['company_name'])) ?>,
+                                                                    <?= htmlspecialchars(json_encode($c['company_name']), ENT_QUOTES, 'UTF-8') ?>,
                                                                     <?= (int)($c['batch_year'] ?? 0) ?>,
-                                                                    '<?= htmlspecialchars($c['last_date_to_apply']) ?>',
-                                                                    <?= htmlspecialchars(json_encode($bList)) ?>,
-                                                                    <?= json_encode($c['job_description_text'] ?? '') ?>,
-                                                                    '<?= htmlspecialchars($c['drive_type'] ?? 'On Campus') ?>'
+                                                                    '<?= htmlspecialchars($c['last_date_to_apply'], ENT_QUOTES, 'UTF-8') ?>',
+                                                                    <?= htmlspecialchars(json_encode($bList), ENT_QUOTES, 'UTF-8') ?>,
+                                                                    <?= htmlspecialchars(json_encode($c['job_description_text'] ?? ''), ENT_QUOTES, 'UTF-8') ?>,
+                                                                    '<?= htmlspecialchars($c['drive_type'] ?? 'On Campus', ENT_QUOTES, 'UTF-8') ?>'
                                                                 )">
                                                                 <i class="fa-solid fa-pen-to-square"></i>
                                                             </button>
