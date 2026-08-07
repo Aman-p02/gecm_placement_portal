@@ -1,4 +1,4 @@
-/* ==========================================================================
+﻿/* ==========================================================================
    Admin Module Global Styles
    ========================================================================== */
 
@@ -77,14 +77,20 @@ body.auth-page {
 /* ==========================================================================
    Dashboard & Sidebar Pages
    ========================================================================== */
+/* Global Collapsible Sidebar Rules */
+body > .d-flex { display: block !important; }
 .sidebar { 
-    min-height: 100vh; 
+    position: fixed; left: -250px; top: 0; bottom: 0; z-index: 1050; transition: left 0.3s ease; height: 100vh; overflow-y: auto;
     background: var(--primary-navy); 
     color: white; 
     padding-top: 20px; 
     width: 250px;
     flex-shrink: 0;
 }
+.sidebar.active { left: 0; }
+.sidebar-overlay { display: none; position: fixed; top: 0; left: 0; right: 0; bottom: 0; background: rgba(0,0,0,0.5); z-index: 1040; }
+.sidebar-overlay.active { display: block; }
+.flex-grow-1 { width: 100%; overflow-x: hidden; }
 .sidebar a { 
     color: rgba(255,255,255,0.8); 
     text-decoration: none; 
@@ -160,12 +166,9 @@ body.auth-page {
 
 /* Mobile Overrides */
 @media (max-width: 768px) {
-    body > .d-flex { display: block !important; }
-    .sidebar { position: fixed; left: -250px; top: 0; bottom: 0; z-index: 1050; transition: left 0.3s ease; height: 100vh; overflow-y: auto; }
-    .sidebar.active { left: 0; }
-    .sidebar-overlay { display: none; position: fixed; top: 0; left: 0; right: 0; bottom: 0; background: rgba(0,0,0,0.5); z-index: 1040; }
-    .sidebar-overlay.active { display: block; }
     .topbar { padding: 15px; }
-    .flex-grow-1 { width: 100%; overflow-x: hidden; }
 }
+
+/* Hide TinyMCE API Warning */
+.tox-notifications-container { display: none !important; }
 

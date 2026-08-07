@@ -166,13 +166,14 @@
 
         /* Animation Classes */
         .animate-on-scroll {
-            opacity: 0;
-            transform: translateY(30px);
-            transition: opacity 0.6s ease-out, transform 0.6s ease-out;
+            /* Animation removed so page loads instantly */
+            opacity: 1;
+            transform: none;
+            transition: none;
         }
         .animate-on-scroll.visible {
             opacity: 1;
-            transform: translateY(0);
+            transform: none;
         }
 
         .hero-section p {

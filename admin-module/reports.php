@@ -62,10 +62,10 @@ if (isset($_GET['export']) && $_GET['export'] === 'csv') {
     header('Content-Type: text/csv; charset=utf-8');
     header('Content-Disposition: attachment; filename=placement_report_' . date('Y-m-d') . '.csv');
     $output = fopen('php://output', 'w');
-    
+
     // Output headers
     fputcsv($output, ['Enrollment No', 'Student Name', 'Branch', 'Company', 'Drive Type']);
-    
+
     foreach ($reports as $row) {
         fputcsv($output, [
             '="' . $row['enrollment_no'] . '"', // Formula forces Excel to treat as text
@@ -75,7 +75,7 @@ if (isset($_GET['export']) && $_GET['export'] === 'csv') {
             $row['drive_type'] ?? 'On Campus'
         ]);
     }
-    
+
     fclose($output);
     exit;
 }
@@ -94,6 +94,7 @@ if ($adminRole === 'superadmin') {
 ?>
 <!DOCTYPE html>
 <html lang="en">
+
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
@@ -102,14 +103,16 @@ if ($adminRole === 'superadmin') {
     <link rel="stylesheet" href="../assets/fontawesome/css/all.min.css">
     <link rel="stylesheet" href="css/admin_style.css">
 </head>
+
 <body class="<?= ($adminRole === 'superadmin') ? 'theme-superadmin' : '' ?>">
     <div class="d-flex">
         <!-- Sidebar -->
-        <div class="sidebar-overlay" id="sidebarOverlay"></div><div class="sidebar" style="width: 250px;">
+        <div class="sidebar-overlay" id="sidebarOverlay"></div>
+        <div class="sidebar" style="width: 250px;">
             <h4 class="text-center mb-4 px-3" style="color: var(--accent-coral);">GEC Admin</h4>
-            
+
             <a href="dashboard.php"><i class="fa-solid fa-gauge me-2"></i> Dashboard</a>
-            
+
             <?php if ($adminRole === 'superadmin'): ?>
                 <a href="manage_admins.php"><i class="fa-solid fa-users-gear me-2"></i> Manage Admins</a>
             <?php endif; ?>
@@ -117,24 +120,29 @@ if ($adminRole === 'superadmin') {
             <a href="manage_companies.php"><i class="fa-solid fa-building me-2"></i> Manage Companies</a>
             <a href="view_applicants.php"><i class="fa-solid fa-users me-2"></i> View Applicants</a>
             <a href="reports.php" class="active"><i class="fa-solid fa-chart-pie me-2"></i> Reports</a>
-            
+
             <a href="logout.php" class="text-danger mt-5"><i class="fa-solid fa-right-from-bracket me-2"></i> Logout</a>
         </div>
 
         <!-- Main Content -->
         <div class="flex-grow-1">
             <div class="topbar d-flex justify-content-between align-items-center">
-                <div class="d-flex align-items-center"><button class="btn btn-sm btn-outline-secondary d-md-none me-3" id="sidebarToggle"><i class="fa-solid fa-bars"></i></button><h5 class="m-0 text-muted">Placement Reports</h5></div>
+                <div class="d-flex align-items-center"><button class="btn btn-sm btn-outline-secondary me-3"
+                        id="sidebarToggle"><i class="fa-solid fa-bars"></i></button>
+                    <h5 class="m-0 text-muted">Placement Reports</h5>
+                </div>
                 <div>
                     <span class="fw-medium me-3 text-dark">Hi, <?= htmlspecialchars($adminName) ?></span>
-                    <span class="badge bg-secondary"><?= ucfirst(htmlspecialchars($adminRole)) ?> <?= $adminBranch ? '- ' . htmlspecialchars($adminBranch) : '' ?></span>
+                    <span class="badge bg-secondary"><?= ucfirst(htmlspecialchars($adminRole)) ?>
+                        <?= $adminBranch ? '- ' . htmlspecialchars($adminBranch) : '' ?></span>
                 </div>
             </div>
 
             <div class="container-fluid p-4">
                 <div class="d-flex justify-content-between align-items-center mb-4">
-                    <h4>Placed Students Report</h4>
-                    <a href="?export=csv&company=<?= urlencode($filterCompany) ?>&batch_year=<?= urlencode($filterBatch) ?>&branch=<?= urlencode($filterBranch) ?>&drive_type=<?= urlencode($filterDrive) ?>" class="btn btn-success">
+
+                    <a href="?export=csv&company=<?= urlencode($filterCompany) ?>&batch_year=<?= urlencode($filterBatch) ?>&branch=<?= urlencode($filterBranch) ?>&drive_type=<?= urlencode($filterDrive) ?>"
+                        class="btn btn-success">
                         <i class="fa-solid fa-file-excel me-2"></i> Export to Excel
                     </a>
                 </div>
@@ -154,8 +162,10 @@ if ($adminRole === 'superadmin') {
                             <div class="col-md-2">
                                 <select name="drive_type" class="form-select">
                                     <option value="">All Drives</option>
-                                    <option value="On Campus" <?= $filterDrive === 'On Campus' ? 'selected' : '' ?>>On Campus</option>
-                                    <option value="Off Campus" <?= $filterDrive === 'Off Campus' ? 'selected' : '' ?>>Off Campus</option>
+                                    <option value="On Campus" <?= $filterDrive === 'On Campus' ? 'selected' : '' ?>>On
+                                        Campus</option>
+                                    <option value="Off Campus" <?= $filterDrive === 'Off Campus' ? 'selected' : '' ?>>Off
+                                        Campus</option>
                                 </select>
                             </div>
                             <div class="col-md-3">
@@ -167,14 +177,14 @@ if ($adminRole === 'superadmin') {
                                 </select>
                             </div>
                             <?php if ($adminRole === 'superadmin'): ?>
-                            <div class="col-md-3">
-                                <select name="branch" class="form-select">
-                                    <option value="">All Branches</option>
-                                    <?php foreach ($allBranches as $br): ?>
-                                        <option value="<?= htmlspecialchars($br) ?>" <?= $filterBranch === $br ? 'selected' : '' ?>><?= htmlspecialchars($br) ?></option>
-                                    <?php endforeach; ?>
-                                </select>
-                            </div>
+                                <div class="col-md-3">
+                                    <select name="branch" class="form-select">
+                                        <option value="">All Branches</option>
+                                        <?php foreach ($allBranches as $br): ?>
+                                            <option value="<?= htmlspecialchars($br) ?>" <?= $filterBranch === $br ? 'selected' : '' ?>><?= htmlspecialchars($br) ?></option>
+                                        <?php endforeach; ?>
+                                    </select>
+                                </div>
                             <?php endif; ?>
                             <div class="col-md-2 d-flex gap-2">
                                 <button type="submit" class="btn btn-primary w-100">Filter</button>
@@ -208,7 +218,8 @@ if ($adminRole === 'superadmin') {
                                             <td><?= htmlspecialchars($row['branch']) ?></td>
                                             <td><?= htmlspecialchars($row['company_name']) ?></td>
                                             <td>
-                                                <span class="badge <?= ($row['drive_type'] ?? 'On Campus') === 'Off Campus' ? 'bg-warning text-dark' : 'bg-info text-dark' ?>">
+                                                <span
+                                                    class="badge <?= ($row['drive_type'] ?? 'On Campus') === 'Off Campus' ? 'bg-warning text-dark' : 'bg-info text-dark' ?>">
                                                     <?= htmlspecialchars($row['drive_type'] ?? 'On Campus') ?>
                                                 </span>
                                             </td>
@@ -230,14 +241,14 @@ if ($adminRole === 'superadmin') {
             </div>
         </div>
     </div>
-    
+
     <script src="../assets/bootstrap/js/bootstrap.bundle.min.js"></script>
     <script>
-        document.addEventListener('DOMContentLoaded', function() {
+        document.addEventListener('DOMContentLoaded', function () {
             const sidebar = document.querySelector('.sidebar');
             const overlay = document.getElementById('sidebarOverlay');
             const toggleBtn = document.getElementById('sidebarToggle');
-            if(toggleBtn && sidebar && overlay) {
+            if (toggleBtn && sidebar && overlay) {
                 toggleBtn.addEventListener('click', () => {
                     sidebar.classList.add('active');
                     overlay.classList.add('active');
@@ -250,5 +261,5 @@ if ($adminRole === 'superadmin') {
         });
     </script>
 </body>
-</html>
 
+</html>

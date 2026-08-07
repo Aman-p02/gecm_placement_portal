@@ -848,15 +848,6 @@ if (empty($filterBranch)) {
                 </div>
             <?php endif; ?>
 
-            <!-- MOBILE VIEW: Student Login Button -->
-            <div class="row g-4 justify-content-center">
-                <div class="col-12 d-block d-md-none mt-4 text-center">
-                    <a href="student-module/login.php" class="btn btn-nav-filled py-3 px-5 fs-5 rounded-pill shadow-sm"
-                        style="background: var(--primary-navy); color: white;">
-                        <i class="fa-solid fa-user-graduate me-2"></i> Student Login
-                    </a>
-                </div>
-            </div>
         </div>
 
     <?php elseif (!empty($filterBranch) && empty($filterBatch)): ?>
@@ -929,33 +920,35 @@ if (empty($filterBranch)) {
                 <?php if (empty($placedStudents)): ?>
                     <p class="text-center mt-5">No placement records found.</p>
                 <?php else: ?>
-                    <table class="record-table">
-                        <thead>
-                            <tr>
-                                <th style="width: 50px;">Sr</th>
-                                <th style="width: 80px;">Branch</th>
-                                <th style="width: 150px;">Enrolment No</th>
-                                <th>Full Name</th>
-                                <th>Company Name</th>
-                                <th style="width: 120px;">Mode</th>
-                            </tr>
-                        </thead>
-                        <tbody>
-                            <?php
-                            $srNo = 1;
-                            foreach ($placedStudents as $s):
-                                ?>
+                    <div class="table-responsive">
+                        <table class="record-table">
+                            <thead>
                                 <tr>
-                                    <td class="text-center"><?= $srNo++ ?></td>
-                                    <td class="text-center"><?= htmlspecialchars($s['branch']) ?></td>
-                                    <td class="text-center"><?= htmlspecialchars($s['enrollment_no']) ?></td>
-                                    <td><?= htmlspecialchars($s['full_name']) ?></td>
-                                    <td><?= htmlspecialchars($s['company_name']) ?></td>
-                                    <td class="text-center">On Campus</td>
+                                    <th style="width: 50px;">Sr</th>
+                                    <th style="width: 80px;">Branch</th>
+                                    <th style="width: 150px;">Enrolment No</th>
+                                    <th>Full Name</th>
+                                    <th>Company Name</th>
+                                    <th style="width: 120px;">Mode</th>
                                 </tr>
-                            <?php endforeach; ?>
-                        </tbody>
-                    </table>
+                            </thead>
+                            <tbody>
+                                <?php
+                                $srNo = 1;
+                                foreach ($placedStudents as $s):
+                                    ?>
+                                    <tr>
+                                        <td class="text-center"><?= $srNo++ ?></td>
+                                        <td class="text-center"><?= htmlspecialchars($s['branch']) ?></td>
+                                        <td class="text-center"><?= htmlspecialchars($s['enrollment_no']) ?></td>
+                                        <td><?= htmlspecialchars($s['full_name']) ?></td>
+                                        <td><?= htmlspecialchars($s['company_name']) ?></td>
+                                        <td class="text-center">On Campus</td>
+                                    </tr>
+                                <?php endforeach; ?>
+                            </tbody>
+                        </table>
+                    </div>
                 <?php endif; ?>
             </div>
         </div>

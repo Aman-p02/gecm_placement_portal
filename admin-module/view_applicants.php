@@ -59,15 +59,12 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST' && isset($_POST['action']) && $_POST['
                         $pdo->beginTransaction();
                         $stmt = $pdo->prepare("UPDATE tbl_applications SET status = ?, attendance = ?, round_1 = ?, round_2 = ?, round_3 = ?, round_4 = ?, round_5 = ?, round_details = ? WHERE application_id = ?");
                         
-                        $validStatuses = ['applied' => 'Applied', 'in progress' => 'In Progress', 'selected' => 'Selected', 'hired' => 'Selected', 'rejected' => 'Rejected'];
                         $updateCount = 0;
                         $skippedCount = 0;
                         
                         while (($row = fgetcsv($file)) !== false) {
                             $appId = (int)($row[$appIdIdx] ?? 0);
-                            $rawStatus = trim($row[$statusIdx] ?? '');
-                            $lowerStatus = strtolower($rawStatus);
-                            $status = $validStatuses[$lowerStatus] ?? ''; // Map to proper ENUM value
+                            $status = trim($row[$statusIdx] ?? '');
                             
                             $att = $attIdx !== false ? strtoupper(trim($row[$attIdx] ?? '')) : '';
                             $r1 = $r1Idx !== false ? strtoupper(trim($row[$r1Idx] ?? '')) : '';
@@ -97,6 +94,26 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST' && isset($_POST['action']) && $_POST['
                         $_SESSION['page_success'] = "Successfully updated $updateCount application(s).";
                         if ($skippedCount > 0) {
                             $_SESSION['page_error'] = "Note: $skippedCount row(s) were skipped due to invalid Status or missing Application ID.";
+                        }
+                        
+                        // Auto-block logic for students with 3 or more absences
+                        $stmtCheck = $pdo->query("
+                            SELECT s.student_id, s.email, s.full_name
+                            FROM tbl_students s
+                            WHERE s.is_blocked = 0 
+                              AND (SELECT COUNT(*) FROM tbl_applications a WHERE a.student_id = s.student_id AND a.attendance = 'A') >= 3
+                        ");
+                        $studentsToBlock = $stmtCheck->fetchAll();
+                        
+                        if (count($studentsToBlock) > 0) {
+                            $blockStmt = $pdo->prepare("UPDATE tbl_students SET is_blocked = 1 WHERE student_id = ?");
+                            foreach ($studentsToBlock as $stu) {
+                                $blockStmt->execute([$stu['student_id']]);
+                                if (!empty($stu['email'])) {
+                                    sendBlockStatusEmail($stu['email'], $stu['full_name'], 1, "Disciplinary issue - 3 times not attending drive after registering");
+                                }
+                            }
+                            $_SESSION['page_success'] .= " Auto-blocked " . count($studentsToBlock) . " student(s) for 3 or more absences.";
                         }
                     } catch (Exception $e) {
                         $pdo->rollBack();
@@ -266,7 +283,7 @@ $csrfToken = generate_csrf_token();
         <!-- Main Content -->
         <div class="flex-grow-1">
             <div class="topbar d-flex justify-content-between align-items-center">
-                <div class="d-flex align-items-center"><button class="btn btn-sm btn-outline-secondary d-md-none me-3" id="sidebarToggle"><i class="fa-solid fa-bars"></i></button><h5 class="m-0 text-muted">Applicant Tracking</h5></div>
+                <div class="d-flex align-items-center"><button class="btn btn-sm btn-outline-secondary me-3" id="sidebarToggle"><i class="fa-solid fa-bars"></i></button><h5 class="m-0 text-muted">Applicant Tracking</h5></div>
                 <div>
                     <span class="fw-medium me-3 text-dark">Hi, <?= htmlspecialchars($adminName) ?></span>
                     <span class="badge bg-secondary"><?= ucfirst(htmlspecialchars($adminRole)) ?></span>
@@ -284,11 +301,8 @@ $csrfToken = generate_csrf_token();
 
                 <div class="custom-card border-top border-4 border-warning">
                     <div class="mb-4 bg-light p-3 rounded border">
-                        <div class="row g-3 align-items-center">
-                            <div class="col-md-3">
-                                <h5 class="m-0" style="color: var(--primary-navy);"><i class="fa-solid fa-user-graduate me-2"></i><?= $adminRole === 'superadmin' ? 'All Applicants' : 'Applicants in ' . htmlspecialchars($adminBranch) ?></h5>
-                            </div>
-                            <div class="col-md-7">
+                        <div class="row g-3 align-items-center justify-content-between">
+                            <div class="col-md-auto">
                                 <form action="" method="GET" class="row g-2">
                                     <?php if ($adminRole === 'superadmin'): ?>
                                     <div class="col-auto">
@@ -334,19 +348,19 @@ $csrfToken = generate_csrf_token();
                                 </form>
                             </div>
                             
-                            <div class="col-md-2 text-end">
+                            <div class="col-md-auto text-md-end d-flex gap-2 align-items-center flex-wrap justify-content-md-end">
                                 <?php
                                     $exportParams = $_GET;
                                     $exportParams['export'] = 'csv';
                                     $exportUrl = '?' . http_build_query($exportParams);
                                 ?>
-                                <a href="<?= htmlspecialchars($exportUrl) ?>" class="btn btn-sm btn-success shadow-sm w-100 mb-2">
-                                    <i class="fa-solid fa-file-excel me-1"></i> Export to Excel
+                                <a href="<?= htmlspecialchars($exportUrl) ?>" class="btn btn-sm btn-success shadow-sm">
+                                    <i class="fa-solid fa-file-excel me-1"></i> Export
                                 </a>
-                                <button type="button" class="btn btn-sm btn-warning shadow-sm w-100 mb-2" data-bs-toggle="modal" data-bs-target="#importModal">
-                                    <i class="fa-solid fa-file-import me-1"></i> Import Results
+                                <button type="button" class="btn btn-sm btn-warning shadow-sm" data-bs-toggle="modal" data-bs-target="#importModal">
+                                    <i class="fa-solid fa-file-import me-1"></i> Import
                                 </button>
-                                <span class="badge bg-white text-dark border w-100 py-1">Total: <?= count($applications) ?></span>
+                                <span class="badge bg-white text-dark border py-2">Total: <?= count($applications) ?></span>
                             </div>
                         </div>
                     </div>
