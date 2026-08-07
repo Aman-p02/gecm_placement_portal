@@ -183,6 +183,148 @@
             box-shadow: 0 8px 25px rgba(0, 0, 0, 0.05);
             margin-top: 40px;
         }
+    
+        /* Timeline Styles */
+        .timeline {
+            position: relative;
+            max-width: 1000px;
+            margin: 0 auto;
+            padding: 20px 0;
+        }
+
+        .timeline::after {
+            content: '';
+            position: absolute;
+            width: 2px;
+            background-color: #e5e7eb;
+            top: 0;
+            bottom: 0;
+            left: 50%;
+            margin-left: -1px;
+        }
+
+        .timeline-item {
+            padding: 0 40px;
+            position: relative;
+            background-color: inherit;
+            width: 50%;
+            margin-bottom: 40px;
+        }
+
+        .timeline-item.left {
+            left: 0;
+        }
+
+        .timeline-item.right {
+            left: 50%;
+        }
+
+        .timeline-node {
+            position: absolute;
+            width: 16px;
+            height: 16px;
+            right: -8px;
+            background-color: white;
+            border: 3px solid #d1d5db;
+            border-radius: 50%;
+            top: 50%;
+            transform: translateY(-50%);
+            z-index: 1;
+        }
+
+        .timeline-item.right .timeline-node {
+            left: -8px;
+        }
+
+        /* Triangle pointers */
+        .timeline-item.left::after {
+            content: " ";
+            height: 0;
+            position: absolute;
+            top: 50%;
+            width: 0;
+            z-index: 1;
+            right: 25px;
+            border: medium solid white;
+            border-width: 10px 0 10px 15px;
+            border-color: transparent transparent transparent #e5e7eb;
+            transform: translateY(-50%);
+        }
+
+        .timeline-item.right::after {
+            content: " ";
+            height: 0;
+            position: absolute;
+            top: 50%;
+            width: 0;
+            z-index: 1;
+            left: 25px;
+            border: medium solid white;
+            border-width: 10px 15px 10px 0;
+            border-color: transparent #e5e7eb transparent transparent;
+            transform: translateY(-50%);
+        }
+
+        .activity-card {
+            background: white;
+            border: 1px solid #e5e7eb;
+            border-radius: 0;
+        }
+
+        .activity-card .card-body {
+            padding: 20px;
+        }
+        
+        .activity-card h5 {
+            color: #333;
+            font-size: 1.1rem;
+            line-height: 1.4;
+            margin-bottom: 12px;
+            font-weight: 400;
+        }
+
+        .activity-card img {
+            height: 280px;
+            object-fit: cover;
+        }
+
+        .carousel-control-prev, .carousel-control-next {
+            width: 10%;
+        }
+
+        .carousel-control-prev-icon, .carousel-control-next-icon {
+            width: 30px;
+            height: 30px;
+            background-size: 50%;
+            opacity: 0.8;
+        }
+
+        /* Responsive Timeline */
+        @media screen and (max-width: 768px) {
+            .timeline::after {
+                left: 20px;
+            }
+            .timeline-item {
+                width: 100%;
+                padding-left: 50px;
+                padding-right: 0;
+            }
+            .timeline-item.right {
+                left: 0%;
+            }
+            .timeline-item.left .timeline-node,
+            .timeline-item.right .timeline-node {
+                left: 12px;
+                top: 50%;
+            }
+            .timeline-item.left::after,
+            .timeline-item.right::after {
+                left: 35px;
+                border-width: 10px 15px 10px 0;
+                border-color: transparent #e5e7eb transparent transparent;
+            }
+        }
+
     </style>
 </head>
 <body>
@@ -230,14 +372,107 @@
         </div>
     </div>
 
+    
     <!-- CONTENT -->
     <div class="container py-4">
-        <div class="dummy-card">
-            <i class="fa-solid fa-laptop-code fa-3x text-primary mb-3"></i>
-            <h3>Placement Activities Page</h3>
-            <p class="text-muted">Information about training programs and activities will be updated here soon.</p>
+        <p class="text-muted mb-4" style="font-size: 0.95rem;">Placement Activity carried out by Training and Placement Cell, GEC Modasa.</p>
+        
+        <div class="row mb-5">
+            <div class="col-md-5 d-flex">
+                <select class="form-select me-2" style="border-radius: 0; box-shadow: none; border-color: #ced4da;">
+                    <option>Select Year</option>
+                    <option selected>2024</option>
+                    <option>2022</option>
+                    <option>2021</option>
+                    <option>2020</option>
+                    <option>2019</option>
+                    <option>2017</option>
+                </select>
+                <button class="btn text-white" style="background-color: #3498db; border-radius: 0; padding: 6px 20px;">Submit</button>
+            </div>
+        </div>
+
+        <div class="timeline">
+            <!-- Left Item 1 -->
+            <div class="timeline-item left">
+                <div class="timeline-node"></div>
+                <div class="activity-card">
+                    <div id="carousel1" class="carousel slide" data-bs-ride="carousel">
+                        <div class="carousel-inner">
+                            <div class="carousel-item active">
+                                <img src="https://images.unsplash.com/photo-1540575467063-178a50c2df87?w=800&q=80" class="d-block w-100" alt="Event">
+                            </div>
+                            <div class="carousel-item">
+                                <img src="https://images.unsplash.com/photo-1515187029135-18ee286d815b?w=800&q=80" class="d-block w-100" alt="Event">
+                            </div>
+                        </div>
+                        <button class="carousel-control-prev" type="button" data-bs-target="#carousel1" data-bs-slide="prev">
+                            <span class="carousel-control-prev-icon bg-dark p-3" aria-hidden="true" style="border-radius: 50%;"></span>
+                        </button>
+                        <button class="carousel-control-next" type="button" data-bs-target="#carousel1" data-bs-slide="next">
+                            <span class="carousel-control-next-icon bg-dark p-3" aria-hidden="true" style="border-radius: 50%;"></span>
+                        </button>
+                    </div>
+                    <div class="card-body">
+                        <h5>IBM Skill Build Orientation Session</h5>
+                        <p class="text-muted" style="font-size: 0.9rem;">The IBM Skills Build Academic Internship Program is a CSR initiative by IBM designed to upskill students in Technological & Digital Skills and helps them seamlessly integrate into the workforce. In ad...</p>
+                        <button class="btn btn-sm text-white" style="background-color: #3498db; border-radius: 2px;">View More</button>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Right Item 1 -->
+            <div class="timeline-item right">
+                <div class="timeline-node"></div>
+                <div class="activity-card">
+                    <div id="carousel2" class="carousel slide" data-bs-ride="carousel">
+                        <div class="carousel-inner">
+                            <div class="carousel-item active">
+                                <img src="https://images.unsplash.com/photo-1524178232363-1fb2b075b655?w=800&q=80" class="d-block w-100" alt="Event">
+                            </div>
+                        </div>
+                        <button class="carousel-control-prev" type="button" data-bs-target="#carousel2" data-bs-slide="prev">
+                            <span class="carousel-control-prev-icon bg-dark p-3" aria-hidden="true" style="border-radius: 50%;"></span>
+                        </button>
+                        <button class="carousel-control-next" type="button" data-bs-target="#carousel2" data-bs-slide="next">
+                            <span class="carousel-control-next-icon bg-dark p-3" aria-hidden="true" style="border-radius: 50%;"></span>
+                        </button>
+                    </div>
+                    <div class="card-body">
+                        <h5>5 Secrets to Gate Success Why GATE CS Branch in association with IMS GATE ACADEMY</h5>
+                        <p class="text-muted" style="font-size: 0.9rem;">Placement Team CE & IT department have organized the webinar on "5 Secrets To Gate Success" in association with IMS GATE ACADEMY. More than 60 students attended the webinar. Webinar Details: We...</p>
+                        <button class="btn btn-sm text-white" style="background-color: #3498db; border-radius: 2px;">View More</button>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Left Item 2 -->
+            <div class="timeline-item left">
+                <div class="timeline-node"></div>
+                <div class="activity-card">
+                    <div id="carousel3" class="carousel slide" data-bs-ride="carousel">
+                        <div class="carousel-inner">
+                            <div class="carousel-item active">
+                                <img src="https://images.unsplash.com/photo-1552664730-d307ca884978?w=800&q=80" class="d-block w-100" alt="Event">
+                            </div>
+                        </div>
+                        <button class="carousel-control-prev" type="button" data-bs-target="#carousel3" data-bs-slide="prev">
+                            <span class="carousel-control-prev-icon bg-dark p-3" aria-hidden="true" style="border-radius: 50%;"></span>
+                        </button>
+                        <button class="carousel-control-next" type="button" data-bs-target="#carousel3" data-bs-slide="next">
+                            <span class="carousel-control-next-icon bg-dark p-3" aria-hidden="true" style="border-radius: 50%;"></span>
+                        </button>
+                    </div>
+                    <div class="card-body">
+                        <h5>Orientation Program on TechSaksham Program Sponsored by Microsoft and SAP India implemented by Edunet Foundation</h5>
+                        <p class="text-muted" style="font-size: 0.9rem;">On the 12th of July 2022, The training and Placement Cell and Computer and Information Technology Department organized an orientation program on the 'TechSaksham Program'...</p>
+                        <button class="btn btn-sm text-white" style="background-color: #3498db; border-radius: 2px;">View More</button>
+                    </div>
+                </div>
+            </div>
         </div>
     </div>
+
 
     <script src="assets/bootstrap/js/bootstrap.bundle.min.js"></script>
 </body>
