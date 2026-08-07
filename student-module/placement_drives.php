@@ -151,10 +151,9 @@ $csrfToken = generate_csrf_token();
                                         </div>
                                     <?php endif; ?>
                                     <div>
-                                        <h4 class="mb-1 text-dark"><?= htmlspecialchars($c['company_name']) ?> <span class="badge bg-primary fs-6 align-middle ms-1"><?= htmlspecialchars($c['batch_year'] ?? 'N/A') ?></span></h4>
+                                        <h4 class="mb-0 text-dark fw-bold"><?= htmlspecialchars($c['company_name']) ?></h4>
                                     </div>
                                 </div>
-                                <span class="text-muted small"><i class="fa-regular fa-clock me-1"></i><?= date('M d, Y', strtotime($c['created_at'])) ?></span>
                             </div>
                             <?php
                                 $deadlineTimestamp = strtotime($c['last_date_to_apply'] . ' 23:59:59');
@@ -176,20 +175,19 @@ $csrfToken = generate_csrf_token();
                             ?>
                             <p class="text-muted mb-3 flex-grow-1">Last Date to Apply: <strong class="<?= $isExpired ? 'text-danger' : 'text-success' ?>"><?= date('d M Y', strtotime($c['last_date_to_apply'])) ?></strong> <?= $daysText ?></p>
                             
-                            <?php if (!empty($c['job_description_text'])): ?>
-                            <div class="mb-3 text-dark small" style="white-space: pre-line; background-color: #f9f9f9; padding: 10px; border-radius: 5px; border-left: 3px solid var(--accent-coral);">
-                                <?= htmlspecialchars($c['job_description_text']) ?>
+                            <div class="d-flex gap-2 mb-3">
+                                <?php if (!empty($c['job_description_text'])): ?>
+                                    <button type="button" class="btn btn-sm btn-outline-primary flex-grow-1" data-bs-toggle="modal" data-bs-target="#jobDescModal<?= $c['company_id'] ?>">
+                                        <i class="fa-solid fa-file-lines me-1"></i> Job Details
+                                    </button>
+                                <?php endif; ?>
+                                
+                                <?php if ($c['document_path']): ?>
+                                    <a href="../admin-module/<?= htmlspecialchars($c['document_path']) ?>" class="btn btn-sm btn-outline-secondary flex-grow-1" target="_blank">
+                                        <i class="fa-solid fa-file-pdf text-danger me-1"></i> Document
+                                    </a>
+                                <?php endif; ?>
                             </div>
-                            <?php endif; ?>
-                            
-                            <?php if ($c['document_path']): ?>
-                            <div class="p-3 bg-light border rounded mb-4">
-                                <h6 class="mb-2 text-dark"><i class="fa-solid fa-paperclip text-muted me-2"></i>Company Document</h6>
-                                <a href="../admin-module/<?= htmlspecialchars($c['document_path']) ?>" class="btn btn-sm btn-outline-secondary w-100" target="_blank">
-                                    <i class="fa-solid fa-file-pdf text-danger me-1"></i> View Document (PDF)
-                                </a>
-                            </div>
-                            <?php endif; ?>
                             
                             <?php if ($c['has_applied'] > 0): ?>
                                 <button class="btn btn-secondary w-100 fw-bold" disabled><i class="fa-solid fa-check me-2"></i>Applied</button>
@@ -209,6 +207,30 @@ $csrfToken = generate_csrf_token();
             <?php endif; ?>
         </div>
     </div>
+
+    <!-- Job Description Modals -->
+    <?php if (!empty($companies)): ?>
+        <?php foreach ($companies as $c): ?>
+            <?php if (!empty($c['job_description_text'])): ?>
+            <div class="modal fade" id="jobDescModal<?= $c['company_id'] ?>" tabindex="-1" aria-labelledby="jobDescModalLabel<?= $c['company_id'] ?>" aria-hidden="true">
+              <div class="modal-dialog modal-dialog-centered modal-lg modal-dialog-scrollable">
+                <div class="modal-content">
+                  <div class="modal-header">
+                    <h5 class="modal-title" id="jobDescModalLabel<?= $c['company_id'] ?>">Job Details - <?= htmlspecialchars($c['company_name']) ?></h5>
+                    <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+                  </div>
+                  <div class="modal-body">
+                    <?= $c['job_description_text'] ?>
+                  </div>
+                  <div class="modal-footer">
+                    <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Close</button>
+                  </div>
+                </div>
+              </div>
+            </div>
+            <?php endif; ?>
+        <?php endforeach; ?>
+    <?php endif; ?>
 
     <script src="../assets/bootstrap/js/bootstrap.bundle.min.js"></script>
 </body>

@@ -77,7 +77,8 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST' && isset($_POST['action']) && $_POST['
                 }
             }
             
-            $jobDescriptionText = sanitize_input($_POST['job_description_text'] ?? '');
+            // Allow basic HTML tags from TinyMCE
+            $jobDescriptionText = strip_tags(trim($_POST['job_description_text'] ?? ''), '<p><br><b><strong><i><em><u><ul><ol><li><a><h1><h2><h3><h4><h5><h6><span><div>');
             
             $driveType = sanitize_input($_POST['drive_type'] ?? 'On Campus');
             if (!in_array($driveType, ['On Campus', 'Off Campus'])) $driveType = 'On Campus';
@@ -154,7 +155,8 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST' && isset($_POST['action']) && $_POST['
         }
 
         // Update company record
-        $jobDescriptionText = sanitize_input($_POST['job_description_text'] ?? '');
+        // Allow basic HTML tags from TinyMCE
+        $jobDescriptionText = strip_tags(trim($_POST['job_description_text'] ?? ''), '<p><br><b><strong><i><em><u><ul><ol><li><a><h1><h2><h3><h4><h5><h6><span><div>');
         
         $driveType = sanitize_input($_POST['drive_type'] ?? 'On Campus');
         if (!in_array($driveType, ['On Campus', 'Off Campus'])) $driveType = 'On Campus';
@@ -239,7 +241,30 @@ $csrfToken = generate_csrf_token();
     <title>Manage Companies - GEC Placement</title>
     <link href="../assets/bootstrap/css/bootstrap.min.css" rel="stylesheet">
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.0/css/all.min.css">
-    <link rel="stylesheet" href="css/admin_style.css">
+    <link rel="stylesheet" href="css/admin_style.css?v=2">
+    <style>
+        /* Force hide TinyMCE warning */
+        .tox-notifications-container { display: none !important; }
+    </style>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/tinymce/6.8.2/tinymce.min.js" referrerpolicy="origin"></script>
+    <script>
+      tinymce.init({
+        selector: '.tinymce-editor',
+        plugins: 'advlist autolink lists link charmap preview searchreplace visualblocks code fullscreen insertdatetime table help wordcount',
+        toolbar: 'undo redo | blocks | bold italic underline | alignleft aligncenter alignright alignjustify | bullist numlist outdent indent | removeformat',
+        menubar: false,
+        height: 300,
+        branding: false,
+        promotion: false
+      });
+      
+      // Fix for Bootstrap Modal focus issue (for the Edit modal)
+      document.addEventListener('focusin', function (e) {
+        if (e.target.closest('.tox-tinymce, .tox-tinymce-aux, .moxman-window, .tam-assetmanager-root') !== null) {
+          e.stopImmediatePropagation();
+        }
+      });
+    </script>
 </head>
 <body class="<?= ($adminRole === 'superadmin') ? 'theme-superadmin' : '' ?>">
     <div class="d-flex">
@@ -320,7 +345,7 @@ $csrfToken = generate_csrf_token();
 
                                 <div class="mb-3">
                                     <label class="form-label small">Job Description (Text)</label>
-                                    <textarea class="form-control" name="job_description_text" rows="4" placeholder="Enter job description here..."></textarea>
+                                    <textarea class="form-control tinymce-editor" name="job_description_text" id="add_job_description_text" rows="4" placeholder="Enter job description here..."></textarea>
                                 </div>
 
                                 <div class="mb-4">
@@ -413,7 +438,7 @@ $csrfToken = generate_csrf_token();
                                                                     <?= (int)($c['batch_year'] ?? 0) ?>,
                                                                     '<?= htmlspecialchars($c['last_date_to_apply']) ?>',
                                                                     <?= htmlspecialchars(json_encode($bList)) ?>,
-                                                                    <?= htmlspecialchars(json_encode($c['job_description_text'] ?? '')) ?>,
+                                                                    <?= json_encode($c['job_description_text'] ?? '') ?>,
                                                                     '<?= htmlspecialchars($c['drive_type'] ?? 'On Campus') ?>'
                                                                 )">
                                                                 <i class="fa-solid fa-pen-to-square"></i>
@@ -494,7 +519,7 @@ $csrfToken = generate_csrf_token();
                             </div>
                             <div class="col-12">
                                 <label class="form-label small fw-semibold">Job Description (Text)</label>
-                                <textarea class="form-control" name="job_description_text" id="edit_job_description_text" rows="4" placeholder="Enter job description here..."></textarea>
+                                <textarea class="form-control tinymce-editor" name="job_description_text" id="edit_job_description_text" rows="4" placeholder="Enter job description here..."></textarea>
                             </div>
                             <div class="col-12">
                                 <label class="form-label small fw-semibold">Eligible Branches <span class="text-danger">*</span></label>
@@ -531,7 +556,11 @@ $csrfToken = generate_csrf_token();
             document.getElementById('edit_company_name').value = name;
             document.getElementById('edit_batch_year').value   = batchYear;
             document.getElementById('edit_last_date').value    = lastDate;
-            document.getElementById('edit_job_description_text').value = jobDescText;
+            if (tinymce.get('edit_job_description_text')) {
+                tinymce.get('edit_job_description_text').setContent(jobDescText);
+            } else {
+                document.getElementById('edit_job_description_text').value = jobDescText;
+            }
             document.getElementById('edit_drive_type').value   = driveType;
 
             // Reset all branch checkboxes then check the ones that match

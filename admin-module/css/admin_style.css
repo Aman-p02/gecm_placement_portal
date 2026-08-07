@@ -1,4 +1,4 @@
-/* ==========================================================================
+﻿/* ==========================================================================
    Admin Module Global Styles
    ========================================================================== */
 
@@ -166,4 +166,7 @@ body > .d-flex { display: block !important; }
 @media (max-width: 768px) {
     .topbar { padding: 15px; }
 }
+
+/* Hide TinyMCE API Warning */
+.tox-notifications-container { display: none !important; }
 

@@ -74,7 +74,7 @@ function sendRegistrationEmail($toEmail, $userName, $role)
 
     try {
         $yourEmail = 'dantanivanit8@gmail.com';
-        $yourAppPassword = 'xkeq amgh eesp xkra';
+        $yourAppPassword = 'gmtl vnlp ecan hsgu';
 
         $mail->isSMTP();
         $mail->Host = 'smtp.gmail.com';
@@ -119,7 +119,7 @@ function sendStatusUpdateEmail($toEmail, $userName, $companyName, $status) {
     $mail = new PHPMailer(true);
     try {
         $yourEmail = 'dantanivanit8@gmail.com';
-        $yourAppPassword = 'xkeq amgh eesp xkra';
+        $yourAppPassword = 'gmtl vnlp ecan hsgu';
 
         $mail->isSMTP();
         $mail->Host = 'smtp.gmail.com';
@@ -170,7 +170,7 @@ function sendBlockStatusEmail($toEmail, $userName, $isBlocked) {
     $mail = new PHPMailer(true);
     try {
         $yourEmail = 'dantanivanit8@gmail.com';
-        $yourAppPassword = 'xkeq amgh eesp xkra';
+        $yourAppPassword = 'gmtl vnlp ecan hsgu';
 
         $mail->isSMTP();
         $mail->Host = 'smtp.gmail.com';
@@ -221,7 +221,7 @@ function sendVerificationEmail($toEmail, $userName, $verificationLink)
 
     try {
         $yourEmail = 'dantanivanit8@gmail.com';
-        $yourAppPassword = 'xkeq amgh eesp xkra';
+        $yourAppPassword = 'gmtl vnlp ecan hsgu';
 
         $mail->isSMTP();
         $mail->Host = 'smtp.gmail.com';
@@ -232,6 +232,7 @@ function sendVerificationEmail($toEmail, $userName, $verificationLink)
         $mail->Port = 587;
 
         $mail->setFrom($yourEmail, 'GEC Placement Portal');
+        $mail->addReplyTo($yourEmail, 'GEC Placement Portal');
         $mail->addAddress($toEmail);
 
         $mail->isHTML(true);
@@ -251,6 +252,7 @@ function sendVerificationEmail($toEmail, $userName, $verificationLink)
         ";
 
         $mail->Body = $emailBody;
+        $mail->AltBody = "Hello {$userName},\n\nThank you for registering. Please copy and paste the following link into your browser to activate your account: {$verificationLink}\n\nBest regards,\nGEC Modasa Placement Cell";
         $mail->send();
         return true;
     } catch (Exception $e) {
