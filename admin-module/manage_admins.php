@@ -45,7 +45,8 @@ $csrfToken = generate_csrf_token();
 <body class="<?= ($adminRole === 'superadmin') ? 'theme-superadmin' : '' ?>">
     <div class="d-flex">
         <!-- Sidebar -->
-        <div class="sidebar-overlay" id="sidebarOverlay"></div><div class="sidebar" style="width: 250px;">
+        <div class="sidebar-overlay" id="sidebarOverlay"></div>
+        <div class="sidebar" style="width: 250px;">
             <h4 class="text-center mb-4 px-3" style="color: var(--accent-coral);">GEC Admin</h4>
             <a href="dashboard.php"><i class="fa-solid fa-gauge me-2"></i> Dashboard</a>
             <a href="manage_admins.php" class="active"><i class="fa-solid fa-users-gear me-2"></i> Manage Admins</a>
@@ -59,7 +60,10 @@ $csrfToken = generate_csrf_token();
         <!-- Main Content -->
         <div class="flex-grow-1">
             <div class="topbar d-flex justify-content-between align-items-center">
-                <div class="d-flex align-items-center"><button class="btn btn-sm btn-outline-secondary d-md-none me-3" id="sidebarToggle"><i class="fa-solid fa-bars"></i></button><h5 class="m-0 text-muted">Manage Sub-Admins</h5></div>
+                <div class="d-flex align-items-center"><button class="btn btn-sm btn-outline-secondary d-md-none me-3"
+                        id="sidebarToggle"><i class="fa-solid fa-bars"></i></button>
+                    <h5 class="m-0 text-muted">Manage Sub-Admins</h5>
+                </div>
                 <div>
                     <span class="fw-medium me-3 text-dark">Hi, <?= htmlspecialchars($adminName) ?></span>
                     <span class="badge bg-secondary"><?= ucfirst(htmlspecialchars($adminRole)) ?></span>
@@ -78,8 +82,8 @@ $csrfToken = generate_csrf_token();
                 <?php endif; ?>
 
                 <div class="custom-card border-top border-4 border-warning">
-                    <h5 class="mb-4" style="color: var(--primary-navy);"><i
-                            class="fa-solid fa-user-shield me-2"></i>Registered Sub-Admins</h5>
+                    <h5 class="mb-4" style="color: var(--primary-navy);">
+                    </h5>
 
                     <?php if (empty($subadmins)): ?>
                         <p class="text-muted">No sub-admins registered yet.</p>
@@ -124,11 +128,11 @@ $csrfToken = generate_csrf_token();
 
     <script src="../assets/bootstrap/js/bootstrap.bundle.min.js"></script>
     <script>
-        document.addEventListener('DOMContentLoaded', function() {
+        document.addEventListener('DOMContentLoaded', function () {
             const sidebar = document.querySelector('.sidebar');
             const overlay = document.getElementById('sidebarOverlay');
             const toggleBtn = document.getElementById('sidebarToggle');
-            if(toggleBtn && sidebar && overlay) {
+            if (toggleBtn && sidebar && overlay) {
                 toggleBtn.addEventListener('click', () => {
                     sidebar.classList.add('active');
                     overlay.classList.add('active');
@@ -143,4 +147,3 @@ $csrfToken = generate_csrf_token();
 </body>
 
 </html>
-

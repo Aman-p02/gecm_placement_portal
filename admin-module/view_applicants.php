@@ -285,10 +285,7 @@ $csrfToken = generate_csrf_token();
                 <div class="custom-card border-top border-4 border-warning">
                     <div class="mb-4 bg-light p-3 rounded border">
                         <div class="row g-3 align-items-center">
-                            <div class="col-md-3">
-                                <h5 class="m-0" style="color: var(--primary-navy);"><i class="fa-solid fa-user-graduate me-2"></i><?= $adminRole === 'superadmin' ? 'All Applicants' : 'Applicants in ' . htmlspecialchars($adminBranch) ?></h5>
-                            </div>
-                            <div class="col-md-7">
+                            <div class="col-md-10">
                                 <form action="" method="GET" class="row g-2">
                                     <?php if ($adminRole === 'superadmin'): ?>
                                     <div class="col-auto">
