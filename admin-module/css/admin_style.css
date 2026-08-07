@@ -82,6 +82,8 @@ body.auth-page {
     background: var(--primary-navy); 
     color: white; 
     padding-top: 20px; 
+    width: 250px;
+    flex-shrink: 0;
 }
 .sidebar a { 
     color: rgba(255,255,255,0.8); 
