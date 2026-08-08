@@ -243,10 +243,20 @@
         }
 
         /* Decorative Elements */
+        .bg-blobs {
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            overflow: hidden;
+            z-index: -1;
+            pointer-events: none;
+        }
+
         .blob {
             position: absolute;
             filter: blur(80px);
-            z-index: -1;
             opacity: 0.6;
         }
 
@@ -293,8 +303,10 @@
 <body>
 
     <!-- Background Decoration -->
-    <div class="blob blob-1"></div>
-    <div class="blob blob-2"></div>
+    <div class="bg-blobs">
+        <div class="blob blob-1"></div>
+        <div class="blob blob-2"></div>
+    </div>
 
     <!-- Navbar -->
     <div class="navbar-wrapper">
@@ -303,8 +315,10 @@
                 <a class="navbar-brand brand-text" href="placement_statistics.php">
                     GEC Modasa <span>Placement</span>
                 </a>
-                <a href="placement_statistics.php" class="btn-back d-none d-md-flex">
-                    <i class="fa-solid fa-arrow-left"></i> Back to Home
+                <a href="placement_statistics.php" class="btn-back">
+                    <i class="fa-solid fa-arrow-left"></i> 
+                    <span class="d-none d-sm-inline">Back to Home</span>
+                    <span class="d-inline d-sm-none">Back</span>
                 </a>
             </div>
         </nav>
@@ -401,7 +415,6 @@
         <div class="text-center mt-5">
             <p class="text-muted small fw-medium">Developed with <i class="fa-solid fa-heart text-danger mx-1"></i> for
                 GEC Modasa (August 2026)</p>
-            <a href="placement_statistics.php" class="btn btn-link text-decoration-none d-md-none mt-3">Back to Home</a>
         </div>
     </div>
 
