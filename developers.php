@@ -110,7 +110,7 @@
             left: 0;
             right: 0;
             height: 4px;
-            background: linear-gradient(90deg, #3b82f6, #8b5cf6);
+            background: linear-gradient(90deg, var(--primary), var(--accent));
             transform: scaleX(0);
             transform-origin: left;
             transition: transform 0.4s ease;
@@ -126,12 +126,12 @@
         }
 
         .dev-img-wrapper {
-            width: clamp(120px, 35vw, 160px);
-            height: clamp(120px, 35vw, 160px);
+            width: clamp(150px, 40vw, 200px);
+            height: clamp(150px, 40vw, 200px);
             margin: 0 auto 1.5rem;
             border-radius: 50%;
-            padding: 6px;
-            background: linear-gradient(135deg, #3b82f6 0%, #8b5cf6 100%);
+            padding: 8px;
+            background: linear-gradient(135deg, var(--primary) 0%, var(--accent) 100%);
             position: relative;
         }
 
@@ -338,7 +338,8 @@
                 <div class="dev-card">
                     <div class="dev-img-wrapper">
                         <!-- REPLACE THIS SRC WITH ACTUAL IMAGE -->
-                        <img src="student-module/uploads/developers_pic/aman.jpg" alt="Prajapati Aman Jayeshbhai" class="dev-img">
+                        <img src="student-module/uploads/developers_pic/aman1.jpg" alt="Prajapati Aman Jayeshbhai"
+                            class="dev-img">
                     </div>
                     <h3 class="dev-name">PRAJAPATI AMAN JAYESHBHAI</h3>
                     <div class="dev-role">Full Stack Developer</div>
