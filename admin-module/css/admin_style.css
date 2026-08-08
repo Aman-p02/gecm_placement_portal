@@ -29,15 +29,19 @@ body {
 /* Auth Centering (used in body of auth pages) */
 body.auth-page {
     display: flex; 
-    align-items: center; 
-    justify-content: center; 
+    flex-direction: column;
     min-height: 100vh;
 }
 
 .auth-container { 
     max-width: 500px; 
     width: 100%; 
-    padding: 15px; 
+    padding: 3rem 15px; 
+    margin: 0 auto;
+    flex: 1;
+    display: flex;
+    align-items: center;
+    justify-content: center;
 }
 .auth-container.small-box {
     max-width: 400px; 

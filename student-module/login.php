@@ -64,6 +64,7 @@ $csrfToken = generate_csrf_token();
     <title>Login - GEC Placement Portal</title>
     <link href="../assets/bootstrap/css/bootstrap.min.css" rel="stylesheet">
     <link rel="stylesheet" href="css/dashboard.css">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.0/css/all.min.css">
 </head>
 
 <body>
@@ -92,44 +93,49 @@ $csrfToken = generate_csrf_token();
                     <label for="password" class="form-label">Password</label>
                     <div class="position-relative">
                         <input type="password" class="form-control pe-5" id="password" name="password" required>
-                        <i class="fa-solid fa-eye position-absolute top-50 end-0 translate-middle-y me-3 text-muted" style="cursor: pointer;" onclick="togglePassword('password', this)"></i>
+                        <i class="fa-solid fa-eye position-absolute top-50 end-0 translate-middle-y me-3 text-muted"
+                            style="cursor: pointer;" onclick="togglePassword('password', this)"></i>
                     </div>
                     <div class="text-end mt-1">
-                        <a href="forgot_password.php" class="small text-decoration-none" style="color: var(--accent-coral);">Forgot Password?</a>
+                        <a href="forgot_password.php" class="small text-decoration-none"
+                            style="color: var(--accent-coral);">Forgot Password?</a>
                     </div>
                 </div>
 
                 <button type="submit" class="btn btn-accent w-100 mb-3">Login</button>
             </form>
-            
+
 
 
             <div class="mt-4 text-center">
-                <p class="text-muted">Don't have an account? <a href="signup.php" style="color: var(--accent-coral); font-weight: 500;">Register Here</a></p>
+                <p class="text-muted">Don't have an account? <a href="signup.php"
+                        style="color: var(--accent-coral); font-weight: 500;">Register Here</a></p>
             </div>
-            
+
 
         </div>
     </div>
 
-    
-        
 
 
-<?php include '../includes/footer.php'; ?>
+
+
+
+    <?php include '../includes/footer.php'; ?>
 </body>
 <script>
-function togglePassword(inputId, icon) {
-    const input = document.getElementById(inputId);
-    if (input.type === 'password') {
-        input.type = 'text';
-        icon.classList.remove('fa-eye');
-        icon.classList.add('fa-eye-slash');
-    } else {
-        input.type = 'password';
-        icon.classList.remove('fa-eye-slash');
-        icon.classList.add('fa-eye');
+    function togglePassword(inputId, icon) {
+        const input = document.getElementById(inputId);
+        if (input.type === 'password') {
+            input.type = 'text';
+            icon.classList.remove('fa-eye');
+            icon.classList.add('fa-eye-slash');
+        } else {
+            input.type = 'password';
+            icon.classList.remove('fa-eye-slash');
+            icon.classList.add('fa-eye');
+        }
     }
-}
 </script>
+
 </html>
