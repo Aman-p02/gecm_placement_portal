@@ -190,12 +190,12 @@
             width: 20px;
             font-size: 1.1rem;
         }
-        
+
         .dev-info-item span {
             color: var(--secondary);
             font-size: 0.95rem;
         }
-        
+
         .dev-info-item strong {
             color: var(--primary);
             font-weight: 700;
@@ -348,12 +348,17 @@
                 <div class="dev-card">
                     <div class="dev-img-wrapper">
                         <!-- REPLACE THIS SRC WITH ACTUAL IMAGE -->
-                        <img src="student-module/uploads/developers_pic/aman2.jpg" alt="Prajapati Aman Jayeshbhai" class="dev-img" style="cursor: pointer;" onclick="openImageModal(this.src)">
+                        <img src="student-module/uploads/developers_pic/aman2.jpg" alt="Prajapati Aman Jayeshbhai"
+                            class="dev-img" style="cursor: pointer;" onclick="openImageModal(this.src)">
                     </div>
                     <h3 class="dev-name">PRAJAPATI AMAN JAYESHBHAI</h3>
                     <div class="dev-role">Full Stack Developer</div>
 
                     <div class="dev-info">
+                        <div class="dev-info-item">
+                            <i class="fa-solid fa-id-badge"></i>
+                            <span><strong>Enrollment:</strong> 250163107021</span>
+                        </div>
                         <div class="dev-info-item">
                             <i class="fa-solid fa-laptop-code"></i>
                             <span><strong>Branch:</strong> Computer Engineering</span>
@@ -363,8 +368,8 @@
                             <span><strong>Batch:</strong> 2025 to 2028</span>
                         </div>
                         <div class="dev-info-item">
-                            <i class="fa-solid fa-id-badge"></i>
-                            <span><strong>Enrollment:</strong> 250163107021</span>
+                            <i class="fa-solid fa-envelope"></i>
+                            <span><strong>Email:</strong> amanjp5711@gmail.com</span>
                         </div>
                     </div>
 
@@ -386,12 +391,17 @@
                     <div class="dev-img-wrapper">
                         <!-- REPLACE THIS SRC WITH ACTUAL IMAGE -->
                         <img src="https://ui-avatars.com/api/?name=Vanit+Dantani&background=8b5cf6&color=fff&size=200&font-size=0.33"
-                            alt="Vanit Dantani Nitinbhai" class="dev-img" style="cursor: pointer;" onclick="openImageModal(this.src)">
+                            alt="Vanit Dantani Nitinbhai" class="dev-img" style="cursor: pointer;"
+                            onclick="openImageModal(this.src)">
                     </div>
                     <h3 class="dev-name">DANTANI VANIT NITINBHAI</h3>
                     <div class="dev-role">Full Stack Developer</div>
 
                     <div class="dev-info">
+                        <div class="dev-info-item">
+                            <i class="fa-solid fa-id-badge"></i>
+                            <span><strong>Enrollment:</strong> 250163107004</span>
+                        </div>
                         <div class="dev-info-item">
                             <i class="fa-solid fa-laptop-code"></i>
                             <span><strong>Branch:</strong> Computer Engineering</span>
@@ -401,8 +411,8 @@
                             <span><strong>Batch:</strong> 2025 to 2028</span>
                         </div>
                         <div class="dev-info-item">
-                            <i class="fa-solid fa-id-badge"></i>
-                            <span><strong>Enrollment:</strong> 250163107004</span>
+                            <i class="fa-solid fa-envelope"></i>
+                            <span><strong>Email:</strong> vanitdantani05@gmail.com</span>
                         </div>
                     </div>
 
@@ -432,8 +442,11 @@
         <div class="modal-dialog modal-dialog-centered modal-lg">
             <div class="modal-content bg-transparent border-0">
                 <div class="modal-body text-center position-relative p-0">
-                    <button type="button" class="btn-close btn-close-white position-absolute top-0 end-0 m-3" data-bs-dismiss="modal" aria-label="Close" style="z-index: 1055; filter: drop-shadow(0 2px 4px rgba(0,0,0,0.5));"></button>
-                    <img id="modalImage" src="" alt="Developer" class="img-fluid rounded-4 shadow-lg" style="max-height: 85vh; object-fit: contain;">
+                    <button type="button" class="btn-close btn-close-white position-absolute top-0 end-0 m-3"
+                        data-bs-dismiss="modal" aria-label="Close"
+                        style="z-index: 1055; filter: drop-shadow(0 2px 4px rgba(0,0,0,0.5));"></button>
+                    <img id="modalImage" src="" alt="Developer" class="img-fluid rounded-4 shadow-lg"
+                        style="max-height: 85vh; object-fit: contain;">
                 </div>
             </div>
         </div>
