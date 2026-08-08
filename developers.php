@@ -204,13 +204,13 @@
             color: var(--secondary);
             font-size: 0.95rem;
         }
-        
+
         .dev-info-item a {
             color: var(--secondary);
             text-decoration: none;
             transition: color 0.3s ease;
         }
-        
+
         .dev-info-item a:hover {
             color: var(--accent);
         }
@@ -263,6 +263,12 @@
             background: rgba(51, 51, 51, 0.05);
         }
 
+        .social-btn.portfolio {
+            color: #10b981;
+            border-color: rgba(16, 185, 129, 0.3);
+            background: rgba(16, 185, 129, 0.05);
+        }
+
         .social-btn:hover {
             color: #fff;
             transform: translateY(-3px);
@@ -278,6 +284,12 @@
             background: #333;
             border-color: #333;
             box-shadow: 0 4px 12px rgba(51, 51, 51, 0.3);
+        }
+
+        .social-btn.portfolio:hover {
+            background: #10b981;
+            border-color: #10b981;
+            box-shadow: 0 4px 12px rgba(16, 185, 129, 0.3);
         }
 
         /* Decorative Elements */
@@ -381,7 +393,8 @@
                     </div>
                     <h3 class="dev-name">PRAJAPATI AMAN JAYESHBHAI</h3>
                     <div class="dev-role">Full Stack Developer</div>
-                    <div class="dev-quote">"Transforming ideas into digital reality through modern web technologies."</div>
+                    <div class="dev-quote">"Transforming ideas into digital reality through modern web technologies."
+                    </div>
 
                     <div class="dev-info">
                         <div class="dev-info-item">
@@ -398,30 +411,40 @@
                         </div>
                         <div class="dev-info-item">
                             <i class="fa-solid fa-envelope"></i>
-                            <span><strong>Email:</strong> <a href="mailto:amanjp5711@gmail.com">amanjp5711@gmail.com</a></span>
+                            <span><strong>Email:</strong> <a
+                                    href="mailto:amanjp5711@gmail.com">amanjp5711@gmail.com</a></span>
                         </div>
 
                         <hr class="my-2 border-secondary" style="opacity: 0.15;">
-                        
+
                         <div class="text-start mt-2">
-                            <div style="color: var(--primary-navy); font-size: 0.85rem; font-weight: 700; margin-bottom: 2px;">
+                            <div
+                                style="color: var(--primary-navy); font-size: 0.85rem; font-weight: 700; margin-bottom: 2px;">
                                 <i class="fa-solid fa-bullseye me-1 text-danger"></i> Key Contributions:
                             </div>
                             <div style="font-size: 0.85rem; line-height: 1.3; color: #444;" class="mb-2 fw-medium">
                                 Developed student & admin panel, database architecture, backend logic, and UI design.
                             </div>
-                            
-                            <div style="color: var(--primary-navy); font-size: 0.85rem; font-weight: 700; margin-bottom: 4px;">
+                            <br>
+                            <div
+                                style="color: var(--primary-navy); font-size: 0.85rem; font-weight: 700; margin-bottom: 4px;">
                                 <i class="fa-solid fa-code me-1 text-primary"></i> Tech Stack:
                             </div>
                             <div class="d-flex flex-wrap gap-1">
-                                <span class="badge bg-white text-dark border fw-medium" style="font-size: 0.7rem; padding: 3px 6px;">PHP</span>
-                                <span class="badge bg-white text-dark border fw-medium" style="font-size: 0.7rem; padding: 3px 6px;">HTML/CSS</span>
-                                <span class="badge bg-white text-dark border fw-medium" style="font-size: 0.7rem; padding: 3px 6px;">Bootstrap 5</span>
-                                <span class="badge bg-white text-dark border fw-medium" style="font-size: 0.7rem; padding: 3px 6px;">MySQL</span>
-                                <span class="badge bg-white text-dark border fw-medium" style="font-size: 0.7rem; padding: 3px 6px;">JS/AJAX</span>
-                                <span class="badge bg-white text-dark border fw-medium" style="font-size: 0.7rem; padding: 3px 6px;">CI/CD</span>
-                                <span class="badge bg-white text-dark border fw-medium" style="font-size: 0.7rem; padding: 3px 6px;">Git</span>
+                                <span class="badge bg-white text-dark border fw-medium"
+                                    style="font-size: 0.7rem; padding: 3px 6px;">PHP</span>
+                                <span class="badge bg-white text-dark border fw-medium"
+                                    style="font-size: 0.7rem; padding: 3px 6px;">HTML/CSS</span>
+                                <span class="badge bg-white text-dark border fw-medium"
+                                    style="font-size: 0.7rem; padding: 3px 6px;">Bootstrap 5</span>
+                                <span class="badge bg-white text-dark border fw-medium"
+                                    style="font-size: 0.7rem; padding: 3px 6px;">MySQL</span>
+                                <span class="badge bg-white text-dark border fw-medium"
+                                    style="font-size: 0.7rem; padding: 3px 6px;">JS/AJAX</span>
+                                <span class="badge bg-white text-dark border fw-medium"
+                                    style="font-size: 0.7rem; padding: 3px 6px;">CI/CD</span>
+                                <span class="badge bg-white text-dark border fw-medium"
+                                    style="font-size: 0.7rem; padding: 3px 6px;">Git</span>
                             </div>
                         </div>
                     </div>
@@ -434,6 +457,9 @@
                         </a>
                         <a href="https://github.com/Aman-p02" target="_blank" class="social-btn github" title="GitHub">
                             <i class="fa-brands fa-github"></i>
+                        </a>
+                        <a href="https://amanprajapati2.vercel.app/" target="_blank" class="social-btn portfolio" title="Portfolio">
+                            <i class="fa-solid fa-globe"></i>
                         </a>
                     </div>
                 </div>
@@ -450,7 +476,8 @@
                     </div>
                     <h3 class="dev-name">DANTANI VANIT NITINBHAI</h3>
                     <div class="dev-role">Full Stack Developer</div>
-                    <div class="dev-quote">"Bridging the gap between complex logic and beautiful user experiences."</div>
+                    <div class="dev-quote">"Bridging the gap between complex logic and beautiful user experiences."
+                    </div>
 
                     <div class="dev-info">
                         <div class="dev-info-item">
@@ -467,7 +494,8 @@
                         </div>
                         <div class="dev-info-item">
                             <i class="fa-solid fa-envelope"></i>
-                            <span><strong>Email:</strong> <a href="mailto:vanitdantani05@gmail.com">vanitdantani05@gmail.com</a></span>
+                            <span><strong>Email:</strong> <a
+                                    href="mailto:vanitdantani05@gmail.com">vanitdantani05@gmail.com</a></span>
                         </div>
                     </div>
 
