@@ -512,5 +512,6 @@ $activities = $stmt->fetchAll(PDO::FETCH_ASSOC);
     </div>
 
     <script src="assets/bootstrap/js/bootstrap.bundle.min.js"></script>
+    <?php include 'includes/footer.php'; ?>
 </body>
 </html>

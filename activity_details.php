@@ -466,5 +466,6 @@ $images = $stmtImg->fetchAll(PDO::FETCH_COLUMN);
     </div>
 
     <script src="assets/bootstrap/js/bootstrap.bundle.min.js"></script>
+    <?php include 'includes/footer.php'; ?>
 </body>
 </html>
