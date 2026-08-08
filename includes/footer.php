@@ -72,7 +72,9 @@
 
 <?php
     // Determine relative path to root based on current script location
-    $inModule = strpos($_SERVER['SCRIPT_NAME'], '/student-module/') !== false || strpos($_SERVER['SCRIPT_NAME'], '/admin-module/') !== false;
+    $inModule = strpos($_SERVER['SCRIPT_NAME'], '/student-module/') !== false || 
+                strpos($_SERVER['SCRIPT_NAME'], '/admin-module/') !== false ||
+                strpos($_SERVER['SCRIPT_NAME'], '/developer/') !== false;
     $basePrefix = $inModule ? '../' : './';
 ?>
 
