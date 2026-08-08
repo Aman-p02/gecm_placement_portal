@@ -64,6 +64,7 @@ $csrfToken = generate_csrf_token();
     <title>Login - GEC Placement Portal</title>
     <link href="../assets/bootstrap/css/bootstrap.min.css" rel="stylesheet">
     <link rel="stylesheet" href="css/dashboard.css">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.0/css/all.min.css">
 </head>
 
 <body>
