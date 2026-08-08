@@ -402,6 +402,22 @@
                         </div>
                     </div>
 
+                    <div class="dev-contribution mt-4 mb-4 text-start px-2">
+                        <h6 class="fw-bold mb-2" style="color: var(--primary-navy); font-size: 0.95rem;"><i class="fa-solid fa-bullseye me-2 text-danger"></i> Key Contributions:</h6>
+                        <p class="text-muted small mb-3 lh-sm">Developed student and admin panel, database architecture, backend logic, and UI design.</p>
+                        
+                        <h6 class="fw-bold mb-2" style="color: var(--primary-navy); font-size: 0.95rem;"><i class="fa-solid fa-code me-2 text-primary"></i> Tech Stack:</h6>
+                        <div class="d-flex flex-wrap gap-1 mt-2">
+                            <span class="badge bg-light text-dark border">PHP</span>
+                            <span class="badge bg-light text-dark border">HTML5</span>
+                            <span class="badge bg-light text-dark border">CSS3</span>
+                            <span class="badge bg-light text-dark border">Bootstrap 5</span>
+                            <span class="badge bg-light text-dark border">MySQL</span>
+                            <span class="badge bg-light text-dark border">JavaScript</span>
+                            <span class="badge bg-light text-dark border">AJAX</span>
+                        </div>
+                    </div>
+
                     <div class="connect-heading">Let's Connect</div>
                     <div class="social-links">
                         <a href="https://www.linkedin.com/in/aman-prajapati-855a8a37b/" target="_blank"
