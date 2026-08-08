@@ -750,6 +750,7 @@ function isChecked($field, $profile) {
 
     <script src="js/dashboard.js"></script>
     <script src="../assets/bootstrap/js/bootstrap.bundle.min.js"></script>
+<?php include '../includes/footer.php'; ?>
 </body>
 
 </html>

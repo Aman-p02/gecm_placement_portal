@@ -124,9 +124,13 @@
     <!-- Copyright -->
     <div class="footer-bottom">
         <div class="container text-center">
-            <p class="mb-0" style="font-size: 0.9rem;">
+            <p class="mb-2" style="font-size: 0.9rem;">
                 &copy; <?= date('Y') ?> <strong>GEC Modasa Placement Cell</strong>. All Rights Reserved.
             </p>
+            <a href="/gec_placement_portal/developers.php" title="Meet the Developers Team"
+                style="display: inline-flex; align-items: center; justify-content: center; gap: 8px; background-color: #0f172a; color: white; border-radius: 50px; padding: 8px 16px; font-size: 0.85rem; font-weight: 600; text-decoration: none; box-shadow: 0 4px 12px rgba(0,0,0,0.2); transition: all 0.3s ease; margin-top: 5px;">
+                <i class="fa-solid fa-code"></i> Developer Team
+            </a>
         </div>
     </div>
 </footer>

@@ -52,8 +52,12 @@
             </div>
         </div>
         <hr style="border-color: rgba(255,255,255,0.1); margin: 25px 0 20px;">
-        <div class="d-flex justify-content-center align-items-center text-center" style="font-size: 0.85rem;">
-            <div class="mb-2 mb-md-0">&copy; <?= date('Y') ?> <strong class="text-white">GEC Modasa Placement Cell</strong></div>
+        <div class="d-flex flex-column justify-content-center align-items-center text-center" style="font-size: 0.85rem;">
+            <div class="mb-3">&copy; <?= date('Y') ?> <strong class="text-white">GEC Modasa Placement Cell</strong></div>
+            <a href="/gec_placement_portal/developers.php" title="Meet the Developers Team"
+                style="display: inline-flex; align-items: center; justify-content: center; gap: 8px; background-color: #0f172a; color: white; border-radius: 50px; padding: 6px 14px; font-weight: 600; text-decoration: none; box-shadow: 0 4px 12px rgba(0,0,0,0.2); transition: all 0.3s ease;">
+                <i class="fa-solid fa-code"></i> Developer Team
+            </a>
         </div>
     </div>
 </footer>
