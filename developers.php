@@ -317,7 +317,7 @@
                         <!-- REPLACE THIS SRC WITH ACTUAL IMAGE -->
                         <img src="https://ui-avatars.com/api/?name=Aman+Prajapati&background=3b82f6&color=fff&size=200&font-size=0.33" alt="Prajapati Aman Jayeshbhai" class="dev-img">
                     </div>
-                    <h3 class="dev-name">Prajapati Aman Jayeshbhai</h3>
+                    <h3 class="dev-name">PRAJAPATI AMAN JAYESHBHAI</h3>
                     <div class="dev-role">Full Stack Developer</div>
                     
                     <div class="dev-info">
@@ -353,7 +353,7 @@
                         <!-- REPLACE THIS SRC WITH ACTUAL IMAGE -->
                         <img src="https://ui-avatars.com/api/?name=Vanit+Dantani&background=8b5cf6&color=fff&size=200&font-size=0.33" alt="Vanit Dantani Nitinbhai" class="dev-img">
                     </div>
-                    <h3 class="dev-name">Vanit Dantani Nitinbhai</h3>
+                    <h3 class="dev-name">DANTANI VANIT NITINBHAI</h3>
                     <div class="dev-role">Full Stack Developer</div>
                     
                     <div class="dev-info">

@@ -26,7 +26,7 @@
             color: #333;
         }
 
-        /* ── Floating Pill Navbar ─────────────────── */
+        /* â”€â”€ Floating Pill Navbar â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€ */
         .navbar-wrapper {
             position: sticky;
             top: 0;
@@ -247,7 +247,7 @@
 
         /* Grade Table */
         .grade-wrap { padding: 26px 30px; }
-        .grade-tbl { width: 100%; border-collapse: collapse; margin-bottom: 20px; scroll-margin-top: 90px; }
+        .grade-tbl { width: 100%; border-collapse: collapse; margin-bottom: 18px; scroll-margin-top: 50px; }
         .grade-tbl thead th { text-align: left; font-size: 0.82rem; font-weight: 800; letter-spacing: 0.07em; text-transform: uppercase; color: #888; padding: 0 16px 12px; border-bottom: 2px solid #e8edf5; }
         .grade-tbl tbody td { padding: 15px 16px; border-bottom: 1px solid #f3f6fb; font-size: 1rem; vertical-align: middle; }
         .grade-tbl tbody tr:last-child td { border-bottom: none; }
@@ -273,7 +273,7 @@
 </head>
 <body>
 
-    <!-- ═══════════ FULL WIDTH NAVBAR ═══════════ -->
+    <!-- â•â•â•â•â•â•â•â•â•â•â• FULL WIDTH NAVBAR â•â•â•â•â•â•â•â•â•â•â• -->
     <div class="navbar-wrapper no-print">
         <nav class="navbar navbar-expand-lg navbar-pill py-2">
             <div class="container-fluid px-4">
@@ -319,7 +319,7 @@
         </nav>
     </div>
 
-    <!-- ═══════════ HERO SECTION ═══════════ -->
+    <!-- â•â•â•â•â•â•â•â•â•â•â• HERO SECTION â•â•â•â•â•â•â•â•â•â•â• -->
     <div class="hero-section no-print">
         <div class="container">
             <div class="hero-badge"><i class="fa-solid fa-shield-halved me-2"></i>Official Guidelines</div>
@@ -328,12 +328,12 @@
         </div>
     </div>
 
-    <!-- ═══════════ MAIN CONTENT (Matching Bootstrap container width) ═══════════ -->
+    <!-- â•â•â•â•â•â•â•â•â•â•â• MAIN CONTENT (Matching Bootstrap container width) â•â•â•â•â•â•â•â•â•â•â• -->
     <div class="container py-4">
 
-        <div class="row gx-4 align-items-start flex-lg-row-reverse">
+        <div class="row gx-4 flex-lg-row-reverse align-items-stretch">
             <!-- LEFT COLUMN -->
-            <div class="col-lg-6">
+            <div class="col-lg-6 d-flex flex-column">
 <!-- 3. Rules (MOBILE ONLY) -->
                 <div class="d-block d-lg-none">
                     <div class="sec-title" style="margin-top:36px;">
@@ -419,7 +419,7 @@
 
 
                 <!-- 4. Company Grades -->
-                <div class="sec-title" style="margin-top: 24px;">
+                <div class="sec-title mt-auto">
                     <div class="ico" style="background:#fef3c7;color:#d97706;"><i class="fa-solid fa-layer-group"></i></div>
                     <h2 style="color:#92400e;">Company Grade Classification</h2>
                 </div>
@@ -471,7 +471,7 @@
             </div>
 
             <!-- RIGHT COLUMN (DESKTOP ONLY) -->
-            <div class="col-lg-6 d-none d-lg-block">
+            <div class="col-lg-6 d-none d-lg-flex flex-column">
                 <!-- 3. Rules -->
                 <div class="sec-title mt-0">
                     <div class="ico" style="background:#eef2ff;color:var(--primary-navy);"><i class="fa-solid fa-list-check"></i></div>
@@ -513,7 +513,7 @@
                 </div>
                 
                 <!-- Penalty (DESKTOP ONLY) -->
-                <div class="sec-title" style="margin-top:36px;">
+                <div class="sec-title mt-auto">
                     <div class="ico" style="background:#fee2e2;color:#dc2626;"><i class="fa-solid fa-triangle-exclamation"></i></div>
                     <h2 style="color:#b91c1c;">Penalty Rules</h2>
                 </div>
