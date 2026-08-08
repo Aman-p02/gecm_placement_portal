@@ -186,9 +186,19 @@
         }
 
         .dev-info-item i {
-            color: var(--text-light);
-            width: 16px;
-            text-align: center;
+            color: var(--accent);
+            width: 20px;
+            font-size: 1.1rem;
+        }
+        
+        .dev-info-item span {
+            color: var(--secondary);
+            font-size: 0.95rem;
+        }
+        
+        .dev-info-item strong {
+            color: var(--primary);
+            font-weight: 700;
         }
 
         .social-links {
@@ -346,15 +356,15 @@
                     <div class="dev-info">
                         <div class="dev-info-item">
                             <i class="fa-solid fa-laptop-code"></i>
-                            <span>Computer Engineering</span>
+                            <span><strong>Branch:</strong> Computer Engineering</span>
                         </div>
                         <div class="dev-info-item">
                             <i class="fa-solid fa-graduation-cap"></i>
-                            <span>Batch: 2025 to 2028</span>
+                            <span><strong>Batch:</strong> 2025 to 2028</span>
                         </div>
                         <div class="dev-info-item">
                             <i class="fa-solid fa-id-badge"></i>
-                            <span>Enrollment: 250163107021</span>
+                            <span><strong>Enrollment:</strong> 250163107021</span>
                         </div>
                     </div>
 
@@ -384,15 +394,15 @@
                     <div class="dev-info">
                         <div class="dev-info-item">
                             <i class="fa-solid fa-laptop-code"></i>
-                            <span>Computer Engineering</span>
+                            <span><strong>Branch:</strong> Computer Engineering</span>
                         </div>
                         <div class="dev-info-item">
                             <i class="fa-solid fa-graduation-cap"></i>
-                            <span>Batch: 2025 to 2028</span>
+                            <span><strong>Batch:</strong> 2025 to 2028</span>
                         </div>
                         <div class="dev-info-item">
                             <i class="fa-solid fa-id-badge"></i>
-                            <span>Enrollment: 250163107004</span>
+                            <span><strong>Enrollment:</strong> 250163107004</span>
                         </div>
                     </div>
 
