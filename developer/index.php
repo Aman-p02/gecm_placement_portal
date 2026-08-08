@@ -54,7 +54,7 @@
                 <div class="dev-card">
                     <div class="dev-img-wrapper">
                         <!-- REPLACE THIS SRC WITH ACTUAL IMAGE -->
-                        <img src="developer/.developers_pic/Aman.jpg" ; alt="Prajapati Aman Jayeshbhai" class="dev-img"
+                        <img src="developers_pic/Aman.jpg" alt="Prajapati Aman Jayeshbhai" class="dev-img"
                             style="cursor: pointer;" onclick="openImageModal(this.src)">
                     </div>
                     <h3 class="dev-name">PRAJAPATI AMAN JAYESHBHAI</h3>
@@ -137,7 +137,7 @@
                 <div class="dev-card">
                     <div class="dev-img-wrapper">
                         <!-- REPLACE THIS SRC WITH ACTUAL IMAGE -->
-                        <img src="student-module/uploads/developers_pic/vanit.jpg"
+                        <img src="developers_pic/vanit.jpeg"
                             alt="Vanit Dantani Nitinbhai" class="dev-img" style="cursor: pointer;"
                             onclick="openImageModal(this.src)">
                     </div>

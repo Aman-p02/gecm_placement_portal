@@ -393,7 +393,7 @@ $images = $stmtImg->fetchAll(PDO::FETCH_COLUMN);
                         <li class="nav-item"><a class="nav-link" href="major_recruiters.php">Major Recruiters</a></li>
                         <li class="nav-item"><a class="nav-link active" href="placement_activities.php">Placement Activities</a></li>
                         <li class="nav-item"><a class="nav-link" href="placement_team.php">Placement Team</a></li>
-                        <li class="nav-item"><a class="nav-link" href="developers.php">Developers Team</a></li>
+                        <li class="nav-item"><a class="nav-link" href="developer/index.php">Developers Team</a></li>
                         <li class="nav-item d-lg-none mt-2">
                             <a class="btn-nav-filled w-100 text-center justify-content-center" href="student-module/login.php">
                                 <i class="fa-solid fa-user-graduate"></i> Student Login
