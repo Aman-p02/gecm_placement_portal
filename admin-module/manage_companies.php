@@ -242,10 +242,7 @@ $csrfToken = generate_csrf_token();
     <link href="../assets/bootstrap/css/bootstrap.min.css" rel="stylesheet">
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.0/css/all.min.css">
     <link rel="stylesheet" href="css/admin_style.css?v=2">
-    <style>
-        /* Force hide TinyMCE warning */
-        .tox-notifications-container { display: none !important; }
-    </style>
+
     <script src="https://cdnjs.cloudflare.com/ajax/libs/tinymce/6.8.2/tinymce.min.js" referrerpolicy="origin"></script>
     <script>
       tinymce.init({
