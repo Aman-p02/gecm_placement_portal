@@ -90,7 +90,7 @@
             </div>
             
             <!-- Quick Links -->
-            <div class="col-lg-2 col-md-6">
+            <div class="col-lg-3 col-md-6">
                 <h5 class="footer-heading">Quick Links</h5>
                 <div class="d-flex flex-column">
                     <a href="placement_statistics.php" class="footer-link">Placement Stats</a>
@@ -102,7 +102,7 @@
             </div>
 
             <!-- Contact -->
-            <div class="col-lg-4 col-md-6">
+            <div class="col-lg-3 col-md-6">
                 <h5 class="footer-heading">Contact Us</h5>
                 <div class="d-flex flex-column" style="font-size: 0.95rem;">
                     <div class="mb-3 d-flex align-items-start">
