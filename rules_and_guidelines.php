@@ -376,7 +376,7 @@
                 </div>
                     
                 <!-- 1. Dress Code -->
-                <div class="sec-title">
+                <div class="sec-title mt-0">
                     <div class="ico" style="background:#eef2ff;color:var(--primary-navy);"><i class="fa-solid fa-shirt"></i></div>
                     <h2 style="color:var(--primary-navy);">Dress Code</h2>
                 </div>
@@ -418,7 +418,7 @@
 
 
                 <!-- 4. Company Grades -->
-                <div class="sec-title" style="margin-top:36px;">
+                <div class="sec-title" style="margin-top: 10px;">
                     <div class="ico" style="background:#fef3c7;color:#d97706;"><i class="fa-solid fa-layer-group"></i></div>
                     <h2 style="color:#92400e;">Company Grade Classification</h2>
                 </div>
@@ -470,7 +470,7 @@
             </div>
 
             <!-- RIGHT COLUMN (DESKTOP ONLY) -->
-            <div class="col-lg-6 d-none d-lg-flex flex-column">
+            <div class="col-lg-6 d-none d-lg-block">
                 <!-- 3. Rules -->
                 <div class="sec-title mt-0">
                     <div class="ico" style="background:#eef2ff;color:var(--primary-navy);"><i class="fa-solid fa-list-check"></i></div>
