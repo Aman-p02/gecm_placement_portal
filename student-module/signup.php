@@ -167,14 +167,14 @@ $csrfToken = generate_csrf_token();
 
     <script src="js/validation.js"></script>
 
-    <!-- Footer & Floating Dev Button -->
-    <div style="text-align: center; margin-top: 40px; margin-bottom: 20px; color: #6c757d; font-size: 0.9rem;">
-        &copy; <?= date('Y') ?> GEC Modasa Placement Cell. All rights reserved.
+    
+        <a href="../developers.php" title="Meet the Developers Team"
+            style="display: inline-flex; align-items: center; justify-content: center; gap: 8px; background-color: #0f172a; color: white; border-radius: 50px; padding: 10px 20px; font-weight: 600; text-decoration: none; box-shadow: 0 4px 12px rgba(0,0,0,0.2); transition: all 0.3s ease; position: relative; z-index: 10;">
+            <i class="fa-solid fa-code"></i> Developer Team
+        </a>
     </div>
-    <a href="../developers.php" class="btn-dev-floating" title="Meet the Developers Team" style="position: fixed; bottom: 20px; right: 20px; background-color: #0f172a; color: white; border-radius: 50px; padding: 10px 20px; font-weight: 600; text-decoration: none; box-shadow: 0 4px 12px rgba(0,0,0,0.2); transition: all 0.3s ease; z-index: 1000; display: flex; align-items: center; gap: 8px;">
-        <i class="fa-solid fa-code"></i> Developer Team
-    </a>
 
+<?php include '../includes/footer_auth.php'; ?>
 </body>
 
 </html>

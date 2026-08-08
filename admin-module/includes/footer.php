@@ -40,6 +40,7 @@
                     <a href="dashboard.php" class="admin-footer-link"><i class="fa-solid fa-angle-right me-2"></i> Dashboard Overview</a>
                     <a href="manage_companies.php" class="admin-footer-link"><i class="fa-solid fa-angle-right me-2"></i> Manage Companies</a>
                     <a href="manage_activities.php" class="admin-footer-link"><i class="fa-solid fa-angle-right me-2"></i> Manage Activities</a>
+                    <a href="/gec_placement_portal/developers.php" class="admin-footer-link"><i class="fa-solid fa-code me-2"></i> View Developers</a>
                 </div>
             </div>
             <div class="col-lg-4 col-md-6">

@@ -89,7 +89,7 @@
             </div>
             
             <!-- Quick Links -->
-            <div class="col-lg-3 col-md-6">
+            <div class="col-lg-2 col-md-6">
                 <h5 class="footer-heading">Quick Links</h5>
                 <div class="d-flex flex-column">
                     <a href="placement_statistics.php" class="footer-link">Placement Stats</a>
@@ -97,6 +97,14 @@
                     <a href="placement_activities.php" class="footer-link">Latest Drives</a>
                     <a href="rules_and_guidelines.php" class="footer-link">Guidelines</a>
                     <a href="placement_team.php" class="footer-link">Our Team</a>
+                </div>
+            </div>
+
+            <!-- Developer Team -->
+            <div class="col-lg-2 col-md-6">
+                <h5 class="footer-heading">Developer Team</h5>
+                <div class="d-flex flex-column">
+                    <a href="/gec_placement_portal/developers.php" class="footer-link">View Developers</a>
                 </div>
             </div>
 
