@@ -3,13 +3,16 @@
 ?>
 <!DOCTYPE html>
 <html lang="en">
+
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Meet the Developers | GEC Modasa</title>
     <link href="assets/bootstrap/css/bootstrap.min.css" rel="stylesheet">
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.0/css/all.min.css">
-    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&family=Outfit:wght@400;500;600;700;800&display=swap" rel="stylesheet">
+    <link
+        href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&family=Outfit:wght@400;500;600;700;800&display=swap"
+        rel="stylesheet">
     <style>
         :root {
             --primary: #0f172a;
@@ -17,12 +20,13 @@
             --accent: #3b82f6;
             --text-light: #94a3b8;
         }
-        
-        html, body {
+
+        html,
+        body {
             overflow-x: hidden;
             max-width: 100%;
         }
-        
+
         body {
             font-family: 'Inter', sans-serif;
             background: linear-gradient(135deg, #f8fafc 0%, #e2e8f0 100%);
@@ -88,12 +92,12 @@
         .dev-card {
             background: rgba(255, 255, 255, 0.7);
             backdrop-filter: blur(12px);
-            border: 1px solid rgba(255,255,255,0.8);
+            border: 1px solid rgba(255, 255, 255, 0.8);
             border-radius: 24px;
             padding: clamp(1.5rem, 5vw, 2.5rem);
             text-align: center;
             transition: all 0.4s cubic-bezier(0.175, 0.885, 0.32, 1.275);
-            box-shadow: 0 10px 40px rgba(0,0,0,0.05);
+            box-shadow: 0 10px 40px rgba(0, 0, 0, 0.05);
             position: relative;
             overflow: hidden;
             height: 100%;
@@ -114,7 +118,7 @@
 
         .dev-card:hover {
             transform: translateY(-10px);
-            box-shadow: 0 20px 40px rgba(0,0,0,0.1);
+            box-shadow: 0 20px 40px rgba(0, 0, 0, 0.1);
         }
 
         .dev-card:hover::before {
@@ -167,7 +171,7 @@
             flex-direction: column;
             gap: 0.5rem;
             text-align: left;
-            background: rgba(255,255,255,0.5);
+            background: rgba(255, 255, 255, 0.5);
             padding: 1.25rem;
             border-radius: 12px;
             margin-bottom: 1.5rem;
@@ -202,19 +206,19 @@
             justify-content: center;
             color: var(--primary);
             background: #fff;
-            border: 1px solid rgba(0,0,0,0.08);
+            border: 1px solid rgba(0, 0, 0, 0.08);
             font-size: 1.4rem;
             text-decoration: none;
             transition: all 0.3s ease;
         }
 
-        
+
         .social-btn.linkedin {
             color: #0077b5;
             border-color: rgba(0, 119, 181, 0.3);
             background: rgba(0, 119, 181, 0.05);
         }
-        
+
         .social-btn.github {
             color: #333;
             border-color: rgba(51, 51, 51, 0.3);
@@ -274,17 +278,18 @@
             border-radius: 50px;
             font-weight: 600;
             text-decoration: none;
-            box-shadow: 0 4px 15px rgba(0,0,0,0.05);
+            box-shadow: 0 4px 15px rgba(0, 0, 0, 0.05);
             transition: all 0.3s ease;
         }
 
         .btn-back:hover {
             transform: translateY(-2px);
-            box-shadow: 0 8px 20px rgba(0,0,0,0.08);
+            box-shadow: 0 8px 20px rgba(0, 0, 0, 0.08);
             color: var(--primary);
         }
     </style>
 </head>
+
 <body>
 
     <!-- Background Decoration -->
@@ -313,17 +318,18 @@
         </div>
 
         <div class="row g-4 justify-content-center">
-            
+
             <!-- Developer 1: Aman -->
             <div class="col-12 col-md-6 col-lg-4">
                 <div class="dev-card">
                     <div class="dev-img-wrapper">
                         <!-- REPLACE THIS SRC WITH ACTUAL IMAGE -->
-                        <img src="https://ui-avatars.com/api/?name=Aman+Prajapati&background=3b82f6&color=fff&size=200&font-size=0.33" alt="Prajapati Aman Jayeshbhai" class="dev-img">
+                        <img src="https://ui-avatars.com/api/?name=Aman+Prajapati&background=3b82f6&color=fff&size=200&font-size=0.33"
+                            alt="Prajapati Aman Jayeshbhai" class="dev-img">
                     </div>
                     <h3 class="dev-name">Prajapati Aman Jayeshbhai</h3>
                     <div class="dev-role">Full Stack Developer</div>
-                    
+
                     <div class="dev-info">
                         <div class="dev-info-item">
                             <i class="fa-solid fa-laptop-code"></i>
@@ -340,7 +346,8 @@
                     </div>
 
                     <div class="social-links">
-                        <a href="https://www.linkedin.com/in/aman-prajapati-855a8a37b/" target="_blank" class="social-btn linkedin" title="LinkedIn">
+                        <a href="https://www.linkedin.com/in/aman-prajapati-855a8a37b/" target="_blank"
+                            class="social-btn linkedin" title="LinkedIn">
                             <i class="fa-brands fa-linkedin-in"></i>
                         </a>
                         <a href="https://github.com/Aman-p02" target="_blank" class="social-btn github" title="GitHub">
@@ -355,11 +362,12 @@
                 <div class="dev-card">
                     <div class="dev-img-wrapper">
                         <!-- REPLACE THIS SRC WITH ACTUAL IMAGE -->
-                        <img src="https://ui-avatars.com/api/?name=Vanit+Dantani&background=8b5cf6&color=fff&size=200&font-size=0.33" alt="Vanit Dantani Nitinbhai" class="dev-img">
+                        <img src="https://ui-avatars.com/api/?name=Vanit+Dantani&background=8b5cf6&color=fff&size=200&font-size=0.33"
+                            alt="Vanit Dantani Nitinbhai" class="dev-img">
                     </div>
-                    <h3 class="dev-name">Vanit Dantani Nitinbhai</h3>
+                    <h3 class="dev-name">Dantani vanit Nitinbhai</h3>
                     <div class="dev-role">Full Stack Developer</div>
-                    
+
                     <div class="dev-info">
                         <div class="dev-info-item">
                             <i class="fa-solid fa-laptop-code"></i>
@@ -376,10 +384,12 @@
                     </div>
 
                     <div class="social-links">
-                        <a href="https://www.linkedin.com/in/vanitdantani" target="_blank" class="social-btn linkedin" title="LinkedIn">
+                        <a href="https://www.linkedin.com/in/vanitdantani" target="_blank" class="social-btn linkedin"
+                            title="LinkedIn">
                             <i class="fa-brands fa-linkedin-in"></i>
                         </a>
-                        <a href="https://github.com/VanitDantani" target="_blank" class="social-btn github" title="GitHub">
+                        <a href="https://github.com/VanitDantani" target="_blank" class="social-btn github"
+                            title="GitHub">
                             <i class="fa-brands fa-github"></i>
                         </a>
                     </div>
@@ -389,11 +399,13 @@
         </div>
 
         <div class="text-center mt-5">
-            <p class="text-muted small fw-medium">Developed with <i class="fa-solid fa-heart text-danger mx-1"></i> for GEC Modasa (August 2026)</p>
+            <p class="text-muted small fw-medium">Developed with <i class="fa-solid fa-heart text-danger mx-1"></i> for
+                GEC Modasa (August 2026)</p>
             <a href="placement_statistics.php" class="btn btn-link text-decoration-none d-md-none mt-3">Back to Home</a>
         </div>
     </div>
 
     <script src="assets/bootstrap/js/bootstrap.bundle.min.js"></script>
 </body>
+
 </html>
