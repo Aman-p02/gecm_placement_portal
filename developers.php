@@ -458,7 +458,8 @@
                         <a href="https://github.com/Aman-p02" target="_blank" class="social-btn github" title="GitHub">
                             <i class="fa-brands fa-github"></i>
                         </a>
-                        <a href="https://amanprajapati2.vercel.app/" target="_blank" class="social-btn portfolio" title="Portfolio">
+                        <a href="https://amanprajapati2.vercel.app/" target="_blank" class="social-btn portfolio"
+                            title="Portfolio">
                             <i class="fa-solid fa-globe"></i>
                         </a>
                     </div>
@@ -499,9 +500,10 @@
                         </div>
 
                         <hr class="my-2 border-secondary" style="opacity: 0.15;">
-                        
+
                         <div class="text-start mt-2">
-                            <div style="color: var(--primary-navy); font-size: 0.85rem; font-weight: 700; margin-bottom: 2px;">
+                            <div
+                                style="color: var(--primary-navy); font-size: 0.85rem; font-weight: 700; margin-bottom: 2px;">
                                 <i class="fa-solid fa-bullseye me-1 text-danger"></i> Key Contributions:
                             </div>
                             <div style="font-size: 0.85rem; line-height: 1.3; color: #444;" class="mb-2 fw-medium">
@@ -532,7 +534,8 @@
                             title="GitHub">
                             <i class="fa-brands fa-github"></i>
                         </a>
-                        <a href="https://vanitdantaniportfolio.netlify.app/" target="_blank" class="social-btn portfolio" title="Portfolio">
+                        <a href="https://vanitdantaniportfolio.netlify.app/" target="_blank"
+                            class="social-btn portfolio" title="Portfolio">
                             <i class="fa-solid fa-globe"></i>
                         </a>
                     </div>
