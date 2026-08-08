@@ -15,9 +15,9 @@
         rel="stylesheet">
     <style>
         :root {
-            --primary: #0f172a;
+            --primary: #1B365D;
             --secondary: #334155;
-            --accent: #3b82f6;
+            --accent: #E65A4B;
             --text-light: #94a3b8;
         }
 
@@ -29,7 +29,7 @@
 
         body {
             font-family: 'Inter', sans-serif;
-            background: linear-gradient(135deg, #f8fafc 0%, #e2e8f0 100%);
+            background: #f4f6f9;
             min-height: 100vh;
             display: flex;
             flex-direction: column;
@@ -265,7 +265,7 @@
             left: -10%;
             width: 400px;
             height: 400px;
-            background: #e0e7ff;
+            background: rgba(230, 90, 75, 0.15);
             border-radius: 50%;
         }
 
@@ -274,7 +274,7 @@
             right: -10%;
             width: 500px;
             height: 500px;
-            background: #ede9fe;
+            background: rgba(27, 54, 93, 0.15);
             border-radius: 50%;
         }
 
