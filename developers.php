@@ -143,9 +143,10 @@
         .dev-name {
             font-family: 'Outfit', sans-serif;
             font-weight: 700;
-            font-size: 1.7rem;
+            font-size: 1.35rem;
             color: var(--primary);
             margin-bottom: 0.25rem;
+            white-space: nowrap;
         }
 
         .dev-role {
