@@ -584,9 +584,6 @@ if (empty($filterBranch)) {
                     <a href="placement_statistics.php?view=placement" class="btn btn-light fw-bold px-4 py-2 rounded-pill">
                         <i class="fa-solid fa-chart-bar me-2"></i>View Placement Records
                     </a>
-                    <a href="student-module/login.php" class="btn btn-outline-light fw-bold px-4 py-2 rounded-pill">
-                        <i class="fa-solid fa-user-graduate me-2"></i>Student Login
-                    </a>
                 </div>
             </div>
         </div>
