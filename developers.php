@@ -338,9 +338,7 @@
                 <div class="dev-card">
                     <div class="dev-img-wrapper">
                         <!-- REPLACE THIS SRC WITH ACTUAL IMAGE -->
-                        <a href="student-module/uploads/developers_pic/aman2.jpg" target="_blank">
-                            <img src="student-module/uploads/developers_pic/aman2.jpg" alt="Prajapati Aman Jayeshbhai" class="dev-img">
-                        </a>
+                        <img src="student-module/uploads/developers_pic/aman2.jpg" alt="Prajapati Aman Jayeshbhai" class="dev-img" style="cursor: pointer;" onclick="openImageModal(this.src)">
                     </div>
                     <h3 class="dev-name">PRAJAPATI AMAN JAYESHBHAI</h3>
                     <div class="dev-role">Full Stack Developer</div>
@@ -377,10 +375,8 @@
                 <div class="dev-card">
                     <div class="dev-img-wrapper">
                         <!-- REPLACE THIS SRC WITH ACTUAL IMAGE -->
-                        <a href="https://ui-avatars.com/api/?name=Vanit+Dantani&background=8b5cf6&color=fff&size=200&font-size=0.33" target="_blank">
-                            <img src="https://ui-avatars.com/api/?name=Vanit+Dantani&background=8b5cf6&color=fff&size=200&font-size=0.33"
-                                alt="Vanit Dantani Nitinbhai" class="dev-img">
-                        </a>
+                        <img src="https://ui-avatars.com/api/?name=Vanit+Dantani&background=8b5cf6&color=fff&size=200&font-size=0.33"
+                            alt="Vanit Dantani Nitinbhai" class="dev-img" style="cursor: pointer;" onclick="openImageModal(this.src)">
                     </div>
                     <h3 class="dev-name">DANTANI VANIT NITINBHAI</h3>
                     <div class="dev-role">Full Stack Developer</div>
@@ -421,7 +417,26 @@
         </div>
     </div>
 
+    <!-- Image Modal (Instagram Style) -->
+    <div class="modal fade" id="imageModal" tabindex="-1" aria-hidden="true">
+        <div class="modal-dialog modal-dialog-centered modal-lg">
+            <div class="modal-content bg-transparent border-0">
+                <div class="modal-body text-center position-relative p-0">
+                    <button type="button" class="btn-close btn-close-white position-absolute top-0 end-0 m-3" data-bs-dismiss="modal" aria-label="Close" style="z-index: 1055; filter: drop-shadow(0 2px 4px rgba(0,0,0,0.5));"></button>
+                    <img id="modalImage" src="" alt="Developer" class="img-fluid rounded-4 shadow-lg" style="max-height: 85vh; object-fit: contain;">
+                </div>
+            </div>
+        </div>
+    </div>
+
     <script src="assets/bootstrap/js/bootstrap.bundle.min.js"></script>
+    <script>
+        function openImageModal(src) {
+            document.getElementById('modalImage').src = src;
+            var imageModal = new bootstrap.Modal(document.getElementById('imageModal'));
+            imageModal.show();
+        }
+    </script>
     <?php include 'includes/footer.php'; ?>
 </body>
 
