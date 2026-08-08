@@ -403,14 +403,18 @@
 
                         <hr class="my-2 border-secondary" style="opacity: 0.15;">
                         
-                        <div class="text-start mt-1">
-                            <p class="mb-2" style="font-size: 0.85rem; line-height: 1.3;">
-                                <strong style="color: var(--primary-navy);"><i class="fa-solid fa-bullseye me-1 text-danger"></i> Key Contributions:</strong> 
-                                <span class="text-muted">Developed student & admin panel, database architecture, backend logic, and UI design.</span>
-                            </p>
+                        <div class="text-start mt-2">
+                            <div style="color: var(--primary-navy); font-size: 0.85rem; font-weight: 700; margin-bottom: 2px;">
+                                <i class="fa-solid fa-bullseye me-1 text-danger"></i> Key Contributions:
+                            </div>
+                            <div style="font-size: 0.85rem; line-height: 1.3; color: #444;" class="mb-2 fw-medium">
+                                Developed student & admin panel, database architecture, backend logic, and UI design.
+                            </div>
                             
-                            <div class="d-flex flex-wrap align-items-center gap-1 mt-1">
-                                <strong style="color: var(--primary-navy); font-size: 0.85rem; margin-right: 4px;"><i class="fa-solid fa-code me-1 text-primary"></i> Stack:</strong>
+                            <div style="color: var(--primary-navy); font-size: 0.85rem; font-weight: 700; margin-bottom: 4px;">
+                                <i class="fa-solid fa-code me-1 text-primary"></i> Tech Stack:
+                            </div>
+                            <div class="d-flex flex-wrap gap-1">
                                 <span class="badge bg-white text-dark border fw-medium" style="font-size: 0.7rem; padding: 3px 6px;">PHP</span>
                                 <span class="badge bg-white text-dark border fw-medium" style="font-size: 0.7rem; padding: 3px 6px;">HTML/CSS</span>
                                 <span class="badge bg-white text-dark border fw-medium" style="font-size: 0.7rem; padding: 3px 6px;">Bootstrap 5</span>
