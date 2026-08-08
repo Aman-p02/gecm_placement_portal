@@ -108,7 +108,7 @@
                                 <span class="badge bg-white text-dark border fw-medium"
                                     style="font-size: 0.7rem; padding: 3px 6px;">JS/AJAX</span>
                                 <span class="badge bg-white text-dark border fw-medium"
-                                    style="font-size: 0.7rem; padding: 3px 6px;">CI/CD</span>
+                                    style="font-size: 0.7rem; padding: 3px 6px;">CI/CD Pipeline</span>
                                 <span class="badge bg-white text-dark border fw-medium"
                                     style="font-size: 0.7rem; padding: 3px 6px;">Git</span>
                             </div>
