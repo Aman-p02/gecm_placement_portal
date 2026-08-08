@@ -458,7 +458,8 @@
                         <a href="https://github.com/Aman-p02" target="_blank" class="social-btn github" title="GitHub">
                             <i class="fa-brands fa-github"></i>
                         </a>
-                        <a href="https://amanprajapati2.vercel.app/" target="_blank" class="social-btn portfolio" title="Portfolio">
+                        <a href="https://amanprajapati2.vercel.app/" target="_blank" class="social-btn portfolio"
+                            title="Portfolio">
                             <i class="fa-solid fa-globe"></i>
                         </a>
                     </div>
@@ -499,23 +500,31 @@
                         </div>
 
                         <hr class="my-2 border-secondary" style="opacity: 0.15;">
-                        
+
                         <div class="text-start mt-2">
-                            <div style="color: var(--primary-navy); font-size: 0.85rem; font-weight: 700; margin-bottom: 2px;">
+                            <div
+                                style="color: var(--primary-navy); font-size: 0.85rem; font-weight: 700; margin-bottom: 2px;">
                                 <i class="fa-solid fa-bullseye me-1 text-danger"></i> Key Contributions:
                             </div>
                             <div style="font-size: 0.85rem; line-height: 1.3; color: #444;" class="mb-2 fw-medium">
                                 Developed statistics page and admin panel UI & backend logic.
                             </div>
-                            
-                            <div style="color: var(--primary-navy); font-size: 0.85rem; font-weight: 700; margin-bottom: 4px;">
+                            <br>
+                            <div
+                                style="color: var(--primary-navy); font-size: 0.85rem; font-weight: 700; margin-bottom: 4px;">
                                 <i class="fa-solid fa-code me-1 text-primary"></i> Tech Stack:
                             </div>
                             <div class="d-flex flex-wrap gap-1">
-                                <span class="badge bg-white text-dark border fw-medium" style="font-size: 0.7rem; padding: 3px 6px;">HTML/CSS</span>
-                                <span class="badge bg-white text-dark border fw-medium" style="font-size: 0.7rem; padding: 3px 6px;">Bootstrap 5</span>
-                                <span class="badge bg-white text-dark border fw-medium" style="font-size: 0.7rem; padding: 3px 6px;">JavaScript</span>
-                                <span class="badge bg-white text-dark border fw-medium" style="font-size: 0.7rem; padding: 3px 6px;">MySQL</span>
+                                <span class="badge bg-white text-dark border fw-medium"
+                                    style="font-size: 0.7rem; padding: 3px 6px;">HTML/CSS</span>
+                                <span class="badge bg-white text-dark border fw-medium"
+                                    style="font-size: 0.7rem; padding: 3px 6px;">Bootstrap 5</span>
+                                <span class="badge bg-white text-dark border fw-medium"
+                                    style="font-size: 0.7rem; padding: 3px 6px;">JavaScript</span>
+                                <span class="badge bg-white text-dark border fw-medium"
+                                    style="font-size: 0.7rem; padding: 3px 6px;">MySQL</span>
+                                <span class="badge bg-white text-dark border fw-medium"
+                                    style="font-size: 0.7rem; padding: 3px 6px;">Git</span>
                             </div>
                         </div>
                     </div>
@@ -530,7 +539,8 @@
                             title="GitHub">
                             <i class="fa-brands fa-github"></i>
                         </a>
-                        <a href="https://vanitdantaniportfolio.netlify.app/" target="_blank" class="social-btn portfolio" title="Portfolio">
+                        <a href="https://vanitdantaniportfolio.netlify.app/" target="_blank"
+                            class="social-btn portfolio" title="Portfolio">
                             <i class="fa-solid fa-globe"></i>
                         </a>
                     </div>
