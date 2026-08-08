@@ -367,5 +367,6 @@ $activity = $stmt->fetch(PDO::FETCH_ASSOC);
             }
         });
     </script>
+    <?php include 'includes/footer.php'; ?>
 </body>
 </html>

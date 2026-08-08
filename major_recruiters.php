@@ -206,10 +206,6 @@
             transition: transform 0.4s ease, box-shadow 0.4s ease;
         }
         
-        .recruiters-grid-img:hover {
-            transform: translateY(-5px);
-            box-shadow: 0 20px 55px rgba(27, 54, 93, 0.12);
-        }
     </style>
 </head>
 <body>

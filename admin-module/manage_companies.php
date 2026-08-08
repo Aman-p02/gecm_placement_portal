@@ -590,6 +590,7 @@ $csrfToken = generate_csrf_token();
             }
         });
     </script>
+    <?php include 'includes/footer.php'; ?>
 </body>
 </html>
 
