@@ -400,21 +400,23 @@
                             <i class="fa-solid fa-envelope"></i>
                             <span><strong>Email:</strong> <a href="mailto:amanjp5711@gmail.com">amanjp5711@gmail.com</a></span>
                         </div>
-                    </div>
 
-                    <div class="dev-contribution mt-4 mb-4 text-start px-2">
-                        <h6 class="fw-bold mb-2" style="color: var(--primary-navy); font-size: 0.95rem;"><i class="fa-solid fa-bullseye me-2 text-danger"></i> Key Contributions:</h6>
-                        <p class="text-muted small mb-3 lh-sm">Developed student and admin panel, database architecture, backend logic, and UI design.</p>
+                        <hr class="my-2 border-secondary" style="opacity: 0.15;">
                         
-                        <h6 class="fw-bold mb-2" style="color: var(--primary-navy); font-size: 0.95rem;"><i class="fa-solid fa-code me-2 text-primary"></i> Tech Stack:</h6>
-                        <div class="d-flex flex-wrap gap-1 mt-2">
-                            <span class="badge bg-light text-dark border">PHP</span>
-                            <span class="badge bg-light text-dark border">HTML5</span>
-                            <span class="badge bg-light text-dark border">CSS3</span>
-                            <span class="badge bg-light text-dark border">Bootstrap 5</span>
-                            <span class="badge bg-light text-dark border">MySQL</span>
-                            <span class="badge bg-light text-dark border">JavaScript</span>
-                            <span class="badge bg-light text-dark border">AJAX</span>
+                        <div class="text-start">
+                            <h6 class="fw-bold mb-1" style="color: var(--primary-navy); font-size: 0.9rem;"><i class="fa-solid fa-bullseye me-1 text-danger"></i> Key Contributions:</h6>
+                            <p class="text-muted mb-2" style="font-size: 0.85rem; line-height: 1.4;">Developed student & admin panel, database architecture, backend logic, and UI design.</p>
+                            
+                            <h6 class="fw-bold mb-1 mt-2" style="color: var(--primary-navy); font-size: 0.9rem;"><i class="fa-solid fa-code me-1 text-primary"></i> Tech Stack:</h6>
+                            <div class="d-flex flex-wrap gap-1 mt-1">
+                                <span class="badge bg-white text-dark border" style="font-size: 0.75rem;">PHP</span>
+                                <span class="badge bg-white text-dark border" style="font-size: 0.75rem;">HTML5 & CSS3</span>
+                                <span class="badge bg-white text-dark border" style="font-size: 0.75rem;">Bootstrap 5</span>
+                                <span class="badge bg-white text-dark border" style="font-size: 0.75rem;">MySQL</span>
+                                <span class="badge bg-white text-dark border" style="font-size: 0.75rem;">JS & AJAX</span>
+                                <span class="badge bg-white text-dark border" style="font-size: 0.75rem;">CI/CD Pipeline</span>
+                                <span class="badge bg-white text-dark border" style="font-size: 0.75rem;">Version Control</span>
+                            </div>
                         </div>
                     </div>
 
