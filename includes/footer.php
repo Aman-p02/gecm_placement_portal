@@ -1,16 +1,14 @@
 <style>
     .premium-footer {
         background: linear-gradient(135deg, #1B365D 0%, #11233D 100%);
+        background: 
+            linear-gradient(135deg, #1B365D 0%, #11233D 100%) padding-box,
+            linear-gradient(90deg, #E65A4B, #f59e0b) border-box;
+        border-top: 5px solid transparent;
+        border-radius: 15px 15px 0 0;
         color: rgba(255, 255, 255, 0.85);
         position: relative;
-        overflow: hidden;
         margin-top: 80px;
-    }
-    .premium-footer::before {
-        content: '';
-        position: absolute;
-        top: 0; left: 0; right: 0; height: 4px;
-        background: linear-gradient(90deg, #E65A4B, #f59e0b);
     }
     .footer-heading {
         color: #fff;
