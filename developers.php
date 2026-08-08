@@ -338,8 +338,7 @@
                 <div class="dev-card">
                     <div class="dev-img-wrapper">
                         <!-- REPLACE THIS SRC WITH ACTUAL IMAGE -->
-                        <img src="https://ui-avatars.com/api/?name=Aman+Prajapati&background=3b82f6&color=fff&size=200&font-size=0.33"
-                            alt="Prajapati Aman Jayeshbhai" class="dev-img">
+                        <img src="student-module/uploads/developers_pic/aman.jpg" alt="Prajapati Aman Jayeshbhai" class="dev-img">
                     </div>
                     <h3 class="dev-name">PRAJAPATI AMAN JAYESHBHAI</h3>
                     <div class="dev-role">Full Stack Developer</div>
