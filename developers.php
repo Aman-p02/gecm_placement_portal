@@ -420,7 +420,7 @@
                 <div class="dev-card">
                     <div class="dev-img-wrapper">
                         <!-- REPLACE THIS SRC WITH ACTUAL IMAGE -->
-                        <img src="https://ui-avatars.com/api/?name=Vanit+Dantani&background=8b5cf6&color=fff&size=200&font-size=0.33"
+                        <img src="student-module/uploads/developers_pic/vanit.jpg"
                             alt="Vanit Dantani Nitinbhai" class="dev-img" style="cursor: pointer;"
                             onclick="openImageModal(this.src)">
                     </div>
