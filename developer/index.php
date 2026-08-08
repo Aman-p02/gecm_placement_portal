@@ -28,10 +28,10 @@
     <div class="navbar-wrapper">
         <nav class="navbar navbar-expand-lg top-navbar navbar-pill py-3">
             <div class="container d-flex justify-content-between align-items-center">
-                <a class="navbar-brand brand-text" href="../index.php">
+                <a class="navbar-brand brand-text" href="../placement_statistics.php">
                     GEC Modasa <span>Placement</span>
                 </a>
-                <a href="../index.php" class="btn-back">
+                <a href="../placement_statistics.php" class="btn-back">
                     <i class="fa-solid fa-arrow-left"></i>
                     <span class="d-none d-sm-inline">Back to Home</span>
                     <span class="d-inline d-sm-none">Back</span>
