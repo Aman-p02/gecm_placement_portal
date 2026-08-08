@@ -436,21 +436,19 @@ $activities = $stmt->fetchAll(PDO::FETCH_ASSOC);
         <p class="text-muted mb-4 text-center" style="font-size: 0.95rem;">Placement Activity carried out by Training and Placement Cell, GEC Modasa.</p>
         
         <div class="row mb-5 justify-content-center">
-            <div class="col-12 col-md-8 col-lg-6">
-                <form method="GET" action="placement_activities.php" class="row g-2 justify-content-center align-items-center">
-                    <div class="col-8 col-sm-6">
-                        <select name="year" class="form-select w-100" style="border-radius: 4px; box-shadow: none; border-color: #ced4da;">
-                            <option value="">All Years</option>
-                            <?php foreach($availableYears as $yr): ?>
-                                <option value="<?= htmlspecialchars($yr) ?>" <?= ($selectedYear == $yr) ? 'selected' : '' ?>><?= htmlspecialchars($yr) ?></option>
-                            <?php endforeach; ?>
-                        </select>
-                    </div>
-                    <div class="col-4 col-sm-auto">
-                        <button type="submit" class="btn w-100 text-white" style="background-color: #3498db; border-radius: 4px;">Submit</button>
-                    </div>
-                </form>
-            </div>
+              <div class="col-12 col-md-6 col-lg-4">
+                  <div class="dropdown w-100 shadow-sm">
+                      <button class="btn dropdown-toggle w-100 text-start d-flex justify-content-between align-items-center" type="button" id="yearFilterDropdown" data-bs-toggle="dropdown" aria-expanded="false" style="border-radius: 6px; border: 1px solid #ced4da; background-color: #fff; padding: 10px 15px; color: #495057;">
+                          <span class="fw-medium text-dark"><?= $selectedYear ? htmlspecialchars($selectedYear) : 'All Years' ?></span>
+                      </button>
+                      <ul class="dropdown-menu w-100 shadow border-0 mt-1" aria-labelledby="yearFilterDropdown" style="border-radius: 6px;">
+                          <li><a class="dropdown-item py-2 <?= !$selectedYear ? 'active bg-primary text-white' : '' ?>" href="placement_activities.php?year=">All Years</a></li>
+                          <?php foreach($availableYears as $yr): ?>
+                              <li><a class="dropdown-item py-2 <?= ($selectedYear == $yr) ? 'active bg-primary text-white' : '' ?>" href="placement_activities.php?year=<?= htmlspecialchars($yr) ?>"><?= htmlspecialchars($yr) ?></a></li>
+                          <?php endforeach; ?>
+                      </ul>
+                  </div>
+              </div>
         </div>
 
         <div class="timeline">

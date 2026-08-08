@@ -595,7 +595,43 @@ if (empty($filterBranch)) {
         <div class="container no-print mb-5 mt-4">
             <div class="row g-5">
                 
-                <!-- Left Side: Noticeboard -->
+                <!-- Left Side: Statistics Highlights -->
+                <div class="col-lg-7">
+                    <div class="mb-4 text-center">
+                        <h2 class="fw-bold mb-2" style="color: var(--primary-navy);"><i class="fa-solid fa-chart-pie me-2 text-success"></i> Placement Highlights</h2>
+                        <p class="text-muted">A quick glance at our placement records and company visits.</p>
+                    </div>
+                    <div class="row g-4">
+                        <div class="col-12">
+                            <div class="department-card h-100 text-center" style="cursor:default; padding: 30px;">
+                                <div class="department-icon mx-auto mb-3" style="background: linear-gradient(135deg,rgba(27,54,93,0.12),rgba(230,90,75,0.12));">
+                                    <i class="fa-solid fa-trophy" style="color:var(--accent-coral);"></i>
+                                </div>
+                                <h3 class="display-5 fw-bold text-dark"><?= $statStudents ?></h3>
+                                <p class="text-muted mb-0" style="font-size: 1.1rem;">Total Students Placed</p>
+                            </div>
+                        </div>
+                        <div class="col-md-6">
+                            <div class="department-card h-100 text-center" style="cursor:default;">
+                                <div class="department-icon mx-auto mb-3" style="background: linear-gradient(135deg,rgba(40,167,69,0.12),rgba(32,201,151,0.12));">
+                                    <i class="fa-solid fa-briefcase" style="color:#28a745;"></i>
+                                </div>
+                                <h3 class="fw-bold text-dark"><?= $statOffers ?></h3>
+                                <p class="text-muted mb-0">Total Offers Made</p>
+                            </div>
+                        </div>
+                        <div class="col-md-6">
+                            <div class="department-card h-100 text-center" style="cursor:default;">
+                                <div class="department-icon mx-auto mb-3" style="background: linear-gradient(135deg,rgba(23,162,184,0.12),rgba(11,94,215,0.12));">
+                                    <i class="fa-solid fa-building" style="color:#17a2b8;"></i>
+                                </div>
+                                <h3 class="fw-bold text-dark"><?= $statCompanies ?></h3>
+                                <p class="text-muted mb-0">Companies Visited</p>
+                            </div>
+                        </div>
+                        </div>
+                    </div>
+                <!-- Right Side: Noticeboard -->
                 <div class="col-lg-5">
                     <div class="mb-4 text-center">
                         <h2 class="fw-bold mb-2" style="color: var(--primary-navy);"><i class="fa-solid fa-bullhorn me-2 text-danger"></i> Noticeboard</h2>
@@ -726,43 +762,6 @@ if (empty($filterBranch)) {
                             }, 5000); // Check every 5 seconds for new companies
                         });
                     </script>
-                </div>
-
-                <!-- Right Side: Statistics Highlights -->
-                <div class="col-lg-7">
-                    <div class="mb-4 text-center">
-                        <h2 class="fw-bold mb-2" style="color: var(--primary-navy);"><i class="fa-solid fa-chart-pie me-2 text-success"></i> Placement Highlights</h2>
-                        <p class="text-muted">A quick glance at our placement records and company visits.</p>
-                    </div>
-                    <div class="row g-4">
-                        <div class="col-12">
-                            <div class="department-card h-100 text-center" style="cursor:default; padding: 30px;">
-                                <div class="department-icon mx-auto mb-3" style="background: linear-gradient(135deg,rgba(27,54,93,0.12),rgba(230,90,75,0.12));">
-                                    <i class="fa-solid fa-trophy" style="color:var(--accent-coral);"></i>
-                                </div>
-                                <h3 class="display-5 fw-bold text-dark"><?= $statStudents ?></h3>
-                                <p class="text-muted mb-0" style="font-size: 1.1rem;">Total Students Placed</p>
-                            </div>
-                        </div>
-                        <div class="col-md-6">
-                            <div class="department-card h-100 text-center" style="cursor:default;">
-                                <div class="department-icon mx-auto mb-3" style="background: linear-gradient(135deg,rgba(40,167,69,0.12),rgba(32,201,151,0.12));">
-                                    <i class="fa-solid fa-briefcase" style="color:#28a745;"></i>
-                                </div>
-                                <h3 class="fw-bold text-dark"><?= $statOffers ?></h3>
-                                <p class="text-muted mb-0">Total Offers Made</p>
-                            </div>
-                        </div>
-                        <div class="col-md-6">
-                            <div class="department-card h-100 text-center" style="cursor:default;">
-                                <div class="department-icon mx-auto mb-3" style="background: linear-gradient(135deg,rgba(23,162,184,0.12),rgba(11,94,215,0.12));">
-                                    <i class="fa-solid fa-building" style="color:#17a2b8;"></i>
-                                </div>
-                                <h3 class="fw-bold text-dark"><?= $statCompanies ?></h3>
-                                <p class="text-muted mb-0">Companies Visited</p>
-                            </div>
-                        </div>
-                    </div>
                 </div>
             </div>
         </div>
