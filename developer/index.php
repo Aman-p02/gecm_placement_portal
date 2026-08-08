@@ -94,7 +94,7 @@
                             <br>
                             <div
                                 style="color: var(--primary-navy); font-size: 0.85rem; font-weight: 700; margin-bottom: 4px;">
-                                <i class="fa-solid fa-code me-1 text-primary"></i> Tech Stack Used in this portal:
+                                <i class="fa-solid fa-code me-1 text-primary"></i> Tech Stack I used in this portal:
                             </div>
                             <div class="d-flex flex-wrap gap-1">
                                 <span class="badge bg-white text-dark border fw-medium"
@@ -177,7 +177,7 @@
                             <br>
                             <div
                                 style="color: var(--primary-navy); font-size: 0.85rem; font-weight: 700; margin-bottom: 4px;">
-                                <i class="fa-solid fa-code me-1 text-primary"></i> Tech Stack Used in this portal:
+                                <i class="fa-solid fa-code me-1 text-primary"></i> Tech Stack I used in this portal:
                             </div>
                             <div class="d-flex flex-wrap gap-1">
                                 <span class="badge bg-white text-dark border fw-medium"
