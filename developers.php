@@ -509,6 +509,9 @@
                             title="GitHub">
                             <i class="fa-brands fa-github"></i>
                         </a>
+                        <a href="https://vanitdantaniportfolio.netlify.app/" target="_blank" class="social-btn portfolio" title="Portfolio">
+                            <i class="fa-solid fa-globe"></i>
+                        </a>
                     </div>
                 </div>
             </div>
