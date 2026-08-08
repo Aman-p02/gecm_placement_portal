@@ -358,10 +358,10 @@
                     </div>
 
                     <div class="social-links">
-                        <a href="#" target="_blank" class="social-btn linkedin" title="LinkedIn">
+                        <a href="https://www.linkedin.com/in/vanitdantani" target="_blank" class="social-btn linkedin" title="LinkedIn">
                             <i class="fa-brands fa-linkedin-in"></i>
                         </a>
-                        <a href="#" target="_blank" class="social-btn github" title="GitHub">
+                        <a href="https://github.com/VanitDantani" target="_blank" class="social-btn github" title="GitHub">
                             <i class="fa-brands fa-github"></i>
                         </a>
                     </div>
