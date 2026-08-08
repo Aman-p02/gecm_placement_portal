@@ -509,7 +509,8 @@ $activities = $stmt->fetchAll(PDO::FETCH_ASSOC);
                 <?php endforeach; ?>
             <?php endif; ?>
         </div>
-    </div>
+    </div> <!-- Close content-card -->
+    </div> <!-- Close container -->
 
     <script src="assets/bootstrap/js/bootstrap.bundle.min.js"></script>
     <?php include 'includes/footer.php'; ?>
