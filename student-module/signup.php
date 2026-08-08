@@ -174,7 +174,7 @@ $csrfToken = generate_csrf_token();
         </a>
     </div>
 
-<?php include '../includes/footer.php'; ?>
+<?php include '../includes/footer_auth.php'; ?>
 </body>
 
 </html>

@@ -123,7 +123,7 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
             </form>
         </div>
     </div>
-<?php include '../includes/footer.php'; ?>
+<?php include '../includes/footer_auth.php'; ?>
 </body>
 </html>
 

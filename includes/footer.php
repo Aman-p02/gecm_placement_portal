@@ -89,7 +89,7 @@
             </div>
             
             <!-- Quick Links -->
-            <div class="col-lg-3 col-md-6">
+            <div class="col-lg-2 col-md-6">
                 <h5 class="footer-heading">Quick Links</h5>
                 <div class="d-flex flex-column">
                     <a href="placement_statistics.php" class="footer-link">Placement Stats</a>
@@ -97,6 +97,14 @@
                     <a href="placement_activities.php" class="footer-link">Latest Drives</a>
                     <a href="rules_and_guidelines.php" class="footer-link">Guidelines</a>
                     <a href="placement_team.php" class="footer-link">Our Team</a>
+                </div>
+            </div>
+
+            <!-- Developer Team -->
+            <div class="col-lg-2 col-md-6">
+                <h5 class="footer-heading">Developer Team</h5>
+                <div class="d-flex flex-column">
+                    <a href="/gec_placement_portal/developers.php" class="footer-link">View Developers</a>
                 </div>
             </div>
 
@@ -124,13 +132,9 @@
     <!-- Copyright -->
     <div class="footer-bottom">
         <div class="container text-center">
-            <p class="mb-2" style="font-size: 0.9rem;">
+            <p class="mb-0" style="font-size: 0.9rem;">
                 &copy; <?= date('Y') ?> <strong>GEC Modasa Placement Cell</strong>. All Rights Reserved.
             </p>
-            <a href="/gec_placement_portal/developers.php" title="Meet the Developers Team"
-                style="display: inline-flex; align-items: center; justify-content: center; gap: 8px; background-color: #0f172a; color: white; border-radius: 50px; padding: 8px 16px; font-size: 0.85rem; font-weight: 600; text-decoration: none; box-shadow: 0 4px 12px rgba(0,0,0,0.2); transition: all 0.3s ease; margin-top: 5px;">
-                <i class="fa-solid fa-code"></i> Developer Team
-            </a>
         </div>
     </div>
 </footer>
