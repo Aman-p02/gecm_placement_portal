@@ -206,10 +206,25 @@ $skills = $stmt->fetchAll(PDO::FETCH_COLUMN);
 $skillsString = implode(',', $skills);
 
 $csrfToken = generate_csrf_token();
-$isProfileComplete = !empty($profile) && !empty($profile['district']) && !empty($profile['course']) && !empty($profile['sem5_cpi']) && !empty($profile['first_name']) && !empty($profile['surname']) && !empty($profile['father_name']) && !empty($profile['mother_name']);
+$isProfileComplete = !empty($profile) && isChecked('district', $profile) && isChecked('course', $profile) && isChecked('sem5_cpi', $profile) && isChecked('first_name', $profile) && isChecked('surname', $profile) && isChecked('father_name', $profile) && isChecked('mother_name', $profile);
 
 // Setup view mode (if profile is complete, show summary first, else edit mode)
 $mode = (isset($_GET['edit']) || !$isProfileComplete) ? 'edit' : 'view';
+
+function getFormValue($field, $profile, $default = '') {
+    if ($_SERVER['REQUEST_METHOD'] === 'POST' && isset($_POST[$field])) {
+        return $_POST[$field];
+    }
+    return $profile[$field] ?? $default;
+}
+
+function isChecked($field, $profile) {
+    if ($_SERVER['REQUEST_METHOD'] === 'POST') {
+        return isset($_POST[$field]);
+    }
+    return !empty($profile[$field]);
+}
+
 
 ?>
 <!DOCTYPE html>
@@ -283,8 +298,8 @@ $mode = (isset($_GET['edit']) || !$isProfileComplete) ? 'edit' : 'view';
             <div class="col-md-4 mb-4">
                 <div class="custom-card text-center h-100">
                     <?php
-                    $picUrl = (!empty($profile['profile_pic']) && file_exists(__DIR__ . '/' . $profile['profile_pic']))
-                        ? htmlspecialchars($profile['profile_pic'])
+                    $picUrl = (isChecked('profile_pic', $profile) && file_exists(__DIR__ . '/' . $profile['profile_pic']))
+                        ? htmlspecialchars(getFormValue('profile_pic', $profile))
                         : 'https://ui-avatars.com/api/?background=random&color=fff&name=' . urlencode($student['full_name']);
                     ?>
                     <img src="<?= $picUrl ?>" alt="Profile Picture" class="profile-pic-preview shadow-sm mb-3">
@@ -300,12 +315,12 @@ $mode = (isset($_GET['edit']) || !$isProfileComplete) ? 'edit' : 'view';
                     <?php if ($isProfileComplete): ?>
                         <div class="text-start mt-3 pt-3 border-top border-secondary">
                             <p class="small text-muted mb-1"><i
-                                    class="fa-solid fa-envelope me-2"></i><?= htmlspecialchars($profile['email']) ?></p>
+                                    class="fa-solid fa-envelope me-2"></i><?= htmlspecialchars(getFormValue('email', $profile)) ?></p>
                             <p class="small text-muted mb-1"><i
-                                    class="fa-solid fa-phone me-2"></i><?= htmlspecialchars($profile['phone_number']) ?></p>
+                                    class="fa-solid fa-phone me-2"></i><?= htmlspecialchars(getFormValue('phone_number', $profile)) ?></p>
                         </div>
-                        <?php if (!empty($profile['resume_path'])): ?>
-                            <a href="<?= htmlspecialchars($profile['resume_path']) ?>" target="_blank"
+                        <?php if (isChecked('resume_path', $profile)): ?>
+                            <a href="<?= htmlspecialchars(getFormValue('resume_path', $profile)) ?>" target="_blank"
                                 class="btn btn-outline-accent btn-sm w-100 mt-3">
                                 <i class="fa-solid fa-file-pdf me-2"></i>View Resume
                             </a>
@@ -435,7 +450,7 @@ $mode = (isset($_GET['edit']) || !$isProfileComplete) ? 'edit' : 'view';
                                         <div class="col-sm-4 text-muted small">Course</div>
                                         <div class="col-sm-8 fw-medium">
                                             <?= htmlspecialchars($profile['course'] ?? 'N/A') ?>
-                                            <?php if(!empty($profile['physically_handicap'])): ?>
+                                            <?php if(isChecked('physically_handicap', $profile)): ?>
                                                 <span class="badge bg-info text-dark ms-2">Physically Handicapped</span>
                                             <?php endif; ?>
                                         </div>
@@ -498,19 +513,19 @@ $mode = (isset($_GET['edit']) || !$isProfileComplete) ? 'edit' : 'view';
                         </div>
 
                             <!-- Training Details -->
-                            <?php if(!empty($profile['finishing_school']) || !empty($profile['skill_training']) || !empty($profile['training_details'])): ?>
+                            <?php if(isChecked('finishing_school', $profile) || isChecked('skill_training', $profile) || isChecked('training_details', $profile)): ?>
                             <div class="mb-4">
                                 <h5 class="border-bottom pb-2 mb-3 text-secondary mt-5">Training & Certifications</h5>
                                 <div class="d-flex flex-wrap gap-2 mb-2">
-                                    <?php if(!empty($profile['finishing_school'])): ?>
+                                    <?php if(isChecked('finishing_school', $profile)): ?>
                                         <span class="badge bg-success"><i class="fa-solid fa-check me-1"></i> Finishing School</span>
                                     <?php endif; ?>
-                                    <?php if(!empty($profile['skill_training'])): ?>
+                                    <?php if(isChecked('skill_training', $profile)): ?>
                                         <span class="badge bg-success"><i class="fa-solid fa-check me-1"></i> Skill Training</span>
                                     <?php endif; ?>
                                 </div>
-                                <?php if(!empty($profile['training_details'])): ?>
-                                    <p class="mb-0 text-muted small"><?= nl2br(htmlspecialchars($profile['training_details'])) ?></p>
+                                <?php if(isChecked('training_details', $profile)): ?>
+                                    <p class="mb-0 text-muted small"><?= nl2br(htmlspecialchars(getFormValue('training_details', $profile))) ?></p>
                                 <?php endif; ?>
                             </div>
                             <?php endif; ?>
@@ -545,55 +560,55 @@ $mode = (isset($_GET['edit']) || !$isProfileComplete) ? 'edit' : 'view';
                             <div class="row g-3 mb-4">
                                 <div class="col-md-4">
                                     <label class="form-label">First Name</label>
-                                    <input type="text" class="form-control" name="first_name" value="<?= htmlspecialchars($profile['first_name'] ?? '') ?>" required>
+                                    <input type="text" class="form-control" name="first_name" value="<?= htmlspecialchars(getFormValue('first_name', $profile)) ?>" required>
                                 </div>
                                 <div class="col-md-4">
                                     <label class="form-label">Middle Name</label>
-                                    <input type="text" class="form-control" name="middle_name" value="<?= htmlspecialchars($profile['middle_name'] ?? '') ?>">
+                                    <input type="text" class="form-control" name="middle_name" value="<?= htmlspecialchars(getFormValue('middle_name', $profile)) ?>">
                                 </div>
                                 <div class="col-md-4">
                                     <label class="form-label">Surname</label>
-                                    <input type="text" class="form-control" name="surname" value="<?= htmlspecialchars($profile['surname'] ?? '') ?>" required>
+                                    <input type="text" class="form-control" name="surname" value="<?= htmlspecialchars(getFormValue('surname', $profile)) ?>" required>
                                 </div>
                                 <div class="col-md-6">
                                     <label class="form-label">Father's Name</label>
-                                    <input type="text" class="form-control" name="father_name" value="<?= htmlspecialchars($profile['father_name'] ?? '') ?>" required>
+                                    <input type="text" class="form-control" name="father_name" value="<?= htmlspecialchars(getFormValue('father_name', $profile)) ?>" required>
                                 </div>
                                 <div class="col-md-6">
                                     <label class="form-label">Mother's Name</label>
-                                    <input type="text" class="form-control" name="mother_name" value="<?= htmlspecialchars($profile['mother_name'] ?? '') ?>" required>
+                                    <input type="text" class="form-control" name="mother_name" value="<?= htmlspecialchars(getFormValue('mother_name', $profile)) ?>" required>
                                 </div>
 
                                 <div class="col-md-4">
                                     <label class="form-label">Gender</label>
                                     <select class="form-select" name="gender" required>
                                         <option value="">Select</option>
-                                        <option value="Male" <?= (isset($profile['gender']) && $profile['gender'] === 'Male') ? 'selected' : '' ?>>Male</option>
-                                        <option value="Female" <?= (isset($profile['gender']) && $profile['gender'] === 'Female') ? 'selected' : '' ?>>Female</option>
-                                        <option value="Other" <?= (isset($profile['gender']) && $profile['gender'] === 'Other') ? 'selected' : '' ?>>Other</option>
+                                        <option value="Male" <?= getFormValue('gender', $profile) === 'Male' ? 'selected' : '' ?>>Male</option>
+                                        <option value="Female" <?= getFormValue('gender', $profile) === 'Female' ? 'selected' : '' ?>>Female</option>
+                                        <option value="Other" <?= getFormValue('gender', $profile) === 'Other' ? 'selected' : '' ?>>Other</option>
                                     </select>
                                 </div>
                                 <div class="col-md-4">
                                     <label class="form-label">Date of Birth</label>
-                                    <input type="date" class="form-control" name="dob" value="<?= htmlspecialchars($profile['dob'] ?? '') ?>" required>
+                                    <input type="date" class="form-control" name="dob" value="<?= htmlspecialchars(getFormValue('dob', $profile)) ?>" required>
                                 </div>
                                 <div class="col-md-4">
                                     <label class="form-label">Category</label>
                                     <select class="form-select" name="category" required>
                                         <option value="">Select</option>
-                                        <option value="General" <?= (isset($profile['category']) && $profile['category'] === 'General') ? 'selected' : '' ?>>General</option>
-                                        <option value="OBC" <?= (isset($profile['category']) && $profile['category'] === 'OBC') ? 'selected' : '' ?>>OBC</option>
-                                        <option value="SC" <?= (isset($profile['category']) && $profile['category'] === 'SC') ? 'selected' : '' ?>>SC</option>
-                                        <option value="ST" <?= (isset($profile['category']) && $profile['category'] === 'ST') ? 'selected' : '' ?>>ST</option>
+                                        <option value="General" <?= getFormValue('category', $profile) === 'General' ? 'selected' : '' ?>>General</option>
+                                        <option value="OBC" <?= getFormValue('category', $profile) === 'OBC' ? 'selected' : '' ?>>OBC</option>
+                                        <option value="SC" <?= getFormValue('category', $profile) === 'SC' ? 'selected' : '' ?>>SC</option>
+                                        <option value="ST" <?= getFormValue('category', $profile) === 'ST' ? 'selected' : '' ?>>ST</option>
                                     </select>
                                 </div>
                                 <div class="col-md-6">
                                     <label class="form-label">District</label>
-                                    <input type="text" class="form-control" name="district" value="<?= htmlspecialchars($profile['district'] ?? '') ?>" required>
+                                    <input type="text" class="form-control" name="district" value="<?= htmlspecialchars(getFormValue('district', $profile)) ?>" required>
                                 </div>
                                 <div class="col-md-6 d-flex align-items-end pb-2">
                                     <div class="form-check">
-                                        <input class="form-check-input" type="checkbox" name="physically_handicap" id="physically_handicap" <?= !empty($profile['physically_handicap']) ? 'checked' : '' ?>>
+                                        <input class="form-check-input" type="checkbox" name="physically_handicap" id="physically_handicap" <?= isChecked('physically_handicap', $profile) ? 'checked' : '' ?>>
                                         <label class="form-check-label" for="physically_handicap">
                                             Physically Handicapped?
                                         </label>
@@ -606,12 +621,12 @@ $mode = (isset($_GET['edit']) || !$isProfileComplete) ? 'edit' : 'view';
                                 <div class="col-md-6">
                                     <label class="form-label">Email Address</label>
                                     <input type="email" class="form-control" name="email"
-                                        value="<?= htmlspecialchars($profile['email'] ?? '') ?>" required>
+                                        value="<?= htmlspecialchars(getFormValue('email', $profile)) ?>" required>
                                 </div>
                                 <div class="col-md-6">
                                     <label class="form-label">Phone Number</label>
                                     <input type="tel" class="form-control" name="phone_number"
-                                        value="<?= htmlspecialchars($profile['phone_number'] ?? '') ?>" pattern="[0-9]{10}"
+                                        value="<?= htmlspecialchars(getFormValue('phone_number', $profile)) ?>" pattern="[0-9]{10}"
                                         title="10 digit mobile number" required>
                                 </div>
                             </div>
@@ -623,39 +638,39 @@ $mode = (isset($_GET['edit']) || !$isProfileComplete) ? 'edit' : 'view';
                             <div class="row g-3 mb-4">
                                 <div class="col-md-3">
                                     <label class="form-label">Course (e.g. B.E.)</label>
-                                    <input type="text" class="form-control" name="course" value="<?= htmlspecialchars($profile['course'] ?? '') ?>" required>
+                                    <input type="text" class="form-control" name="course" value="<?= htmlspecialchars(getFormValue('course', $profile)) ?>" required>
                                 </div>
                                 <div class="col-md-3">
                                     <label class="form-label">Passing Year</label>
-                                    <input type="number" class="form-control border-primary" name="passing_year" value="<?= htmlspecialchars($profile['passing_year'] ?? '') ?>" min="2000" max="2100" required>
+                                    <input type="number" class="form-control border-primary" name="passing_year" value="<?= htmlspecialchars(getFormValue('passing_year', $profile)) ?>" min="2000" max="2100" required>
                                 </div>
                                 <div class="col-md-3">
                                     <label class="form-label">SSC Percentage</label>
-                                    <input type="number" step="0.01" min="0" max="100" class="form-control" name="ssc_percentage" value="<?= htmlspecialchars($profile['ssc_percentage'] ?? '') ?>">
+                                    <input type="number" step="0.01" min="0" max="100" class="form-control" name="ssc_percentage" value="<?= htmlspecialchars(getFormValue('ssc_percentage', $profile)) ?>">
                                 </div>
                                 <div class="col-md-3">
                                     <label class="form-label">HSC Percentage</label>
-                                    <input type="number" step="0.01" min="0" max="100" class="form-control" name="hsc_percentage" value="<?= htmlspecialchars($profile['hsc_percentage'] ?? '') ?>">
+                                    <input type="number" step="0.01" min="0" max="100" class="form-control" name="hsc_percentage" value="<?= htmlspecialchars(getFormValue('hsc_percentage', $profile)) ?>">
                                 </div>
                                 <div class="col-md-3">
                                     <label class="form-label">Sem 5 CGPA</label>
                                     <input type="number" step="0.01" min="0" max="10" class="form-control" name="sem5_cgpa"
-                                        value="<?= htmlspecialchars($profile['sem5_cgpa'] ?? '') ?>">
+                                        value="<?= htmlspecialchars(getFormValue('sem5_cgpa', $profile)) ?>">
                                 </div>
                                 <div class="col-md-3">
                                     <label class="form-label">Sem 5 CPI</label>
                                     <input type="number" step="0.01" min="0" max="10" class="form-control" name="sem5_cpi"
-                                        value="<?= htmlspecialchars($profile['sem5_cpi'] ?? '') ?>" <?= !empty($profile['sem5_cpi']) ? 'readonly' : '' ?> required>
+                                        value="<?= htmlspecialchars(getFormValue('sem5_cpi', $profile)) ?>" <?= isChecked('sem5_cpi', $profile) ? 'readonly' : '' ?> required>
                                 </div>
                                 <div class="col-md-3">
                                     <label class="form-label">Sem 6 CGPA</label>
                                     <input type="number" step="0.01" min="0" max="10" class="form-control" name="sem6_cgpa"
-                                        value="<?= htmlspecialchars($profile['sem6_cgpa'] ?? '') ?>">
+                                        value="<?= htmlspecialchars(getFormValue('sem6_cgpa', $profile)) ?>">
                                 </div>
                                 <div class="col-md-3">
                                     <label class="form-label">Sem 6 CPI (Current)</label>
                                     <input type="number" step="0.01" min="0" max="10" class="form-control" name="sem6_cpi"
-                                        value="<?= htmlspecialchars($profile['sem6_cpi'] ?? '') ?>" <?= !empty($profile['sem6_cpi']) ? 'readonly' : '' ?>>
+                                        value="<?= htmlspecialchars(getFormValue('sem6_cpi', $profile)) ?>" <?= isChecked('sem6_cpi', $profile) ? 'readonly' : '' ?>>
                                 </div>
                                 <div class="col-md-12 mt-3">
                                     <label class="form-label text-danger fw-medium"><i class="fa-solid fa-triangle-exclamation me-1"></i>Active Backlogs (ATKT)</label>
@@ -669,13 +684,13 @@ $mode = (isset($_GET['edit']) || !$isProfileComplete) ? 'edit' : 'view';
                             <div class="row g-3 mb-4">
                                 <div class="col-md-6">
                                     <div class="form-check mb-2">
-                                        <input class="form-check-input" type="checkbox" name="finishing_school" id="finishing_school" <?= !empty($profile['finishing_school']) ? 'checked' : '' ?>>
+                                        <input class="form-check-input" type="checkbox" name="finishing_school" id="finishing_school" <?= isChecked('finishing_school', $profile) ? 'checked' : '' ?>>
                                         <label class="form-check-label" for="finishing_school">
                                             Completed Finishing School Training?
                                         </label>
                                     </div>
                                     <div class="form-check">
-                                        <input class="form-check-input" type="checkbox" name="skill_training" id="skill_training" <?= !empty($profile['skill_training']) ? 'checked' : '' ?>>
+                                        <input class="form-check-input" type="checkbox" name="skill_training" id="skill_training" <?= isChecked('skill_training', $profile) ? 'checked' : '' ?>>
                                         <label class="form-check-label" for="skill_training">
                                             Completed other Skill Training?
                                         </label>
@@ -683,7 +698,7 @@ $mode = (isset($_GET['edit']) || !$isProfileComplete) ? 'edit' : 'view';
                                 </div>
                                 <div class="col-md-12">
                                     <label class="form-label">Training Details (If any)</label>
-                                    <textarea class="form-control" name="training_details" rows="2" placeholder="Mention your training provider and course name..."><?= htmlspecialchars($profile['training_details'] ?? '') ?></textarea>
+                                    <textarea class="form-control" name="training_details" rows="2" placeholder="Mention your training provider and course name..."><?= htmlspecialchars(getFormValue('training_details', $profile)) ?></textarea>
                                 </div>
                             </div>
 
@@ -693,7 +708,7 @@ $mode = (isset($_GET['edit']) || !$isProfileComplete) ? 'edit' : 'view';
                                     <label class="form-label">Profile Picture (Image)</label>
                                     <input type="file" class="form-control" name="profile_pic" id="profile_pic"
                                         accept="image/jpeg, image/png, image/webp">
-                                    <?php if (!empty($profile['profile_pic'])): ?>
+                                    <?php if (isChecked('profile_pic', $profile)): ?>
                                         <small class="text-success mt-1 d-block"><i class="fa-solid fa-check me-1"></i>Current
                                             photo uploaded</small>
                                     <?php endif; ?>
@@ -701,7 +716,7 @@ $mode = (isset($_GET['edit']) || !$isProfileComplete) ? 'edit' : 'view';
                                 <div class="col-md-6">
                                     <label class="form-label">Resume (PDF)</label>
                                     <input type="file" class="form-control" name="resume" accept="application/pdf">
-                                    <?php if (!empty($profile['resume_path'])): ?>
+                                    <?php if (isChecked('resume_path', $profile)): ?>
                                         <small class="text-success mt-1 d-block"><i class="fa-solid fa-check me-1"></i>Current
                                             resume uploaded</small>
                                     <?php endif; ?>
