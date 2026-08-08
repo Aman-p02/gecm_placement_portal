@@ -67,44 +67,7 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST' && $validToken) {
     <title>Reset Password - GEC Placement Portal</title>
     <link href="../assets/bootstrap/css/bootstrap.min.css" rel="stylesheet">
     <link rel="stylesheet" href="../assets/fontawesome/css/all.min.css">
-    <style>
-        :root {
-            --primary-navy: #1B365D;
-            --accent-coral: #E65A4B;
-        }
-        body {
-            background-color: #f4f6f9;
-            height: 100vh;
-            display: flex;
-            align-items: center;
-            justify-content: center;
-        }
-        .auth-card {
-            background: white;
-            border-radius: 12px;
-            box-shadow: 0 4px 20px rgba(0,0,0,0.08);
-            overflow: hidden;
-            width: 100%;
-            max-width: 450px;
-        }
-        .auth-header {
-            background: var(--primary-navy);
-            color: white;
-            padding: 30px;
-            text-align: center;
-        }
-        .btn-accent {
-            background-color: var(--accent-coral);
-            color: white;
-            font-weight: 500;
-        }
-        .btn-accent:hover {
-            background-color: #d94a3b;
-            color: white;
-        }
-        .form-control { background-color: #fcfcfc; border: 1.5px solid #b0b8c1; padding: 0.6rem 1rem; border-radius: 8px; }
-        .form-control:focus { border-color: var(--accent-coral); box-shadow: 0 0 0 0.25rem rgba(230, 90, 75, 0.25); background-color: #ffffff; }
-    </style>
+    <link rel="stylesheet" href="css/auth.css">
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.0/css/all.min.css">
 </head>
 <body>
