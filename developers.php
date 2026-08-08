@@ -60,7 +60,7 @@
         /* Header Section */
         .dev-header {
             text-align: center;
-            padding: 5rem 1rem 3rem;
+            padding: 2.5rem 1rem 1.5rem;
             position: relative;
         }
 
@@ -143,7 +143,7 @@
         .dev-name {
             font-family: 'Outfit', sans-serif;
             font-weight: 700;
-            font-size: 1.5rem;
+            font-size: 1.7rem;
             color: var(--primary);
             margin-bottom: 0.25rem;
         }
@@ -166,7 +166,7 @@
             padding: 1.25rem;
             border-radius: 12px;
             margin-bottom: 1.5rem;
-            font-size: 0.9rem;
+            font-size: 1.05rem;
             color: var(--secondary);
         }
 
@@ -189,8 +189,8 @@
         }
 
         .social-btn {
-            width: 45px;
-            height: 45px;
+            width: 50px;
+            height: 50px;
             border-radius: 50%;
             display: flex;
             align-items: center;
@@ -198,9 +198,22 @@
             color: var(--primary);
             background: #fff;
             border: 1px solid rgba(0,0,0,0.08);
-            font-size: 1.1rem;
+            font-size: 1.4rem;
             text-decoration: none;
             transition: all 0.3s ease;
+        }
+
+        
+        .social-btn.linkedin {
+            color: #0077b5;
+            border-color: rgba(0, 119, 181, 0.3);
+            background: rgba(0, 119, 181, 0.05);
+        }
+        
+        .social-btn.github {
+            color: #333;
+            border-color: rgba(51, 51, 51, 0.3);
+            background: rgba(51, 51, 51, 0.05);
         }
 
         .social-btn:hover {
@@ -297,7 +310,7 @@
         <div class="row g-4 justify-content-center">
             
             <!-- Developer 1: Aman -->
-            <div class="col-12 col-md-6 col-lg-5">
+            <div class="col-12 col-md-6 col-lg-4">
                 <div class="dev-card">
                     <div class="dev-img-wrapper">
                         <!-- REPLACE THIS SRC WITH ACTUAL IMAGE -->
@@ -333,7 +346,7 @@
             </div>
 
             <!-- Developer 2: Vanit -->
-            <div class="col-12 col-md-6 col-lg-5">
+            <div class="col-12 col-md-6 col-lg-4">
                 <div class="dev-card">
                     <div class="dev-img-wrapper">
                         <!-- REPLACE THIS SRC WITH ACTUAL IMAGE -->
