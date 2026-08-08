@@ -35,10 +35,15 @@ h1, h2, h3, h4, h5, h6 {
 .auth-container {
     max-width: 500px;
     width: 100%;
-    margin: auto;
+    margin: 0 auto;
+    flex: 1;
+    display: flex;
+    align-items: center;
+    justify-content: center;
 }
 
 .custom-card {
+    width: 100%;
     background-color: var(--card-light);
     border: none;
     border-radius: 12px;
