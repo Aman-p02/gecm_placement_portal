@@ -436,15 +436,19 @@ $activities = $stmt->fetchAll(PDO::FETCH_ASSOC);
         <p class="text-muted mb-4 text-center" style="font-size: 0.95rem;">Placement Activity carried out by Training and Placement Cell, GEC Modasa.</p>
         
         <div class="row mb-5 justify-content-center">
-            <div class="col-md-6 d-flex justify-content-center">
-                <form method="GET" action="placement_activities.php" class="d-flex w-100 justify-content-center">
-                    <select name="year" class="form-select me-2" style="border-radius: 0; box-shadow: none; border-color: #ced4da; max-width: 450px;">
-                        <option value="">All Years</option>
-                        <?php foreach($availableYears as $yr): ?>
-                            <option value="<?= htmlspecialchars($yr) ?>" <?= ($selectedYear == $yr) ? 'selected' : '' ?>><?= htmlspecialchars($yr) ?></option>
-                        <?php endforeach; ?>
-                    </select>
-                    <button type="submit" class="btn text-white" style="background-color: #3498db; border-radius: 0; padding: 6px 20px;">Submit</button>
+            <div class="col-12 col-md-8 col-lg-6">
+                <form method="GET" action="placement_activities.php" class="row g-2 justify-content-center align-items-center">
+                    <div class="col-8 col-sm-6">
+                        <select name="year" class="form-select w-100" style="border-radius: 4px; box-shadow: none; border-color: #ced4da;">
+                            <option value="">All Years</option>
+                            <?php foreach($availableYears as $yr): ?>
+                                <option value="<?= htmlspecialchars($yr) ?>" <?= ($selectedYear == $yr) ? 'selected' : '' ?>><?= htmlspecialchars($yr) ?></option>
+                            <?php endforeach; ?>
+                        </select>
+                    </div>
+                    <div class="col-4 col-sm-auto">
+                        <button type="submit" class="btn w-100 text-white" style="background-color: #3498db; border-radius: 4px;">Submit</button>
+                    </div>
                 </form>
             </div>
         </div>

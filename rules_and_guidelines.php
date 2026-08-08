@@ -375,8 +375,8 @@
                     </div>
                 </div>
                     
-                    <!-- 1. Dress Code -->
-                <div class="sec-title mt-0">
+                <!-- 1. Dress Code -->
+                <div class="sec-title">
                     <div class="ico" style="background:#eef2ff;color:var(--primary-navy);"><i class="fa-solid fa-shirt"></i></div>
                     <h2 style="color:var(--primary-navy);">Dress Code</h2>
                 </div>
