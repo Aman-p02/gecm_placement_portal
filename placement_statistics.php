@@ -594,7 +594,7 @@ if (empty($filterBranch)) {
             <div class="row g-5">
                 
                 <!-- Left Side: Statistics Highlights -->
-                <div class="col-lg-7">
+                <div class="col-lg-7 order-2 order-lg-1">
                     <div class="mb-4 text-center">
                         <h2 class="fw-bold mb-2" style="color: var(--primary-navy);"><i class="fa-solid fa-chart-pie me-2 text-success"></i> Placement Highlights</h2>
                         <p class="text-muted">A quick glance at our placement records and company visits.</p>
@@ -630,7 +630,7 @@ if (empty($filterBranch)) {
                         </div>
                     </div>
                 <!-- Right Side: Noticeboard -->
-                <div class="col-lg-5">
+                <div class="col-lg-5 order-1 order-lg-2">
                     <div class="mb-4 text-center">
                         <h2 class="fw-bold mb-2" style="color: var(--primary-navy);"><i class="fa-solid fa-bullhorn me-2 text-danger"></i> Noticeboard</h2>
                         <p class="text-muted">Stay updated with the latest placement drives and deadlines.</p>
