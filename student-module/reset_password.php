@@ -165,7 +165,8 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST' && $validToken) {
         }
     }
     </script>
-<?php include '../includes/footer_auth.php'; ?>
+
+<?php include '../includes/footer.php'; ?>
 </body>
 </html>
 

@@ -70,6 +70,7 @@ if (isset($_GET['token']) && !empty($_GET['token'])) {
             <?php endif; ?>
         </div>
     </div>
-<?php include '../includes/footer_auth.php'; ?>
+
+<?php include '../includes/footer.php'; ?>
 </body>
 </html>

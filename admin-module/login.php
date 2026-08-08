@@ -113,13 +113,10 @@ $csrfToken = generate_csrf_token();
     </div>
 
     
-        <a href="../developers.php" title="Meet the Developers Team"
-            style="display: inline-flex; align-items: center; justify-content: center; gap: 8px; background-color: #0f172a; color: white; border-radius: 50px; padding: 10px 20px; font-weight: 600; text-decoration: none; box-shadow: 0 4px 12px rgba(0,0,0,0.2); transition: all 0.3s ease; position: relative; z-index: 10;">
-            <i class="fa-solid fa-code"></i> Developer Team
-        </a>
-    </div>
+        
 
-<?php include '../includes/footer_auth.php'; ?>
+
+<?php include 'includes/footer.php'; ?>
 </body>
 <script>
     function togglePassword(inputId, icon) {

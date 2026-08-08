@@ -8,7 +8,8 @@
         border-radius: 15px 15px 0 0;
         color: rgba(255, 255, 255, 0.85);
         position: relative;
-        margin-top: 40px;
+        margin-top: auto;
+        width: 100%;
     }
     .footer-heading {
         color: #fff;
@@ -100,14 +101,6 @@
                 </div>
             </div>
 
-            <!-- Developer Team -->
-            <div class="col-lg-2 col-md-6">
-                <h5 class="footer-heading">Developer Team</h5>
-                <div class="d-flex flex-column">
-                    <a href="/gec_placement_portal/developers.php" class="footer-link">View Developers</a>
-                </div>
-            </div>
-
             <!-- Contact -->
             <div class="col-lg-4 col-md-6">
                 <h5 class="footer-heading">Contact Us</h5>
@@ -124,6 +117,14 @@
                         <i class="fa-solid fa-phone footer-contact-icon"></i>
                         <span>+91 99999 88888</span>
                     </div>
+                </div>
+            </div>
+
+            <!-- Developer Team -->
+            <div class="col-lg-2 col-md-6">
+                <h5 class="footer-heading">Developer Team</h5>
+                <div class="d-flex flex-column">
+                    <a href="/gec_placement_portal/developers.php" class="footer-link">View Developers</a>
                 </div>
             </div>
         </div>

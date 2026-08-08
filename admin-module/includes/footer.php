@@ -3,7 +3,8 @@
         background: #1B365D;
         color: rgba(255, 255, 255, 0.8);
         border-radius: 16px 16px 0 0;
-        margin-top: 60px;
+        margin-top: auto;
+        width: 100%;
         padding: 35px 30px 20px;
         box-shadow: 0 -10px 30px rgba(0,0,0,0.05);
     }
