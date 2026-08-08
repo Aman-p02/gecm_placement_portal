@@ -46,13 +46,13 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
             // Insert new sub-admin
             $hashedPassword = password_hash($password, PASSWORD_BCRYPT);
             $role = 'subadmin';
-            
+
             $stmt = $pdo->prepare("INSERT INTO tbl_admins (full_name, email, phone_number, password, role, branch) VALUES (?, ?, ?, ?, ?, ?)");
             if ($stmt->execute([$fullName, $email, $phone, $hashedPassword, $role, $branch])) {
-                
+
                 // Send registration email
                 sendRegistrationEmail($email, $fullName, $role);
-                
+
                 $_SESSION['signup_success'] = "Sub Admin Registration successful! You can now login.";
                 header("Location: login.php");
                 exit;
@@ -66,6 +66,7 @@ $csrfToken = generate_csrf_token();
 ?>
 <!DOCTYPE html>
 <html lang="en">
+
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
@@ -74,6 +75,7 @@ $csrfToken = generate_csrf_token();
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.0/css/all.min.css">
     <link rel="stylesheet" href="css/admin_style.css">
 </head>
+
 <body class="auth-page">
     <div class="container auth-container">
         <div class="custom-card auth-styled border-top border-4 border-warning">
@@ -89,17 +91,20 @@ $csrfToken = generate_csrf_token();
 
                 <div class="mb-3">
                     <label class="form-label small">Full Name</label>
-                    <input type="text" class="form-control" name="full_name" value="<?= htmlspecialchars($fullName ?? '') ?>" required>
+                    <input type="text" class="form-control" name="full_name"
+                        value="<?= htmlspecialchars($fullName ?? '') ?>" required>
                 </div>
-                
+
                 <div class="row g-2 mb-3">
                     <div class="col-sm-6">
                         <label class="form-label small">Email Address</label>
-                        <input type="email" class="form-control" name="email" value="<?= htmlspecialchars($email ?? '') ?>" required>
+                        <input type="email" class="form-control" name="email"
+                            value="<?= htmlspecialchars($email ?? '') ?>" required>
                     </div>
                     <div class="col-sm-6">
                         <label class="form-label small">Phone Number</label>
-                        <input type="tel" class="form-control" name="phone" value="<?= htmlspecialchars($phone ?? '') ?>" pattern="[0-9]{10}" required>
+                        <input type="tel" class="form-control" name="phone"
+                            value="<?= htmlspecialchars($phone ?? '') ?>" pattern="[0-9]{10}" required>
                     </div>
                 </div>
 
@@ -121,15 +126,21 @@ $csrfToken = generate_csrf_token();
                     <div class="col-sm-6">
                         <label class="form-label small">Password</label>
                         <div class="position-relative">
-                            <input type="password" class="form-control pe-5" name="password" id="signup_password" required>
-                            <i class="fa-solid fa-eye position-absolute top-50 end-0 translate-middle-y me-3 text-muted" style="cursor: pointer; z-index: 10;" onclick="togglePassword('signup_password', this)"></i>
+                            <input type="password" class="form-control pe-5" name="password" id="signup_password"
+                                required>
+                            <i class="fa-solid fa-eye position-absolute top-50 end-0 translate-middle-y me-3 text-muted"
+                                style="cursor: pointer; z-index: 10;"
+                                onclick="togglePassword('signup_password', this)"></i>
                         </div>
                     </div>
                     <div class="col-sm-6">
                         <label class="form-label small">Confirm Password</label>
                         <div class="position-relative">
-                            <input type="password" class="form-control pe-5" name="confirm_password" id="signup_confirm_password" required>
-                            <i class="fa-solid fa-eye position-absolute top-50 end-0 translate-middle-y me-3 text-muted" style="cursor: pointer; z-index: 10;" onclick="togglePassword('signup_confirm_password', this)"></i>
+                            <input type="password" class="form-control pe-5" name="confirm_password"
+                                id="signup_confirm_password" required>
+                            <i class="fa-solid fa-eye position-absolute top-50 end-0 translate-middle-y me-3 text-muted"
+                                style="cursor: pointer; z-index: 10;"
+                                onclick="togglePassword('signup_confirm_password', this)"></i>
                         </div>
                     </div>
                 </div>
@@ -137,7 +148,8 @@ $csrfToken = generate_csrf_token();
                 <button type="submit" class="btn btn-accent w-100">Sign Up</button>
 
                 <div class="mt-3 text-center">
-                    <span class="text-muted small">Already have an account?</span> <a href="login.php" class="small fw-semibold" style="color: var(--accent-coral);">Login</a>
+                    <span class="text-muted small">Already have an account?</span> <a href="login.php"
+                        class="small fw-semibold" style="color: var(--accent-coral);">Login</a>
                 </div>
             </form>
         </div>
@@ -147,25 +159,26 @@ $csrfToken = generate_csrf_token();
     <div style="text-align: center; margin-top: 40px; margin-bottom: 20px; color: #6c757d; font-size: 0.9rem;">
         &copy; <?= date('Y') ?> GEC Modasa Placement Cell. All rights reserved.
     </div>
-    <a href="../developers.php" class="btn-dev-floating" title="Meet the Developers Team" style="position: fixed; bottom: 20px; right: 20px; background-color: #0f172a; color: white; border-radius: 50px; padding: 10px 20px; font-weight: 600; text-decoration: none; box-shadow: 0 4px 12px rgba(0,0,0,0.2); transition: all 0.3s ease; z-index: 1000; display: flex; align-items: center; gap: 8px;">
+    <a href="../developers.php" class="btn-dev-floating" title="Meet the Developers Team"
+        style="position: fixed; bottom: 20px; right: 20px; background-color: #0f172a; color: white; border-radius: 50px; padding: 10px 20px; font-weight: 600; text-decoration: none; box-shadow: 0 4px 12px rgba(0,0,0,0.2); transition: all 0.3s ease; z-index: 1000; display: flex; align-items: center; gap: 8px;">
         <i class="fa-solid fa-code"></i> Developer Team
     </a>
 
 </body>
 <script>
-function togglePassword(inputId, icon) {
-    const input = document.getElementById(inputId);
-    if (input.type === 'password') {
-        input.type = 'text';
-        icon.classList.remove('fa-eye');
-        icon.classList.add('fa-eye-slash');
-    } else {
-        input.type = 'password';
-        icon.classList.remove('fa-eye-slash');
-        icon.classList.add('fa-eye');
+    function togglePassword(inputId, icon) {
+        const input = document.getElementById(inputId);
+        if (input.type === 'password') {
+            input.type = 'text';
+            icon.classList.remove('fa-eye');
+            icon.classList.add('fa-eye-slash');
+        } else {
+            input.type = 'password';
+            icon.classList.remove('fa-eye-slash');
+            icon.classList.add('fa-eye');
+        }
     }
-}
 </script>
+
+
 </html>
-
-
