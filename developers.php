@@ -60,14 +60,14 @@
         /* Header Section */
         .dev-header {
             text-align: center;
-            padding: 2.5rem 1rem 1.5rem;
+            padding: clamp(1.5rem, 5vw, 2.5rem) 1rem 1.5rem;
             position: relative;
         }
 
         .dev-header h1 {
             font-family: 'Outfit', sans-serif;
             font-weight: 800;
-            font-size: 3.5rem;
+            font-size: clamp(2rem, 8vw, 3.5rem);
             color: var(--primary);
             margin-bottom: 1rem;
             letter-spacing: -1px;
@@ -86,7 +86,7 @@
             backdrop-filter: blur(12px);
             border: 1px solid rgba(255,255,255,0.8);
             border-radius: 24px;
-            padding: 2.5rem;
+            padding: clamp(1.5rem, 5vw, 2.5rem);
             text-align: center;
             transition: all 0.4s cubic-bezier(0.175, 0.885, 0.32, 1.275);
             box-shadow: 0 10px 40px rgba(0,0,0,0.05);
@@ -118,8 +118,8 @@
         }
 
         .dev-img-wrapper {
-            width: 160px;
-            height: 160px;
+            width: clamp(120px, 35vw, 160px);
+            height: clamp(120px, 35vw, 160px);
             margin: 0 auto 1.5rem;
             border-radius: 50%;
             padding: 6px;
@@ -143,7 +143,7 @@
         .dev-name {
             font-family: 'Outfit', sans-serif;
             font-weight: 700;
-            font-size: 1.35rem;
+            font-size: clamp(1rem, 4.5vw, 1.35rem);
             color: var(--primary);
             margin-bottom: 0.25rem;
             white-space: nowrap;
