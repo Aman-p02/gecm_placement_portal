@@ -54,8 +54,8 @@
                 <div class="dev-card">
                     <div class="dev-img-wrapper">
                         <!-- REPLACE THIS SRC WITH ACTUAL IMAGE -->
-                        <img src="student-module/uploads/developers_pic/Aman.jpg" alt="Prajapati Aman Jayeshbhai"
-                            class="dev-img" style="cursor: pointer;" onclick="openImageModal(this.src)">
+                        <img src="developer/.developers_pic/Aman.jpg" ; alt="Prajapati Aman Jayeshbhai" class="dev-img"
+                            style="cursor: pointer;" onclick="openImageModal(this.src)">
                     </div>
                     <h3 class="dev-name">PRAJAPATI AMAN JAYESHBHAI</h3>
                     <div class="dev-role">Full Stack Developer</div>
