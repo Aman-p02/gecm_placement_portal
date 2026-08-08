@@ -201,6 +201,15 @@
             font-weight: 700;
         }
 
+        .connect-heading {
+            font-size: 0.85rem;
+            font-weight: 700;
+            text-transform: uppercase;
+            color: var(--secondary);
+            margin-bottom: 0.75rem;
+            letter-spacing: 0.5px;
+        }
+
         .social-links {
             display: flex;
             justify-content: center;
@@ -348,7 +357,7 @@
                 <div class="dev-card">
                     <div class="dev-img-wrapper">
                         <!-- REPLACE THIS SRC WITH ACTUAL IMAGE -->
-                        <img src="student-module/uploads/developers_pic/aman2.jpg" alt="Prajapati Aman Jayeshbhai"
+                        <img src="student-module/uploads/developers_pic/Aman.jpg" alt="Prajapati Aman Jayeshbhai"
                             class="dev-img" style="cursor: pointer;" onclick="openImageModal(this.src)">
                     </div>
                     <h3 class="dev-name">PRAJAPATI AMAN JAYESHBHAI</h3>
@@ -373,6 +382,7 @@
                         </div>
                     </div>
 
+                    <div class="connect-heading">Let's Connect</div>
                     <div class="social-links">
                         <a href="https://www.linkedin.com/in/aman-prajapati-855a8a37b/" target="_blank"
                             class="social-btn linkedin" title="LinkedIn">
@@ -416,6 +426,7 @@
                         </div>
                     </div>
 
+                    <div class="connect-heading">Let's Connect</div>
                     <div class="social-links">
                         <a href="https://www.linkedin.com/in/vanitdantani" target="_blank" class="social-btn linkedin"
                             title="LinkedIn">
