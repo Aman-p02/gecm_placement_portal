@@ -121,6 +121,12 @@ $csrfToken = generate_csrf_token();
 
 
 
+    <!-- Floating Developer Button -->
+    <a href="../developers.php" class="dev-floating-btn">
+        <span class="dev-text">View Developers</span>
+        <span class="dev-icon">&lt;/&gt;</span>
+    </a>
+
     <?php include '../includes/footer.php'; ?>
 </body>
 <script>

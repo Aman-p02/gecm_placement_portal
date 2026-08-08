@@ -36,7 +36,7 @@ h1, h2, h3, h4, h5, h6 {
     max-width: 500px;
     width: 100%;
     margin: 0 auto;
-    padding: 3rem 15px;
+    padding: 3rem 15px 5rem 15px; /* Increased bottom gap */
     flex: 1;
     display: flex;
     align-items: center;
@@ -198,4 +198,39 @@ h1, h2, h3, h4, h5, h6 {
     color: var(--accent-coral) !important;
     background-color: rgba(255, 107, 74, 0.1);
     font-weight: 600;
+}
+
+/* Floating Developer Button Animation */
+.dev-floating-btn {
+    position: fixed;
+    bottom: 30px;
+    right: 30px;
+    height: 50px;
+    background: #1B365D;
+    color: #fff;
+    border-radius: 25px;
+    display: flex;
+    align-items: center;
+    justify-content: flex-end;
+    padding: 0 15px;
+    text-decoration: none;
+    box-shadow: 0 4px 15px rgba(0,0,0,0.2);
+    overflow: hidden;
+    white-space: nowrap;
+    z-index: 1000;
+    animation: devBtnSequence 9s forwards;
+}
+.dev-floating-btn:hover { background: #E65A4B; color: #fff; }
+.dev-floating-btn .dev-text { opacity: 0; margin-right: 10px; font-weight: 600; font-family: 'Outfit', sans-serif; animation: devTextSequence 9s forwards; }
+.dev-floating-btn .dev-icon { font-weight: bold; font-family: monospace; font-size: 1.2rem; }
+@keyframes devBtnSequence {
+    0%, 5% { width: 50px; opacity: 1; transform: scale(1); }
+    15%, 45% { width: 190px; }
+    55%, 85% { width: 50px; opacity: 1; transform: scale(1); }
+    95%, 100% { width: 50px; opacity: 0; transform: scale(0.8); visibility: hidden; pointer-events: none; }
+}
+@keyframes devTextSequence {
+    0%, 10% { opacity: 0; }
+    15%, 45% { opacity: 1; }
+    50%, 100% { opacity: 0; }
 }
