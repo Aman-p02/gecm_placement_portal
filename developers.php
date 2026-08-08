@@ -403,19 +403,21 @@
 
                         <hr class="my-2 border-secondary" style="opacity: 0.15;">
                         
-                        <div class="text-start">
-                            <h6 class="fw-bold mb-1" style="color: var(--primary-navy); font-size: 0.9rem;"><i class="fa-solid fa-bullseye me-1 text-danger"></i> Key Contributions:</h6>
-                            <p class="text-muted mb-2" style="font-size: 0.85rem; line-height: 1.4;">Developed student & admin panel, database architecture, backend logic, and UI design.</p>
+                        <div class="text-start mt-1">
+                            <p class="mb-2" style="font-size: 0.85rem; line-height: 1.3;">
+                                <strong style="color: var(--primary-navy);"><i class="fa-solid fa-bullseye me-1 text-danger"></i> Key Contributions:</strong> 
+                                <span class="text-muted">Developed student & admin panel, database architecture, backend logic, and UI design.</span>
+                            </p>
                             
-                            <h6 class="fw-bold mb-1 mt-2" style="color: var(--primary-navy); font-size: 0.9rem;"><i class="fa-solid fa-code me-1 text-primary"></i> Tech Stack:</h6>
-                            <div class="d-flex flex-wrap gap-1 mt-1">
-                                <span class="badge bg-white text-dark border" style="font-size: 0.75rem;">PHP</span>
-                                <span class="badge bg-white text-dark border" style="font-size: 0.75rem;">HTML5 & CSS3</span>
-                                <span class="badge bg-white text-dark border" style="font-size: 0.75rem;">Bootstrap 5</span>
-                                <span class="badge bg-white text-dark border" style="font-size: 0.75rem;">MySQL</span>
-                                <span class="badge bg-white text-dark border" style="font-size: 0.75rem;">JS & AJAX</span>
-                                <span class="badge bg-white text-dark border" style="font-size: 0.75rem;">CI/CD Pipeline</span>
-                                <span class="badge bg-white text-dark border" style="font-size: 0.75rem;">Version Control</span>
+                            <div class="d-flex flex-wrap align-items-center gap-1 mt-1">
+                                <strong style="color: var(--primary-navy); font-size: 0.85rem; margin-right: 4px;"><i class="fa-solid fa-code me-1 text-primary"></i> Stack:</strong>
+                                <span class="badge bg-white text-dark border fw-medium" style="font-size: 0.7rem; padding: 3px 6px;">PHP</span>
+                                <span class="badge bg-white text-dark border fw-medium" style="font-size: 0.7rem; padding: 3px 6px;">HTML/CSS</span>
+                                <span class="badge bg-white text-dark border fw-medium" style="font-size: 0.7rem; padding: 3px 6px;">Bootstrap 5</span>
+                                <span class="badge bg-white text-dark border fw-medium" style="font-size: 0.7rem; padding: 3px 6px;">MySQL</span>
+                                <span class="badge bg-white text-dark border fw-medium" style="font-size: 0.7rem; padding: 3px 6px;">JS/AJAX</span>
+                                <span class="badge bg-white text-dark border fw-medium" style="font-size: 0.7rem; padding: 3px 6px;">CI/CD</span>
+                                <span class="badge bg-white text-dark border fw-medium" style="font-size: 0.7rem; padding: 3px 6px;">Git</span>
                             </div>
                         </div>
                     </div>
