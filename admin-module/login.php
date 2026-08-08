@@ -116,7 +116,7 @@ $csrfToken = generate_csrf_token();
         
 
 
-<?php include 'includes/footer.php'; ?>
+<?php include '../includes/footer.php'; ?>
 </body>
 <script>
     function togglePassword(inputId, icon) {

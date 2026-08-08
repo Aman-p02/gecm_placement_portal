@@ -342,6 +342,6 @@ $activities = $stmt->fetchAll(PDO::FETCH_ASSOC);
             }
         });
     </script>
-    <?php include 'includes/footer.php'; ?>
+    <?php include '../includes/footer.php'; ?>
 </body>
 </html>
