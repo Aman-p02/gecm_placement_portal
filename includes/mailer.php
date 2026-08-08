@@ -99,7 +99,7 @@ function sendRegistrationEmail($toEmail, $userName, $role)
                 <p>Your registration as a <strong>{$roleDisplay}</strong> was successful!</p>
                 <p>You can now log in to the portal and start using your account.</p>
                 <div style='text-align: center; margin: 30px 0;'>
-                    <a href='http://localhost/gec_placement_portal' style='background-color: #E65A4B; color: white; padding: 12px 25px; text-decoration: none; border-radius: 5px; font-weight: bold;'>Go to Portal</a>
+                    <a href='http://localhost/gecm_placement_portal' style='background-color: #E65A4B; color: white; padding: 12px 25px; text-decoration: none; border-radius: 5px; font-weight: bold;'>Go to Portal</a>
                 </div>
                 <p>Best regards,<br><strong>GEC Modasa Placement Cell</strong></p>
             </div>
@@ -151,7 +151,7 @@ function sendStatusUpdateEmail($toEmail, $userName, $companyName, $status) {
                 <p>Hello <strong>{$userName}</strong>,</p>
                 <p>{$msgBody}</p>
                 <div style='text-align: center; margin: 30px 0;'>
-                    <a href='http://localhost/gec_placement_portal' style='background-color: #E65A4B; color: white; padding: 12px 25px; text-decoration: none; border-radius: 5px; font-weight: bold;'>View Dashboard</a>
+                    <a href='http://localhost/gecm_placement_portal' style='background-color: #E65A4B; color: white; padding: 12px 25px; text-decoration: none; border-radius: 5px; font-weight: bold;'>View Dashboard</a>
                 </div>
                 <p>Best regards,<br><strong>GEC Modasa Placement Cell</strong></p>
             </div>

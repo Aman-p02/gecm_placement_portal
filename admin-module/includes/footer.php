@@ -1,6 +1,10 @@
 <style>
     .admin-footer {
-        background: #1B365D;
+        background: linear-gradient(135deg, #1B365D 0%, #11233D 100%);
+        background: 
+            linear-gradient(135deg, #1B365D 0%, #11233D 100%) padding-box,
+            linear-gradient(90deg, #E65A4B, #f59e0b) border-box;
+        border-top: 5px solid transparent;
         color: rgba(255, 255, 255, 0.8);
         border-radius: 16px 16px 0 0;
         margin-top: auto;

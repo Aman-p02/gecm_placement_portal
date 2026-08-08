@@ -124,7 +124,7 @@
             <div class="col-lg-2 col-md-6">
                 <h5 class="footer-heading">Developer Team</h5>
                 <div class="d-flex flex-column">
-                    <a href="/gec_placement_portal/developers.php" class="footer-link">View Developers</a>
+                    <a href="/gecm_placement_portal/developers.php" class="footer-link">View Developers</a>
                 </div>
             </div>
         </div>
