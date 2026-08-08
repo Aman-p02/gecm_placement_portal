@@ -204,6 +204,16 @@
             color: var(--secondary);
             font-size: 0.95rem;
         }
+        
+        .dev-info-item a {
+            color: var(--secondary);
+            text-decoration: none;
+            transition: color 0.3s ease;
+        }
+        
+        .dev-info-item a:hover {
+            color: var(--accent);
+        }
 
         .dev-info-item strong {
             color: var(--primary);
@@ -388,7 +398,7 @@
                         </div>
                         <div class="dev-info-item">
                             <i class="fa-solid fa-envelope"></i>
-                            <span><strong>Email:</strong> amanjp5711@gmail.com</span>
+                            <span><strong>Email:</strong> <a href="mailto:amanjp5711@gmail.com">amanjp5711@gmail.com</a></span>
                         </div>
                     </div>
 
@@ -433,7 +443,7 @@
                         </div>
                         <div class="dev-info-item">
                             <i class="fa-solid fa-envelope"></i>
-                            <span><strong>Email:</strong> vanitdantani05@gmail.com</span>
+                            <span><strong>Email:</strong> <a href="mailto:vanitdantani05@gmail.com">vanitdantani05@gmail.com</a></span>
                         </div>
                     </div>
 
