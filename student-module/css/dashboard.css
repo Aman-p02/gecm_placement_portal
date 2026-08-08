@@ -202,9 +202,8 @@ h1, h2, h3, h4, h5, h6 {
 
 /* Floating Developer Button Animation */
 .dev-floating-btn {
-    position: fixed;
-    bottom: 30px;
-    right: 30px;
+    position: relative;
+    margin: -2rem auto 2rem auto;
     height: 50px;
     background: #1B365D;
     color: #fff;
