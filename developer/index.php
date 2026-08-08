@@ -54,8 +54,8 @@
                 <div class="dev-card">
                     <div class="dev-img-wrapper">
                         <!-- REPLACE THIS SRC WITH ACTUAL IMAGE -->
-                        <img src="../student-module/uploads/developers_pic/Aman.jpg" alt="Prajapati Aman Jayeshbhai"
-                            class="dev-img" style="cursor: pointer;" onclick="openImageModal(this.src)">
+                        <img src="developers_pic/Aman.jpg" alt="Prajapati Aman Jayeshbhai" class="dev-img"
+                            style="cursor: pointer;" onclick="openImageModal(this.src)">
                     </div>
                     <h3 class="dev-name">PRAJAPATI AMAN JAYESHBHAI</h3>
                     <div class="dev-role">Full Stack Developer</div>
@@ -94,7 +94,7 @@
                             <br>
                             <div
                                 style="color: var(--primary-navy); font-size: 0.85rem; font-weight: 700; margin-bottom: 4px;">
-                                <i class="fa-solid fa-code me-1 text-primary"></i> Tech Stack:
+                                <i class="fa-solid fa-code me-1 text-primary"></i> Tech Stack I used in this portal:
                             </div>
                             <div class="d-flex flex-wrap gap-1">
                                 <span class="badge bg-white text-dark border fw-medium"
@@ -108,7 +108,7 @@
                                 <span class="badge bg-white text-dark border fw-medium"
                                     style="font-size: 0.7rem; padding: 3px 6px;">JS/AJAX</span>
                                 <span class="badge bg-white text-dark border fw-medium"
-                                    style="font-size: 0.7rem; padding: 3px 6px;">CI/CD</span>
+                                    style="font-size: 0.7rem; padding: 3px 6px;">CI/CD Pipeline</span>
                                 <span class="badge bg-white text-dark border fw-medium"
                                     style="font-size: 0.7rem; padding: 3px 6px;">Git</span>
                             </div>
@@ -137,9 +137,8 @@
                 <div class="dev-card">
                     <div class="dev-img-wrapper">
                         <!-- REPLACE THIS SRC WITH ACTUAL IMAGE -->
-                        <img src="../student-module/uploads/developers_pic/vanit.jpg"
-                            alt="DANTANI VANIT NITINBHAI" class="dev-img" style="cursor: pointer;"
-                            onclick="openImageModal(this.src)">
+                        <img src="developers_pic/vanit.jpeg" alt="DANTANI VANIT NITINBHAI" class="dev-img"
+                            style="cursor: pointer;" onclick="openImageModal(this.src)">
                     </div>
                     <h3 class="dev-name">DANTANI VANIT NITINBHAI</h3>
                     <div class="dev-role">Full Stack Developer</div>
@@ -176,16 +175,23 @@
                                 Developed statistics page and super admin panel, backend logic & database structure .
                             </div>
                             <br>
-                            <div style="color: var(--primary-navy); font-size: 0.85rem; font-weight: 700; margin-bottom: 4px;">
-                                <i class="fa-solid fa-code me-1 text-primary"></i> Tech Stack:
+                            <div
+                                style="color: var(--primary-navy); font-size: 0.85rem; font-weight: 700; margin-bottom: 4px;">
+                                <i class="fa-solid fa-code me-1 text-primary"></i> Tech Stack I used in this portal:
                             </div>
                             <div class="d-flex flex-wrap gap-1">
-                                <span class="badge bg-white text-dark border fw-medium" style="font-size: 0.7rem; padding: 3px 6px;">PHP</span>
-                                <span class="badge bg-white text-dark border fw-medium" style="font-size: 0.7rem; padding: 3px 6px;">HTML/CSS</span>
-                                <span class="badge bg-white text-dark border fw-medium" style="font-size: 0.7rem; padding: 3px 6px;">Bootstrap 5</span>
-                                <span class="badge bg-white text-dark border fw-medium" style="font-size: 0.7rem; padding: 3px 6px;">JavaScript</span>
-                                <span class="badge bg-white text-dark border fw-medium" style="font-size: 0.7rem; padding: 3px 6px;">MySQL</span>
-                                <span class="badge bg-white text-dark border fw-medium" style="font-size: 0.7rem; padding: 3px 6px;">Git</span>
+                                <span class="badge bg-white text-dark border fw-medium"
+                                    style="font-size: 0.7rem; padding: 3px 6px;">PHP</span>
+                                <span class="badge bg-white text-dark border fw-medium"
+                                    style="font-size: 0.7rem; padding: 3px 6px;">HTML/CSS</span>
+                                <span class="badge bg-white text-dark border fw-medium"
+                                    style="font-size: 0.7rem; padding: 3px 6px;">Bootstrap 5</span>
+                                <span class="badge bg-white text-dark border fw-medium"
+                                    style="font-size: 0.7rem; padding: 3px 6px;">JavaScript</span>
+                                <span class="badge bg-white text-dark border fw-medium"
+                                    style="font-size: 0.7rem; padding: 3px 6px;">MySQL</span>
+                                <span class="badge bg-white text-dark border fw-medium"
+                                    style="font-size: 0.7rem; padding: 3px 6px;">Git</span>
                             </div>
                         </div>
                     </div>
