@@ -70,6 +70,12 @@
     }
 </style>
 
+<?php
+    // Determine relative path to root based on current script location
+    $inModule = strpos($_SERVER['SCRIPT_NAME'], '/student-module/') !== false || strpos($_SERVER['SCRIPT_NAME'], '/admin-module/') !== false;
+    $basePrefix = $inModule ? '../' : './';
+?>
+
 <footer class="premium-footer pt-5">
     <div class="container pb-4">
         <div class="row g-4 justify-content-between">
@@ -93,11 +99,11 @@
             <div class="col-lg-3 col-md-6">
                 <h5 class="footer-heading">Quick Links</h5>
                 <div class="d-flex flex-column">
-                    <a href="placement_statistics.php" class="footer-link">Placement Stats</a>
-                    <a href="major_recruiters.php" class="footer-link">Top Recruiters</a>
-                    <a href="placement_activities.php" class="footer-link">Latest Drives</a>
-                    <a href="rules_and_guidelines.php" class="footer-link">Guidelines</a>
-                    <a href="placement_team.php" class="footer-link">Our Team</a>
+                    <a href="<?= $basePrefix ?>placement_statistics.php" class="footer-link">Placement Stats</a>
+                    <a href="<?= $basePrefix ?>major_recruiters.php" class="footer-link">Top Recruiters</a>
+                    <a href="<?= $basePrefix ?>placement_activities.php" class="footer-link">Latest Drives</a>
+                    <a href="<?= $basePrefix ?>rules_and_guidelines.php" class="footer-link">Guidelines</a>
+                    <a href="<?= $basePrefix ?>placement_team.php" class="footer-link">Our Team</a>
                 </div>
             </div>
 
@@ -124,7 +130,7 @@
             <div class="col-lg-2 col-md-6">
                 <h5 class="footer-heading">Developer Team</h5>
                 <div class="d-flex flex-column">
-                    <a href="/gecm_placement_portal/developers.php" class="footer-link">View Developers</a>
+                    <a href="<?= $basePrefix ?>developers.php" class="footer-link">View Developers</a>
                 </div>
             </div>
         </div>

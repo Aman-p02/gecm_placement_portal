@@ -316,7 +316,7 @@
                     GEC Modasa <span>Placement</span>
                 </a>
                 <a href="placement_statistics.php" class="btn-back">
-                    <i class="fa-solid fa-arrow-left"></i> 
+                    <i class="fa-solid fa-arrow-left"></i>
                     <span class="d-none d-sm-inline">Back to Home</span>
                     <span class="d-inline d-sm-none">Back</span>
                 </a>
@@ -419,7 +419,7 @@
     </div>
 
     <script src="assets/bootstrap/js/bootstrap.bundle.min.js"></script>
-<?php include 'includes/footer.php'; ?>
+    <?php include 'includes/footer.php'; ?>
 </body>
 
 </html>
