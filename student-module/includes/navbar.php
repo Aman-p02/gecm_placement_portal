@@ -1,5 +1,8 @@
 <?php
 $currentPage = basename($_SERVER['PHP_SELF']);
+if (!isset($isProfileComplete) && isset($pdo)) {
+    $isProfileComplete = is_profile_complete($pdo);
+}
 ?>
 <!-- Navbar -->
 <nav class="navbar navbar-expand-lg top-navbar navbar-light">
