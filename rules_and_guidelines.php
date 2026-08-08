@@ -418,7 +418,7 @@
 
 
                 <!-- 4. Company Grades -->
-                <div class="sec-title" style="margin-top: 10px;">
+                <div class="sec-title" style="margin-top: 24px;">
                     <div class="ico" style="background:#fef3c7;color:#d97706;"><i class="fa-solid fa-layer-group"></i></div>
                     <h2 style="color:#92400e;">Company Grade Classification</h2>
                 </div>
