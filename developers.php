@@ -163,7 +163,16 @@
             font-size: 0.95rem;
             text-transform: uppercase;
             letter-spacing: 1px;
+            margin-bottom: 0.75rem;
+        }
+
+        .dev-quote {
+            font-size: 0.95rem;
+            color: var(--secondary);
+            font-style: italic;
             margin-bottom: 1.5rem;
+            line-height: 1.5;
+            padding: 0 0.5rem;
         }
 
         .dev-info {
@@ -362,6 +371,7 @@
                     </div>
                     <h3 class="dev-name">PRAJAPATI AMAN JAYESHBHAI</h3>
                     <div class="dev-role">Full Stack Developer</div>
+                    <div class="dev-quote">"Transforming ideas into digital reality through modern web technologies."</div>
 
                     <div class="dev-info">
                         <div class="dev-info-item">
@@ -406,6 +416,7 @@
                     </div>
                     <h3 class="dev-name">DANTANI VANIT NITINBHAI</h3>
                     <div class="dev-role">Full Stack Developer</div>
+                    <div class="dev-quote">"Bridging the gap between complex logic and beautiful user experiences."</div>
 
                     <div class="dev-info">
                         <div class="dev-info-item">
