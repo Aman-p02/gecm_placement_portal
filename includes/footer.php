@@ -73,7 +73,7 @@
 
 <footer class="premium-footer pt-5">
     <div class="container pb-4">
-        <div class="row g-4">
+        <div class="row g-4 justify-content-between">
             <!-- Brand Column -->
             <div class="col-lg-4 col-md-6 pe-lg-5">
                 <h4 class="text-white fw-bold mb-3">
@@ -91,7 +91,7 @@
             </div>
             
             <!-- Quick Links -->
-            <div class="col-lg-4 col-md-6">
+            <div class="col-lg-3 col-md-6">
                 <h5 class="footer-heading">Quick Links</h5>
                 <div class="d-flex flex-column">
                     <a href="placement_statistics.php" class="footer-link">Placement Stats</a>
