@@ -8,7 +8,7 @@
         border-radius: 15px 15px 0 0;
         color: rgba(255, 255, 255, 0.85);
         position: relative;
-        margin-top: 80px;
+        margin-top: 40px;
     }
     .footer-heading {
         color: #fff;

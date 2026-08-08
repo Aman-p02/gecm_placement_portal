@@ -372,7 +372,7 @@ $activities = $stmt->fetchAll(PDO::FETCH_ASSOC);
             padding: 35px 40px;
             box-shadow: 0 4px 20px rgba(0, 0, 0, 0.05);
             margin-top: 20px;
-            margin-bottom: 40px;
+            margin-bottom: 10px;
             border: 1px solid rgba(0, 0, 0, 0.04);
         }
         
@@ -510,7 +510,8 @@ $activities = $stmt->fetchAll(PDO::FETCH_ASSOC);
                 <?php endforeach; ?>
             <?php endif; ?>
         </div>
-    </div>
+    </div> <!-- Close content-card -->
+    </div> <!-- Close container -->
 
     <script src="assets/bootstrap/js/bootstrap.bundle.min.js"></script>
     <?php include 'includes/footer.php'; ?>
