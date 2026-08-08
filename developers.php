@@ -18,13 +18,17 @@
             --text-light: #94a3b8;
         }
         
+        html, body {
+            overflow-x: hidden;
+            max-width: 100%;
+        }
+        
         body {
             font-family: 'Inter', sans-serif;
             background: linear-gradient(135deg, #f8fafc 0%, #e2e8f0 100%);
             min-height: 100vh;
             display: flex;
             flex-direction: column;
-            overflow-x: hidden;
         }
 
         /* ── Floating Pill Navbar ─────────────────── */
@@ -143,7 +147,7 @@
         .dev-name {
             font-family: 'Outfit', sans-serif;
             font-weight: 700;
-            font-size: clamp(1rem, 4.5vw, 1.35rem);
+            font-size: clamp(0.9rem, 4.2vw, 1.35rem);
             color: var(--primary);
             margin-bottom: 0.25rem;
             white-space: nowrap;
