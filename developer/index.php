@@ -28,10 +28,10 @@
     <div class="navbar-wrapper">
         <nav class="navbar navbar-expand-lg top-navbar navbar-pill py-3">
             <div class="container d-flex justify-content-between align-items-center">
-                <a class="navbar-brand brand-text" href="placement_statistics.php">
+                <a class="navbar-brand brand-text" href="../placement_statistics.php">
                     GEC Modasa <span>Placement</span>
                 </a>
-                <a href="placement_statistics.php" class="btn-back">
+                <a href="../placement_statistics.php" class="btn-back">
                     <i class="fa-solid fa-arrow-left"></i>
                     <span class="d-none d-sm-inline">Back to Home</span>
                     <span class="d-inline d-sm-none">Back</span>
@@ -54,7 +54,7 @@
                 <div class="dev-card">
                     <div class="dev-img-wrapper">
                         <!-- REPLACE THIS SRC WITH ACTUAL IMAGE -->
-                        <img src="student-module/uploads/developers_pic/Aman.jpg" alt="Prajapati Aman Jayeshbhai"
+                        <img src="../student-module/uploads/developers_pic/Aman.jpg" alt="Prajapati Aman Jayeshbhai"
                             class="dev-img" style="cursor: pointer;" onclick="openImageModal(this.src)">
                     </div>
                     <h3 class="dev-name">PRAJAPATI AMAN JAYESHBHAI</h3>
@@ -137,8 +137,8 @@
                 <div class="dev-card">
                     <div class="dev-img-wrapper">
                         <!-- REPLACE THIS SRC WITH ACTUAL IMAGE -->
-                        <img src="student-module/uploads/developers_pic/vanit.jpg"
-                            alt="Vanit Dantani Nitinbhai" class="dev-img" style="cursor: pointer;"
+                        <img src="../student-module/uploads/developers_pic/vanit.jpg"
+                            alt="DANTANI VANIT NITINBHAI" class="dev-img" style="cursor: pointer;"
                             onclick="openImageModal(this.src)">
                     </div>
                     <h3 class="dev-name">DANTANI VANIT NITINBHAI</h3>
@@ -239,7 +239,7 @@
             imageModal.show();
         }
     </script>
-    <?php include 'includes/footer.php'; ?>
+    <?php include '../includes/footer.php'; ?>
 </body>
 
 </html>
