@@ -107,11 +107,11 @@ $csrfToken = generate_csrf_token();
     <nav class="navbar navbar-expand-lg top-navbar navbar-light">
         <div class="container">
             <a class="navbar-brand brand-text" href="dashboard.php">GEC Modasa <span>Placement</span></a>
-            <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarNav">
-                <span class="navbar-toggler-icon"></span>
+            <button class="navbar-toggler border-0 px-1" type="button" data-bs-toggle="collapse" data-bs-target="#navbarNav" onclick="let icon = this.querySelector('i'); if(icon.classList.contains('fa-bars')){icon.classList.replace('fa-bars', 'fa-xmark');}else{icon.classList.replace('fa-xmark', 'fa-bars');}">
+                <i class="fa-solid fa-bars fs-2 text-dark"></i>
             </button>
             <div class="collapse navbar-collapse" id="navbarNav">
-                <ul class="navbar-nav ms-4">
+                <ul class="navbar-nav ms-auto align-items-lg-center gap-2">
                     <li class="nav-item">
                         <a class="nav-link fw-medium" href="dashboard.php">Profile</a>
                     </li>
@@ -121,17 +121,22 @@ $csrfToken = generate_csrf_token();
                     <li class="nav-item">
                         <a class="nav-link fw-medium" href="track_applications.php">My Applications</a>
                     </li>
+                    
+                    <hr class="d-lg-none my-2 text-secondary">
+                    
+                    <li class="nav-item">
+                        <span class="nav-link fw-bold" style="color: var(--primary-navy);">Hi, <?= htmlspecialchars($student['full_name']) ?></span>
+                    </li>
+                    <li class="nav-item mt-2 mt-lg-0 ms-lg-2">
+                        <a href="logout.php" class="btn btn-outline-danger btn-sm w-100"><i class="fa-solid fa-right-from-bracket me-1"></i> Logout</a>
+                    </li>
                 </ul>
-                <div class="d-flex align-items-center gap-3 ms-auto mt-3 mt-lg-0">
-                    <span class="fw-medium text-dark">Hi, <?= htmlspecialchars($student['full_name']) ?></span>
-                    <a href="logout.php" class="btn btn-outline-danger btn-sm"><i class="fa-solid fa-right-from-bracket me-1"></i> Logout</a>
-                </div>
             </div>
         </div>
     </nav>
 
     <!-- Content -->
-    <div class="container py-5" style="margin-top: 2rem;">
+    <div class="container py-4">
         <h3 class="mb-4">Available Placement Drives</h3>
         
         <?php if ($error): ?>
