@@ -36,7 +36,7 @@ h1, h2, h3, h4, h5, h6 {
     max-width: 500px;
     width: 100%;
     margin: 0 auto;
-    padding: 3rem 15px 5rem 15px; /* Increased bottom gap */
+    padding: 3rem 15px 1.5rem 15px; /* Reduced bottom gap */
     flex: 1;
     display: flex;
     align-items: center;
@@ -203,7 +203,7 @@ h1, h2, h3, h4, h5, h6 {
 /* Floating Developer Button Animation */
 .dev-floating-btn {
     position: relative;
-    margin: -2rem auto 2rem auto;
+    margin: 0.5rem 30px 1.5rem auto; /* Right corner placement */
     height: 50px;
     background: #1B365D;
     color: #fff;
